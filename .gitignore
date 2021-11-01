@@ -1,0 +1,8 @@
+# File for removing tracking 
+
+# Remove the build directory
+build/*
+*/build/*
+
+# Remove VS Code file
+.vscode/*
