@@ -13,3 +13,10 @@ add_executable(${PROJ_NAME} "Source/Main.cpp")
 
 # Ensure that all of the submodules have been downloaded and added added to the project
 include(${CMAKE_CURRENT_LIST_DIR}/CMake/Submodules.cmake)
+
+# Now add in the actual source files
+add_subdirectory(Source)
+
+# Ensure that VSCode gets all of it's nice formatting
+# Make sure that this is done last
+include(${CMAKE_CURRENT_LIST_DIR}/CMAKE/VisualStudio.cmake)
