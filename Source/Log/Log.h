@@ -4,6 +4,7 @@
 \Brief         : Adds a header for initing the loging system
 \Contributors  : Lawrence G,
  *********************************************************************************************************/
+#pragma once
 #include "spdlog/spdlog.h"
 
 // Log object for logging to the terminal and log file

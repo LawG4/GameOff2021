@@ -21,8 +21,5 @@ bool initWindow()
     window = glfwCreateWindow(640, 480, "BUG", NULL, NULL);
     glfwShowWindow(window);
 
-    while (!glfwWindowShouldClose(window)) {
-        glfwPollEvents();
-    }
     return true;
 }

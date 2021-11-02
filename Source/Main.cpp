@@ -11,8 +11,23 @@
 
 int main(int argc, char *argv[])
 {
-    initLog();
+    if (!initLog()) {
+        std::cout << "Somehow the logger failed to init!\nWhat on earth happened??" << std::endl;
+        return -1;
+    }
 
-    initWindow();
-    std::cout << "Hello World" << std::endl;
+    if (!initWindow()) {
+        Log.error("Could not initialise GLFW window");
+        return -1;
+    }
+
+    if (!initVulkan()) {
+        Log.error("Could not initialise Vulkan");
+        return -1;
+    }
+
+    // Enter into the windowing loop
+    while (!glfwWindowShouldClose(window)) {
+        glfwPollEvents();
+    }
 }
