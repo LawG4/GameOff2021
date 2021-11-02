@@ -19,4 +19,4 @@ add_subdirectory(Source)
 
 # Ensure that VSCode gets all of it's nice formatting
 # Make sure that this is done last
-include(${CMAKE_CURRENT_LIST_DIR}/CMAKE/VisualStudio.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/CMake/VisualStudio.cmake)
