@@ -19,10 +19,5 @@ extern GLFWwindow *window;
 /// <param name="isFullScreen"> Is the window going to be full screen </param>
 /// <param name="isFullScreen"> The width of the window if not full screen</param>
 /// <param name="isFullScreen"> The height of the window if not full screen </param>
-/// <param name="isLauncher"> Are we creating a launcher </param>
-/// <param name="useVulkan"> Was adaquate Vulkan support detected </param>
 /// <returns>True if the window was created successfully </returns>
-bool initWindow(const char *windowTitle, uint32_t width, uint32_t height, bool isFullScreen = false,
-                bool isLauncher = true, bool useVulkan = false);
-
-void launcherKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
+bool initWindow(const char *windowTitle, uint32_t width, uint32_t height, bool isFullScreen);

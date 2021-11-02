@@ -18,16 +18,24 @@ int main(int argc, char *argv[])
     }
 
     // Create the launcher
-    if (!initWindow("B.U.G Launcher", 720, 400)) {
+    if (!initWindow("B.U.G Launcher", 720, 400, false)) {
         Log.error("Could not initialise GLFW window for the laucher");
         glfwTerminate();
         return -1;
+    }
+
+    // Ensure that the machine is capable of loading Vulkan at all
+    if (!glfwVulkanSupported()) {
+        Log.error("Vulkan is not supported on your device");
+        return -1;
+    } else {
+        Log.info("GLFW Confirms a Vulkan device");
     }
 
     // Enter into the windowing loop
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
 
-        glfwSwapBuffers(window);
+        // glfwSwapBuffers(window);
     }
 }

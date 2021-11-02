@@ -19,8 +19,7 @@ bool isLauncherFocused = false;
 
 void glfwErrorCallback(int error, const char *desc) { Log.error("GLFW ERROR : {}", desc); }
 
-bool initWindow(const char *windowTitle, uint32_t width, uint32_t height, bool isFullScreen, bool isLauncher,
-                bool useVulkan)
+bool initWindow(const char *windowTitle, uint32_t width, uint32_t height, bool isFullScreen)
 {
     // Has GLFW been initialised yet
     if (!glfwActive) {
@@ -33,27 +32,12 @@ bool initWindow(const char *windowTitle, uint32_t width, uint32_t height, bool i
         glfwSetErrorCallback(glfwErrorCallback);
     }
 
-    // If we are creating the window for the launcher or for not Vulkan then we are using GL
-    bool useGL = !useVulkan;
-    if (isLauncher) useGL = true;
-
-    // Set the window hints depending on the API
-    if (useGL) {
-        Log.info("Using GL for {} window", isLauncher ? "launcher" : "game");
-        glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-
-    } else {
-        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-    }
+    // Tell GLFW to use no specific API as Vulkan will handle this
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
     // Create the window
     window = glfwCreateWindow(width, height, windowTitle, NULL, NULL);
     glfwShowWindow(window);
-
-    // Ensure that the context is made current
-    if (useGL) glfwMakeContextCurrent(window);
 
     return true;
 }
