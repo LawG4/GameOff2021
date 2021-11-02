@@ -7,6 +7,7 @@
 
 #include "Window.h"
 #include "Log.h"
+#include "Render.h"
 
 GLFWwindow **window;
 GLFWwindow *gameWindow;
@@ -57,6 +58,12 @@ bool initWindow(const char *windowTitle, uint32_t width, uint32_t height, bool i
     // Create the window
     *window = glfwCreateWindow(width, height, windowTitle, NULL, NULL);
     glfwShowWindow(*window);
+
+    // Add the window to the render API tracking
+    windowUsingVulkan[*window] = !useGL;
+
+    // Ensure that the context is made current
+    if (useGL) glfwMakeContextCurrent(*window);
 
     return true;
 }

@@ -9,15 +9,30 @@
 #include "Log.h"
 #include "Window.h"
 
+bool glStarted = false;
+
 bool initGL()
 {
-    Log.info("Initialising OpenGL");
+    if (!glStarted) {
+        Log.info("Initialising OpenGL");
 
-    glfwMakeContextCurrent(*window);
-    if (!gladLoadGL()) {
-        Log.error("Could not retireve GL pointers");
-        return false;
+        if (!gladLoadGL()) {
+            Log.error("Could not retireve GL pointers");
+            return false;
+        } else {
+            Log.info("OpenGL initialised");
+        }
+    } else {
+        Log.warn("GL already initialised");
+        return true;
     }
+
+    return true;
+}
+
+bool glSurfaceSetup(GLFWwindow* context)
+{
+    glfwMakeContextCurrent(context);
 
     // Set the swap interval
     glfwSwapInterval(1);

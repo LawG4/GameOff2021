@@ -6,6 +6,7 @@
  *********************************************************************************************************/
 #include "GL.h"
 #include "Log.h"
+#include "Render.h"
 #include "Window.h"
 
 #include <iostream>
@@ -30,10 +31,12 @@ int main(int argc, char *argv[])
         return -1;
     }
 
+    setClearColor(launcher, 1.0, 0.0, 0.0);
+
     // Enter into the windowing loop
     while (!glfwWindowShouldClose(launcher)) {
         glfwPollEvents();
-        glClear(GL_COLOR_BUFFER_BIT);
+        clearFrame(*window);
         glfwSwapBuffers(*window);
     }
 }

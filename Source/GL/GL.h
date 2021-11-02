@@ -5,6 +5,7 @@
 \Contributors  : Lawrence G,
  *********************************************************************************************************/
 #pragma once
+#include "Window.h"
 
 /// <summary> Starts OpenGL </summary>
 /// <returns> Returns true if GL init successeded </returns>
