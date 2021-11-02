@@ -32,7 +32,7 @@ bool initLog()
     // Next if we're not on debug mode then make a console logger
 #ifndef NDEBUF
     auto consoleLog = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-    consoleLog->set_level(spdlog::level::warn);
+    consoleLog->set_level(spdlog::level::info);
 
     spdlog::logger multi("Multi_Logger", {consoleLog, fileLog});
     Log = multi;
