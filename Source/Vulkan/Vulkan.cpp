@@ -8,13 +8,6 @@
 
 bool initVulkan()
 {
-    // Use glfw to check if Vulkan is supported
-    if (!window) {
-        Log.warn("GLFW window not initialised before trying to create Vulkan instance");
-        if (!initWindow()) {
-            return false;
-        }
-    }
     if (!glfwVulkanSupported()) {
         Log.error("GLFW could not find a Vulkan loader and Vulkan ICD");
         return false;
