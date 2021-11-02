@@ -6,7 +6,6 @@ set(COMPONENTS
 	Log
 	GL
 	Render
-	ImGui
 )
 
 foreach(directory ${COMPONENTS})
