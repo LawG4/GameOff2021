@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
     while (!glfwWindowShouldClose(launcher)) {
         glfwPollEvents();
         clearFrame(*window);
+
         glfwSwapBuffers(*window);
     }
 }

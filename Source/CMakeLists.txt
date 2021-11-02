@@ -7,6 +7,7 @@ set(COMPONENTS
 	GL
 	Render
 	Player
+	UI
 )
 
 foreach(directory ${COMPONENTS})
