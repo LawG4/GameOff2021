@@ -31,3 +31,5 @@ extern GLFWwindow *launcher;
 /// <returns>True if the window was created successfully </returns>
 bool initWindow(const char *windowTitle, uint32_t width, uint32_t height, bool isFullScreen = false,
                 bool isLauncher = true, bool useVulkan = false);
+
+void launcherKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);

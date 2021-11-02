@@ -6,6 +6,8 @@
  *********************************************************************************************************/
 #include "Vulkan.h"
 
+bool isVulkanSuitable() { return false; }
+
 bool initVulkan()
 {
     if (!glfwVulkanSupported()) {

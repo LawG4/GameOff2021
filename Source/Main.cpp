@@ -33,6 +33,9 @@ int main(int argc, char *argv[])
 
     setClearColor(launcher, 1.0, 0.0, 0.0);
 
+    // Set the callback for the launcher
+    glfwSetKeyCallback(launcher, launcherKeyCallback);
+
     // Enter into the windowing loop
     while (!glfwWindowShouldClose(launcher)) {
         glfwPollEvents();
