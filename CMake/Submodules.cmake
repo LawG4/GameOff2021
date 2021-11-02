@@ -11,6 +11,15 @@ add_subdirectory(${PROJ_ROOT}/External/glfw)
 # Link to the project
 target_link_libraries(${PROJ_NAME} glfw)
 
+# glad - Extensions loading library
+if(NOT EXISTS ${PROJ_ROOT}/External/glad)
+    message(FATAL_ERROR "Glad not found, ensure you have it downloaded")
+endif()
+# Add the submodule 
+add_subdirectory(${PROJ_ROOT}/External/glad)
+# Link to the project
+target_link_libraries(${PROJ_NAME} glad)
+
 # sspdlog
 # Check if the directory exists 
 if(NOT EXISTS ${PROJ_ROOT}/External/spdlog)
