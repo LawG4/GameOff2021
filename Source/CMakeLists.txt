@@ -5,6 +5,7 @@ set(COMPONENTS
 	Vulkan
 	Log
 	GL
+	Render
 )
 
 foreach(directory ${COMPONENTS})
