@@ -9,9 +9,7 @@
 #include "Log.h"
 #include "Render.h"
 
-GLFWwindow **window;
-GLFWwindow *gameWindow;
-GLFWwindow *launcher;
+GLFWwindow *window;
 
 // Tracks if GLFW has been initialised.
 bool glfwActive = false;
@@ -35,11 +33,6 @@ bool initWindow(const char *windowTitle, uint32_t width, uint32_t height, bool i
         glfwSetErrorCallback(glfwErrorCallback);
     }
 
-    // Are we using the launcher?
-    isLauncherFocused = isLauncher;
-    window = &launcher;
-    if (!isLauncher) window = &gameWindow;
-
     // If we are creating the window for the launcher or for not Vulkan then we are using GL
     bool useGL = !useVulkan;
     if (isLauncher) useGL = true;
@@ -56,14 +49,11 @@ bool initWindow(const char *windowTitle, uint32_t width, uint32_t height, bool i
     }
 
     // Create the window
-    *window = glfwCreateWindow(width, height, windowTitle, NULL, NULL);
-    glfwShowWindow(*window);
-
-    // Add the window to the render API tracking
-    windowUsingVulkan[*window] = !useGL;
+    window = glfwCreateWindow(width, height, windowTitle, NULL, NULL);
+    glfwShowWindow(window);
 
     // Ensure that the context is made current
-    if (useGL) glfwMakeContextCurrent(*window);
+    if (useGL) glfwMakeContextCurrent(window);
 
     return true;
 }

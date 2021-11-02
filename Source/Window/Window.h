@@ -10,16 +10,9 @@
 // Vulkan types
 #include "Vulkan.h"
 
-// We also need to tell glfw to use glad, that way extensions know to be laoded
-#include <glad/glad.h>
-
 #include <GLFW/glfw3.h>
 
-// Pointer to the current window
-extern GLFWwindow **window;
-// Opaque handle to the GLFW window
-extern GLFWwindow *gameWindow;
-extern GLFWwindow *launcher;
+extern GLFWwindow *window;
 
 /// <summary> Creates a GLFW window </summary>
 /// <param name="windowTitle"> Window title for the window being created </param>

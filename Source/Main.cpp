@@ -4,7 +4,6 @@
 \Brief         : Adds an entry point into the game
 \Contributors  : Lawrence G,
  *********************************************************************************************************/
-#include "GL.h"
 #include "Log.h"
 #include "Render.h"
 #include "Window.h"
@@ -25,22 +24,10 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    if (!initGL()) {
-        Log.error("Could not initiislise GL");
-        glfwTerminate();
-        return -1;
-    }
-
-    setClearColor(launcher, 1.0, 0.0, 0.0);
-
-    // Set the callback for the launcher
-    glfwSetKeyCallback(launcher, launcherKeyCallback);
-
     // Enter into the windowing loop
-    while (!glfwWindowShouldClose(launcher)) {
+    while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
-        clearFrame(*window);
 
-        glfwSwapBuffers(*window);
+        glfwSwapBuffers(window);
     }
 }
