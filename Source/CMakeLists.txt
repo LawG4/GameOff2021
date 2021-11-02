@@ -6,6 +6,7 @@ set(COMPONENTS
 	Log
 	GL
 	Render
+	Player
 )
 
 foreach(directory ${COMPONENTS})
