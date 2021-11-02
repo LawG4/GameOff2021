@@ -7,22 +7,10 @@
 
 #include "Window.h"
 
-// If the user is compiling for release mode we need to add the windows header, that way we can close the
-// console for release builds
-#if defined(WIN32) && defined(NDEBUG)
-#include <Windows.h>
-#define FORCE_CLOSE_WIN32_CONSOLE 1
-#endif  // defined(WIN32) && defined(NDEBUG)
-
 GLFWwindow *window;
 
 bool initWindow()
 {
-    // If the user is in windows release mode then use windows api to close console
-#ifdef FORCE_CLOSE_WIN32_CONSOLE
-    FreeConsole();
-#endif  // FORCE_CLOSE_WIN32_CONSOLE
-
     // Initialise GLFW
     if (!glfwInit()) {
         return false;
