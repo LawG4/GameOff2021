@@ -4,6 +4,7 @@
 \Brief         : Adds an entry point into the game
 \Contributors  : Lawrence G,
  *********************************************************************************************************/
+#include "GL.h"
 #include "Log.h"
 #include "Window.h"
 
@@ -16,18 +17,23 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    if (!initWindow()) {
-        Log.error("Could not initialise GLFW window");
+    // Create the launcher
+    if (!initWindow("B.U.G Launcher", 720, 400)) {
+        Log.error("Could not initialise GLFW window for the laucher");
+        glfwTerminate();
         return -1;
     }
 
-    if (!initVulkan()) {
-        Log.error("Could not initialise Vulkan");
+    if (!initGL()) {
+        Log.error("Could not initiislise GL");
+        glfwTerminate();
         return -1;
     }
 
     // Enter into the windowing loop
-    while (!glfwWindowShouldClose(window)) {
+    while (!glfwWindowShouldClose(launcher)) {
         glfwPollEvents();
+        glClear(GL_COLOR_BUFFER_BIT);
+        glfwSwapBuffers(*window);
     }
 }

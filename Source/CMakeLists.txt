@@ -4,6 +4,7 @@ set(COMPONENTS
 	Window
 	Vulkan
 	Log
+	GL
 )
 
 foreach(directory ${COMPONENTS})
