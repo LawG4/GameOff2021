@@ -20,7 +20,7 @@ void launcherKeyCallback(GLFWwindow* window, int key, int scancode, int action, 
         // Evaluate suitability for using Vulkan or GL for the actual game
         bool useVulkan = isVulkanSuitable();
 
-        Log.info("Creating new window!");
+        Log.info("Creating new game window!");
         // Create a new window
     }
 }

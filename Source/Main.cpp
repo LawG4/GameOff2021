@@ -5,6 +5,7 @@
 \Contributors  : Lawrence G,
  *********************************************************************************************************/
 #include "GL.h"
+#include "Gui.h"
 #include "Log.h"
 #include "Render.h"
 #include "Window.h"
@@ -40,6 +41,9 @@ int main(int argc, char *argv[])
     while (!glfwWindowShouldClose(launcher)) {
         glfwPollEvents();
         clearFrame(*window);
+
+        renderUI(*window);
+
         glfwSwapBuffers(*window);
     }
 }
