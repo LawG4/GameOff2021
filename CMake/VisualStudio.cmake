@@ -23,3 +23,10 @@ function(assign_source_group)
 endfunction(assign_source_group)
 
 assign_source_group(${PROJ_SOURCES})
+
+# Make VsStudio output to the bin directory 
+# also make vs studio use the bin directory as the working directory
+set_target_properties(
+    ${PROJ_NAME} PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin"
+    VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/bin")

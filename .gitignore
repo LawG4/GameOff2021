@@ -6,3 +6,7 @@ build/*
 
 # Remove VS Code file
 .vscode/*
+
+# Remove the bin directory
+bin/*
+*/bin/*

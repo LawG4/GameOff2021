@@ -1,0 +1,10 @@
+{
+	"Override_Default_Settings" : true,
+
+	"Window_Settings" : {
+		"FullScreen" : false,
+		"Primary_Screen" : 0,
+		"Windowed_Width" : 720,
+		"Windowed_Height" : 400
+	}
+}
