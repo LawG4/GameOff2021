@@ -2,7 +2,7 @@
 \File          : Window.cpp
 \Copyright     : MIT License
 \Brief         : Adds a definitions for the declared functions and variables in Window.h
-\Contributors  : Lawrence G,
+\Contributors  : Lawrence G, Freddie M
  *********************************************************************************************************/
 
 #include "Window.h"

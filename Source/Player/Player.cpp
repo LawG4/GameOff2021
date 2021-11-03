@@ -13,6 +13,9 @@
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     if (key == GLFW_KEY_E && action == GLFW_PRESS) {
-        Log.error("button pressed weee");
+        Log.info("button E pressed");
+    }
+    if (key == GLFW_KEY_W && action == GLFW_PRESS) {
+        Log.info("button W pressed");
     }
 }
