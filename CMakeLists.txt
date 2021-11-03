@@ -29,3 +29,32 @@ AddAsset("${CMAKE_CURRENT_LIST_DIR}/UserSettings.json" "")
 
 # Set c++ to be 17 standard
 set_property(TARGET ${PROJ_NAME} PROPERTY CXX_STANDARD 17)
+
+set(WORK_DIR ${CMAKE_CURRENT_BINARY_DIR}/$<$<CONFIG:Debug>:Release>/)
+message(STATUS "Runtime dir : ${WORK_DIR}")
+
+# Once we've gotten to the bottom add a custom rule for each of the shaders to be compiled
+foreach(ShaderPath ${SHADER_FILES})
+	# Get the name of the shader
+	get_filename_component(ShaderName ${ShaderPath} NAME)
+	get_filename_component(ShaderDir ${ShaderPath} DIRECTORY)
+
+	set(SPV_OUT ${ShaderName}.spv)
+
+	# Add the custom command
+	add_custom_command(
+		OUTPUT ${PROJ_ROOT}/bin/$<CONFIG>/Shaders/${SPV_OUT}
+		COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJ_ROOT}/bin/$<CONFIG>/Shaders
+		COMMAND ${Vulkan_GLSLC_EXECUTABLE} ${ShaderPath} -o ${PROJ_ROOT}/bin/$<CONFIG>/Shaders/${SPV_OUT}
+		DEPENDS ${ShaderPath}
+		COMMENT "Compiling shader : ${ShaderName}")
+
+	# Add the Compiled shader to the list of spirv shaders
+	set(SPV_SHADERS ${SPV_SHADERS} ${SPV_OUT})
+endforeach()
+
+# Once the list of SPIRV shaders has been completed add a target to track them
+add_custom_target(SPIRV_TARGET ALL DEPENDS ${SPV_SHADERS})
+
+# Make the main project depend on the spirv target
+add_dependencies(${PROJ_NAME} SPIRV_TARGET)
