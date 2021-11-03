@@ -54,6 +54,10 @@ void cleanupVulkan()
 {
     if (!vulkanInitialised) return;
 
+    for (VkImageView& view : vk::swapchainImageViews) {
+        vkDestroyImageView(vk::logialDevice, view, nullptr);
+    }
+
     vkDestroySwapchainKHR(vk::logialDevice, vk::swapchain, nullptr);
 
     vkDestroySurfaceKHR(vk::instance, vk::surface, nullptr);

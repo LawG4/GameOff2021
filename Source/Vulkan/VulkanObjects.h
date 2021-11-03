@@ -48,5 +48,6 @@ extern SwapchainProperties selectedSwapchainProperties;
 extern VkFormat swapchainFormat;
 extern VkExtent2D swapchainExtent;
 extern std::vector<VkImage> swapchainImages;
+extern std::vector<VkImageView> swapchainImageViews;
 
 }  // namespace vk
