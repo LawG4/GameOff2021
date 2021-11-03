@@ -46,4 +46,4 @@ target_link_libraries(${PROJ_NAME} nlohmann_json)
 # We want to include Vulkan as a dynamically loaded module
 # This is because we want to use GLFW to init Vulkan headers 
 find_package(Vulkan REQUIRED FATAL_ERROR)
-target_include_directories(${PROJ_NAME} PRIVATE ${Vulkan_INCLUDE_DIR})
+target_include_directories(${PROJ_NAME} PUBLIC ${Vulkan_INCLUDE_DIR})
