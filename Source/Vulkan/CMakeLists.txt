@@ -12,6 +12,7 @@ set(SOURCES
 	Validation.cpp
 	PhysicalDevice.cpp
 	LogicalDevice.cpp
+	Surface.cpp
 )
 
 target_sources(${PROJ_NAME} PRIVATE ${HEADERS} ${SOURCES})

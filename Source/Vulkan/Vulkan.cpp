@@ -5,7 +5,7 @@
 \Contributors  : Lawrence G,
  *********************************************************************************************************/
 #include "Vulkan.h"
-
+#include "Window.h"
 bool vulkanInitialised = false;
 
 bool initVulkan()
@@ -31,6 +31,14 @@ bool initVulkan()
         Log.info("Created Vulkan Logical Device");
     }
 
+    // Use glfw to create the surface for us
+    if (glfwCreateWindowSurface(vk::instance, window, nullptr, &vk::surface) != VK_SUCCESS) {
+        Log.error("Unable to create surface using glfw");
+        return false;
+    } else {
+        Log.info("Created Vulkan surface");
+    }
+
     vulkanInitialised = true;
     return true;
 }
@@ -38,6 +46,8 @@ bool initVulkan()
 void cleanupVulkan()
 {
     if (!vulkanInitialised) return;
+
+    vkDestroySurfaceKHR(vk::instance, vk::surface, nullptr);
 
     vkDestroyDevice(vk::logialDevice, nullptr);
 

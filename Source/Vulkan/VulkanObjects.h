@@ -23,4 +23,6 @@ extern QueueFamilyIndices selectedQueueFamilies;
 extern VkDevice logialDevice;
 
 extern VkQueue graphicsQueue;
+
+extern VkSurfaceKHR surface;
 }  // namespace vk
