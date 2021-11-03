@@ -7,7 +7,9 @@
 #include "Log.h"
 #include "Render.h"
 #include "Window.h"
+#include "nlohmann/json.hpp"
 
+#include <fstream>
 #include <iostream>
 
 int main(int argc, char *argv[])
@@ -17,8 +19,34 @@ int main(int argc, char *argv[])
         return -1;
     }
 
+    // Read in the user settings Json File
+    std::ifstream userSettingFile("UserSettings.json");
+    if (!userSettingFile) {
+        Log.warn("Could not open user settings json file");
+    } else {
+        Log.info("Opened user settings json file");
+    }
+
+    // Parse the settings file into the json object
+    nlohmann::json userSetting;
+    userSettingFile >> userSetting;
+    userSettingFile.close();
+
+    // Set the defaults for the window
+    bool fullScreen = true;
+    uint32_t windowWidth = 720;
+    uint32_t windowHeight = 400;
+
+    bool settingsOverride = userSetting["Override_Default_Settings"];
+    if (settingsOverride) {
+        Log.info("Json file detected that the user wants to override default settings");
+        fullScreen = userSetting["Window_Settings"]["FullScreen"];
+        windowWidth = userSetting["Window_Settings"]["Windowed_Width"];
+        windowHeight = userSetting["Window_Settings"]["Windowed_Height"];
+    }
+
     // Create the launcher
-    if (!initWindow("B.U.G Launcher", 720, 400, false)) {
+    if (!initWindow("B.U.G Launcher", windowWidth, windowHeight, fullScreen)) {
         Log.error("Could not initialise GLFW window for the laucher");
         glfwTerminate();
         return -1;
