@@ -11,13 +11,9 @@
 
 VkPhysicalDevice vk::physicalDevice = VK_NULL_HANDLE;
 VkPhysicalDeviceProperties deviceProperties;
+QueueFamilyIndices vk::selectedQueueFamilies;
 
 std::vector<VkPhysicalDevice> devices;
-
-struct QueueFamilyIndices {
-    std::optional<uint32_t> graphicsFamily;
-};
-QueueFamilyIndices selectedQueueFamilies;
 
 QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
 
@@ -29,8 +25,8 @@ bool isDeviceSuitable(VkPhysicalDevice device)
     Log.info("Evaluating suitability for Vulkan device {}", deviceProperties.deviceName);
 
     // Does it have the suitable queues
-    selectedQueueFamilies = findQueueFamilies(device);
-    if (!selectedQueueFamilies.graphicsFamily.has_value()) {
+    vk::selectedQueueFamilies = findQueueFamilies(device);
+    if (!vk::selectedQueueFamilies.graphicsFamily.has_value()) {
         Log.info("Rejecting physical device");
         return false;
     }

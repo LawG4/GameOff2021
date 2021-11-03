@@ -24,6 +24,13 @@ bool initVulkan()
         Log.info("Created Vulkan Physical Device");
     }
 
+    if (!vk::createLogicalDevice()) {
+        Log.error("Could not create Vulkan logical device");
+        return false;
+    } else {
+        Log.info("Created Vulkan Logical Device");
+    }
+
     vulkanInitialised = true;
     return true;
 }
@@ -31,6 +38,8 @@ bool initVulkan()
 void cleanupVulkan()
 {
     if (!vulkanInitialised) return;
+
+    vkDestroyDevice(vk::logialDevice, nullptr);
 
     if (vk::validationLayersEnabled) {
         vk::deleteDebugMessenger();

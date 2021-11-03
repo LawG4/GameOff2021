@@ -13,10 +13,6 @@
 #include "Log.h"
 #include "VulkanObjects.h"
 
-/// <summary> Dynamically loads Vulkan library </summary>
-/// <returns> True if vulkan loaded succesfully</returns>
-bool osDynamicLoadVulkan();
-
 /// <summary> A struct to hold all of the information required to start drawing a display list in Vulkan. ie
 /// graphics pipelines </summary>
 typedef struct VulkanDisplayList_t {
@@ -60,5 +56,10 @@ void createDebugMessenger();
 void deleteDebugMessenger();
 
 /// <summary> Selects the best Vulkan physical device </summary>
+/// <returns>True if successful</returns>
 bool selectBestPhysicalDevice();
+
+/// <summary> Creates a logical device from the selected physical device </summary>
+/// <returns>True if successful</returns>
+bool createLogicalDevice();
 }  // namespace vk
