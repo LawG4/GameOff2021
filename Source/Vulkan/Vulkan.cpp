@@ -25,6 +25,10 @@ void cleanupVulkan()
 {
     if (!vulkanInitialised) return;
 
+    if (vk::validationLayersEnabled) {
+        vk::deleteDebugMessenger();
+    }
+
     vkDestroyInstance(vk::instance, nullptr);
 
     Log.info("Vulkan Destoryed");

@@ -11,4 +11,5 @@
 namespace vk
 {
 extern VkInstance instance;
-}
+extern VkDebugUtilsMessengerEXT messenger;
+}  // namespace vk

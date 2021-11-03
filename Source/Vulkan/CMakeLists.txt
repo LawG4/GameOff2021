@@ -9,6 +9,7 @@ set(HEADERS
 set(SOURCES
 	Vulkan.cpp
 	Instance.cpp
+	Validation.cpp
 )
 
 target_sources(${PROJ_NAME} PRIVATE ${HEADERS} ${SOURCES})

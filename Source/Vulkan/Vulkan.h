@@ -33,7 +33,29 @@ namespace vk
 {
 /// <summary> The instance extensions that the user would like to enable and are supported</summary>
 extern std::vector<const char*> validatedRequestedInstanceExtensions;
+
 /// <summary> The instance extension properties supported by the vulkan instance </summary>
 extern std::vector<VkExtensionProperties> instanceExtensionProperties;
+
+/// <summary> The instance layers that have been validated as supported </summary>
+extern std::vector<const char*> validatedRequestedInstanceLayers;
+
+/// <summary> The layers supported by this instance </summary>
+extern std::vector<VkLayerProperties> instanceLayerProperties;
+
+/// <summary> Adds validation layers and extensions to the list of requested extensions and layers </summary>
+void addValidationLayersAndExtensions(std::vector<const char*>& extensions, std::vector<const char*>& layers);
+
+/// <summary> Have we decided to use validation layers? </summary>
+extern bool validationLayersEnabled;
+
+/// <summary> Tries to make a vulkan instance </summary>
+/// <returns>True if successful</returns>
 bool createInstance();
+
+/// <summary> Attempts to create the vulkan debug callback messenger </summary>
+void createDebugMessenger();
+
+/// <summary> Deletes the debug messenger </summary>
+void deleteDebugMessenger();
 }  // namespace vk
