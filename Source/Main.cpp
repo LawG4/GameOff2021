@@ -7,7 +7,12 @@
 #include "Log.h"
 #include "Render.h"
 #include "Window.h"
+<<<<<<< Updated upstream
 #include "nlohmann/json.hpp"
+=======
+#include "Player.h"
+
+>>>>>>> Stashed changes
 
 #include <fstream>
 #include <iostream>
@@ -85,8 +90,14 @@ int main(int argc, char *argv[])
     // Enter into the windowing loop
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
+<<<<<<< Updated upstream
 
         // glfwSwapBuffers(window);
+=======
+        clearFrame(*window);
+        glfwSetKeyCallback(*window, key_callback);
+        glfwSwapBuffers(*window);
+>>>>>>> Stashed changes
     }
 
     cleanUp();
