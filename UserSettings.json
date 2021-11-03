@@ -4,7 +4,7 @@
 	"Window_Settings" : {
 		"FullScreen" : false,
 		"Primary_Screen" : 0,
-		"Windowed_Width" : 720,
+		"Windowed_Width" : 700,
 		"Windowed_Height" : 400
 	}
 }

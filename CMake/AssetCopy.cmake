@@ -7,8 +7,10 @@ function(AddAsset PathToAsset CopyPath)
 
 	# Add a custom target to copy the asset
 	add_custom_command(TARGET ${PROJ_NAME} POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different
+		COMMAND ${CMAKE_COMMAND} -E copy
 		"${PathToAsset}"
 		"$<TARGET_FILE_DIR:${PROJ_NAME}>/${CopyPath}"
+		DEPENDS "${PathToAsset}"
+		COMMENT "Copying Asset ${PathToAsset}"
 		)
 endfunction()
