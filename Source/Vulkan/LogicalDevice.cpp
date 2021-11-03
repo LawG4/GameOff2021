@@ -7,8 +7,11 @@
 
 #include "Vulkan.h"
 
+#include <set>
+
 VkDevice vk::logialDevice;
 VkQueue vk::graphicsQueue;
+VkQueue vk::presentationQueue;
 
 /// <summary> Fetch the queues from the created physical device </summary>
 void fetchQueues();
@@ -58,12 +61,33 @@ void fetchQueues()
 {
     vkGetDeviceQueue(vk::logialDevice, vk::selectedQueueFamilies.graphicsFamily.value(), 0,
                      &vk::graphicsQueue);
+    vkGetDeviceQueue(vk::logialDevice, vk::selectedQueueFamilies.presentFamily.value(), 0,
+                     &vk::presentationQueue);
 }
 
 void createDeviceQueueInfos(std::vector<VkDeviceQueueCreateInfo>& queues)
 {
+    // We only want to create one queue per index, ie if graphics and presentation queue have the same value,
+    // then we only want one queue create info
+    // We can make the process of finding out the unique queue family indices easier using sets, as they only
+    // allow unique values
+    std::set<uint32_t> uniqueQueueIndicies = {vk::selectedQueueFamilies.graphicsFamily.value(),
+                                              vk::selectedQueueFamilies.presentFamily.value()};
+
     // Queue prioarties are all set to one
     float queuePrioraty = 1.0;
+
+    // For each unique family index create one device queue create info
+    for (uint32_t queueIndex : uniqueQueueIndicies) {
+        VkDeviceQueueCreateInfo queue;
+        memset(&queue, 0, sizeof(VkDeviceQueueCreateInfo));
+        queue.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+        queue.queueFamilyIndex = queueIndex;
+        queue.queueCount = 1;
+        queue.pQueuePriorities = &queuePrioraty;
+
+        queues.push_back(queue);
+    }
 
     // Create a graphics queue
     VkDeviceQueueCreateInfo graphics;
@@ -73,7 +97,7 @@ void createDeviceQueueInfos(std::vector<VkDeviceQueueCreateInfo>& queues)
     graphics.queueCount = 1;
     graphics.pQueuePriorities = &queuePrioraty;
 
-    queues.push_back(graphics);
+    // queues.push_back(graphics);
 }
 
 VkPhysicalDeviceFeatures selectDeviceFeatures()

@@ -11,6 +11,8 @@
 
 struct QueueFamilyIndices {
     std::optional<uint32_t> graphicsFamily;
+    std::optional<uint32_t> presentFamily;
+    bool allQueuesPresent();
 };
 
 namespace vk
@@ -23,6 +25,7 @@ extern QueueFamilyIndices selectedQueueFamilies;
 extern VkDevice logialDevice;
 
 extern VkQueue graphicsQueue;
+extern VkQueue presentationQueue;
 
 extern VkSurfaceKHR surface;
 }  // namespace vk

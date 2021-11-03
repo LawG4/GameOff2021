@@ -17,6 +17,11 @@ std::vector<VkPhysicalDevice> devices;
 
 QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
 
+bool QueueFamilyIndices::allQueuesPresent()
+{
+    return this->graphicsFamily.has_value() && this->presentFamily.has_value();
+}
+
 bool isDeviceSuitable(VkPhysicalDevice device)
 {
     // Get the physical device properties
@@ -26,7 +31,7 @@ bool isDeviceSuitable(VkPhysicalDevice device)
 
     // Does it have the suitable queues
     vk::selectedQueueFamilies = findQueueFamilies(device);
-    if (!vk::selectedQueueFamilies.graphicsFamily.has_value()) {
+    if (!vk::selectedQueueFamilies.allQueuesPresent()) {
         Log.info("Rejecting physical device");
         return false;
     }
@@ -82,6 +87,14 @@ QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device)
         // Use the first queue that has graphics support
         if (flags & VK_QUEUE_GRAPHICS_BIT && !indices.graphicsFamily.has_value()) {
             indices.graphicsFamily = i;
+        }
+
+        // Does this queue have support for presentation?
+        if (!indices.presentFamily.has_value()) {
+            VkBool32 presentationSupported = false;
+            vkGetPhysicalDeviceSurfaceSupportKHR(device, i, vk::surface, &presentationSupported);
+
+            if (presentationSupported == VK_TRUE) indices.presentFamily = i;
         }
     }
 

@@ -17,6 +17,14 @@ bool initVulkan()
         Log.info("Created Vulkan instance");
     }
 
+    // Use glfw to create the surface for us
+    if (glfwCreateWindowSurface(vk::instance, window, nullptr, &vk::surface) != VK_SUCCESS) {
+        Log.error("Unable to create surface using glfw");
+        return false;
+    } else {
+        Log.info("Created Vulkan surface");
+    }
+
     if (!vk::selectBestPhysicalDevice()) {
         Log.error("Could not create a Vulkan physical device");
         return false;
@@ -29,14 +37,6 @@ bool initVulkan()
         return false;
     } else {
         Log.info("Created Vulkan Logical Device");
-    }
-
-    // Use glfw to create the surface for us
-    if (glfwCreateWindowSurface(vk::instance, window, nullptr, &vk::surface) != VK_SUCCESS) {
-        Log.error("Unable to create surface using glfw");
-        return false;
-    } else {
-        Log.info("Created Vulkan surface");
     }
 
     vulkanInitialised = true;
