@@ -26,3 +26,6 @@ include(${CMAKE_CURRENT_LIST_DIR}/CMake/VisualStudio.cmake)
 
 # Add the user settings Json
 AddAsset("${CMAKE_CURRENT_LIST_DIR}/UserSettings.json" "")
+
+# Set c++ to be 17 standard
+set_property(TARGET ${PROJ_NAME} PROPERTY CXX_STANDARD 17)

@@ -7,10 +7,19 @@
 
 #include "Vulkan.h"
 
+#include <optional>
+
 VkPhysicalDevice vk::physicalDevice = VK_NULL_HANDLE;
 VkPhysicalDeviceProperties deviceProperties;
 
 std::vector<VkPhysicalDevice> devices;
+
+struct QueueFamilyIndices {
+    std::optional<uint32_t> graphicsFamily;
+};
+QueueFamilyIndices selectedQueueFamilies;
+
+QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
 
 bool isDeviceSuitable(VkPhysicalDevice device)
 {
@@ -18,6 +27,13 @@ bool isDeviceSuitable(VkPhysicalDevice device)
     vkGetPhysicalDeviceProperties(device, &deviceProperties);
 
     Log.info("Evaluating suitability for Vulkan device {}", deviceProperties.deviceName);
+
+    // Does it have the suitable queues
+    selectedQueueFamilies = findQueueFamilies(device);
+    if (!selectedQueueFamilies.graphicsFamily.has_value()) {
+        Log.info("Rejecting physical device");
+        return false;
+    }
 
     // For now just assume it's good
     Log.info("Selected Physical device {}", deviceProperties.deviceName);
@@ -51,4 +67,27 @@ bool vk::selectBestPhysicalDevice()
     }
 
     return true;
+}
+
+QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device)
+{
+    QueueFamilyIndices indices;
+
+    // Get the list of the current devices queues
+    uint32_t queueFamilyCount = 0;
+    vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
+    std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
+    vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
+
+    // Now loop through each one of the Queues looking for the graphics queue
+    for (uint32_t i = 0; i < queueFamilies.size(); i++) {
+        VkQueueFlags flags = queueFamilies.at(i).queueFlags;
+
+        // Use the first queue that has graphics support
+        if (flags & VK_QUEUE_GRAPHICS_BIT && !indices.graphicsFamily.has_value()) {
+            indices.graphicsFamily = i;
+        }
+    }
+
+    return indices;
 }
