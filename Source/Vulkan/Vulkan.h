@@ -28,6 +28,9 @@ bool initVulkan();
 
 namespace vk
 {
-
+/// <summary> The instance extensions that the user would like to enable and are supported</summary>
+extern std::vector<const char*> validatedRequestedInstanceExtensions;
+/// <summary> The instance extension properties supported by the vulkan instance </summary>
+extern std::vector<VkExtensionProperties> instanceExtensionProperties;
 bool createInstance();
 }  // namespace vk
