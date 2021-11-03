@@ -9,6 +9,10 @@
 #include "Window.h"
 #include "nlohmann/json.hpp"
 
+#include "Player.h"
+
+
+
 #include <fstream>
 #include <iostream>
 
@@ -85,8 +89,13 @@ int main(int argc, char *argv[])
     // Enter into the windowing loop
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
+        
 
         // glfwSwapBuffers(window);
+
+        //clearFrame(*window);
+        glfwSetKeyCallback(window, key_callback);
+        //glfwSwapBuffers(*window);
     }
 
     cleanUp();

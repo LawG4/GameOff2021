@@ -10,7 +10,7 @@
 
 
 // We also need to tell glfw to use glad, that way extensions know to be laoded
-#include <glad/glad.h>
+
 
 #include <GLFW/glfw3.h>
 
