@@ -12,4 +12,6 @@ namespace vk
 {
 extern VkInstance instance;
 extern VkDebugUtilsMessengerEXT messenger;
+
+extern VkPhysicalDevice physicalDevice;
 }  // namespace vk

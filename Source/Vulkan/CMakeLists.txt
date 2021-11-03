@@ -10,6 +10,7 @@ set(SOURCES
 	Vulkan.cpp
 	Instance.cpp
 	Validation.cpp
+	PhysicalDevice.cpp
 )
 
 target_sources(${PROJ_NAME} PRIVATE ${HEADERS} ${SOURCES})

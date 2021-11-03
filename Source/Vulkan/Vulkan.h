@@ -58,4 +58,7 @@ void createDebugMessenger();
 
 /// <summary> Deletes the debug messenger </summary>
 void deleteDebugMessenger();
+
+/// <summary> Selects the best Vulkan physical device </summary>
+bool selectBestPhysicalDevice();
 }  // namespace vk

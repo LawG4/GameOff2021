@@ -17,6 +17,13 @@ bool initVulkan()
         Log.info("Created Vulkan instance");
     }
 
+    if (!vk::selectBestPhysicalDevice()) {
+        Log.error("Could not create a Vulkan physical device");
+        return false;
+    } else {
+        Log.info("Created Vulkan Physical Device");
+    }
+
     vulkanInitialised = true;
     return true;
 }
