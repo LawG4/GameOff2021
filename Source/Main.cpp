@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
         // Key input data 
         glfwSetKeyCallback(window, key_callback);
         // Mouse input data
-        glfwSetCursorPosCallback(window, cursor_position_callback);
+        //glfwSetCursorPosCallback(window, cursor_position_callback);
 
         //glfwSwapBuffers(*window);
     }
