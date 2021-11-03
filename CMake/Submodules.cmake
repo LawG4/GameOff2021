@@ -11,15 +11,6 @@ add_subdirectory(${PROJ_ROOT}/External/glfw)
 # Link to the project
 target_link_libraries(${PROJ_NAME} glfw)
 
-# glad - Extensions loading library
-if(NOT EXISTS ${PROJ_ROOT}/External/glad)
-    message(FATAL_ERROR "Glad not found, ensure you have it downloaded")
-endif()
-# Add the submodule 
-add_subdirectory(${PROJ_ROOT}/External/glad)
-# Link to the project
-target_link_libraries(${PROJ_NAME} glad)
-
 # sspdlog
 # Check if the directory exists 
 if(NOT EXISTS ${PROJ_ROOT}/External/spdlog)
@@ -47,3 +38,4 @@ target_link_libraries(${PROJ_NAME} nlohmann_json)
 # This is because we want to use GLFW to init Vulkan headers 
 find_package(Vulkan REQUIRED FATAL_ERROR)
 target_include_directories(${PROJ_NAME} PUBLIC ${Vulkan_INCLUDE_DIR})
+target_link_libraries(${PROJ_NAME} ${Vulkan_LIBRARIES})
