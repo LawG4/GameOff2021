@@ -45,10 +45,16 @@ int main(int argc, char *argv[])
         windowHeight = userSetting["Window_Settings"]["Windowed_Height"];
     }
 
-    // Create the launcher
+    // Create the window with the settings
     if (!initWindow("B.U.G Launcher", windowWidth, windowHeight, fullScreen)) {
         Log.error("Could not initialise GLFW window for the laucher");
         glfwTerminate();
+        return -1;
+    }
+
+    // Initialise vulkan
+    if (!initVulkan()) {
+        Log.error("Could not start Vulkan");
         return -1;
     }
 

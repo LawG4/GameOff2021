@@ -5,3 +5,10 @@
 \Contributors  : Lawrence G,
  *********************************************************************************************************/
 #pragma once
+
+#include "Vulkan.h"
+
+namespace vk
+{
+extern VkInstance instance;
+}

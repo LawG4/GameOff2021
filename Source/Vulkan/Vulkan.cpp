@@ -6,14 +6,14 @@
  *********************************************************************************************************/
 #include "Vulkan.h"
 
-bool isVulkanSuitable() { return false; }
-
 bool initVulkan()
 {
-    if (!glfwVulkanSupported()) {
-        Log.error("GLFW could not find a Vulkan loader and Vulkan ICD");
+    if (!vk::createInstance()) {
+        Log.error("Could not create Vulkan instance");
         return false;
     } else {
-        Log.info("A Vulkan loader and minimally capable ICD were found");
+        Log.info("Created Vulkan instance");
     }
+
+    return true;
 }

@@ -38,6 +38,5 @@ bool initWindow(const char *windowTitle, uint32_t width, uint32_t height, bool i
     // Create the window
     window = glfwCreateWindow(width, height, windowTitle, NULL, NULL);
     glfwShowWindow(window);
-
     return true;
 }
