@@ -12,6 +12,20 @@
 #include <fstream>
 #include <iostream>
 
+/// <summary> Destory everything </summary>
+void cleanUp()
+{
+    // First destroy Vulkan
+    cleanupVulkan();
+
+    // If the window exists destroy it
+    if (window) glfwDestroyWindow(window);
+    glfwTerminate();
+    Log.info("GLFW resources destroyed");
+
+    Log.info("All resources destroyed");
+}
+
 int main(int argc, char *argv[])
 {
     if (!initLog()) {
@@ -48,13 +62,14 @@ int main(int argc, char *argv[])
     // Create the window with the settings
     if (!initWindow("B.U.G Launcher", windowWidth, windowHeight, fullScreen)) {
         Log.error("Could not initialise GLFW window for the laucher");
-        glfwTerminate();
+        cleanUp();
         return -1;
     }
 
     // Ensure that the machine is capable of loading Vulkan at all
     if (!glfwVulkanSupported()) {
         Log.error("Vulkan is not supported on your device");
+        cleanUp();
         return -1;
     } else {
         Log.info("GLFW Confirms a Vulkan device");
@@ -63,6 +78,7 @@ int main(int argc, char *argv[])
     // Initialise vulkan
     if (!initVulkan()) {
         Log.error("Could not start Vulkan");
+        cleanUp();
         return -1;
     }
 
@@ -72,4 +88,6 @@ int main(int argc, char *argv[])
 
         // glfwSwapBuffers(window);
     }
+
+    cleanUp();
 }

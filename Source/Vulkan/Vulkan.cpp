@@ -6,6 +6,8 @@
  *********************************************************************************************************/
 #include "Vulkan.h"
 
+bool vulkanInitialised = false;
+
 bool initVulkan()
 {
     if (!vk::createInstance()) {
@@ -15,5 +17,15 @@ bool initVulkan()
         Log.info("Created Vulkan instance");
     }
 
+    vulkanInitialised = true;
     return true;
+}
+
+void cleanupVulkan()
+{
+    if (!vulkanInitialised) return;
+
+    vkDestroyInstance(vk::instance, nullptr);
+
+    Log.info("Vulkan Destoryed");
 }

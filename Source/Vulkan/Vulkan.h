@@ -26,6 +26,9 @@ typedef struct VulkanDisplayList_t {
 /// <returns>True if nothing went wrong</returns>
 bool initVulkan();
 
+/// <summary> Destorys all Vulkan objects </summary>
+void cleanupVulkan();
+
 namespace vk
 {
 /// <summary> The instance extensions that the user would like to enable and are supported</summary>
