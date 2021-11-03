@@ -59,6 +59,15 @@ void deleteDebugMessenger();
 /// <returns>True if successful</returns>
 bool selectBestPhysicalDevice();
 
+/// <summary>The currently bound physical device's device extension properties </summary>
+extern std::vector<VkExtensionProperties> deviceExtensionProperties;
+
+/// <summary>A list of required device extensions, fail if a device doesn't have these </summary>
+extern std::vector<const char*> requiredDeviceExtensions;
+
+/// <summary>A list of device extensions it would be nice to have, use to rate best physical device </summary>
+extern std::vector<const char*> requestedDeviceExtensions;
+
 /// <summary> Creates a logical device from the selected physical device </summary>
 /// <returns>True if successful</returns>
 bool createLogicalDevice();

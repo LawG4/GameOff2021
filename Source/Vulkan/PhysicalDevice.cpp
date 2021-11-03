@@ -12,11 +12,15 @@
 VkPhysicalDevice vk::physicalDevice = VK_NULL_HANDLE;
 VkPhysicalDeviceProperties deviceProperties;
 QueueFamilyIndices vk::selectedQueueFamilies;
+std::vector<VkExtensionProperties> vk::deviceExtensionProperties;
 
+// An internal list of all of the physical devices
 std::vector<VkPhysicalDevice> devices;
 
+// Function to find all of the queue families that we need
 QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
 
+// Function to let us know if the device has all the functions that we need.
 bool QueueFamilyIndices::allQueuesPresent()
 {
     return this->graphicsFamily.has_value() && this->presentFamily.has_value();
@@ -27,6 +31,14 @@ bool isDeviceSuitable(VkPhysicalDevice device)
     // Get the physical device properties
     vkGetPhysicalDeviceProperties(device, &deviceProperties);
 
+    // Get the device extensions
+    uint32_t deviceExtensionCount = 0;
+    vkEnumerateDeviceExtensionProperties(device, nullptr, &deviceExtensionCount, nullptr);
+    vk::deviceExtensionProperties.clear();
+    vk::deviceExtensionProperties.resize(deviceExtensionCount);
+    vkEnumerateDeviceExtensionProperties(device, nullptr, &deviceExtensionCount,
+                                         vk::deviceExtensionProperties.data());
+
     Log.info("Evaluating suitability for Vulkan device {}", deviceProperties.deviceName);
 
     // Does it have the suitable queues
@@ -34,6 +46,23 @@ bool isDeviceSuitable(VkPhysicalDevice device)
     if (!vk::selectedQueueFamilies.allQueuesPresent()) {
         Log.info("Rejecting physical device");
         return false;
+    }
+
+    // Does it have the required device extensions?
+    for (auto& extension : vk::requiredDeviceExtensions) {
+        bool found = false;
+
+        for (auto& knownExtension : vk::deviceExtensionProperties) {
+            if (!strcmp(extension, knownExtension.extensionName)) {
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            Log.warn("Device couldn't find required extension {}", extension);
+            return false;
+        }
     }
 
     // For now just assume it's good
