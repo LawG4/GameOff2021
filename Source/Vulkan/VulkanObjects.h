@@ -15,6 +15,20 @@ struct QueueFamilyIndices {
     bool allQueuesPresent();
 };
 
+struct SwapchainProperties {
+    VkSurfaceCapabilitiesKHR capabilities;
+    std::vector<VkSurfaceFormatKHR> formats;
+    std::vector<VkPresentModeKHR> presentModes;
+
+    /// <summary> Takes a pysical device and fills this swapchain propeties as a result </summary>
+    /// <param name="device">The device we're populating</param>
+    void populate(VkPhysicalDevice device);
+
+    /// <summary> Does the selected device have enough swapchain capabilities? </summary>
+    /// <returns>True if swapchain support is good enough</returns>
+    bool swapchainSuitable();
+};
+
 namespace vk
 {
 extern VkInstance instance;
@@ -28,4 +42,11 @@ extern VkQueue graphicsQueue;
 extern VkQueue presentationQueue;
 
 extern VkSurfaceKHR surface;
+extern VkSwapchainKHR swapchain;
+extern uint32_t swapLength;
+extern SwapchainProperties selectedSwapchainProperties;
+extern VkFormat swapchainFormat;
+extern VkExtent2D swapchainExtent;
+extern std::vector<VkImage> swapchainImages;
+
 }  // namespace vk

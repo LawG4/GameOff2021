@@ -5,6 +5,7 @@
 \Contributors  : Lawrence G,
  *********************************************************************************************************/
 #pragma once
+#pragma warning(disable : 26812)  // Vulkan has an annoying prefer class enum over enum warning
 
 // Use GLFW to include Vulkan headers
 #define GLFW_INCLUDE_VULKAN
@@ -71,4 +72,8 @@ extern std::vector<const char*> requestedDeviceExtensions;
 /// <summary> Creates a logical device from the selected physical device </summary>
 /// <returns>True if successful</returns>
 bool createLogicalDevice();
+
+/// <summary> Creates the swapchain suitable for the window </summary>
+/// <returns>returns if successful</returns>
+bool createSwapchain();
 }  // namespace vk

@@ -65,6 +65,13 @@ bool isDeviceSuitable(VkPhysicalDevice device)
         }
     }
 
+    // Does the device have good enough swapchain capabilities
+    vk::selectedSwapchainProperties.populate(device);
+    if (!vk::selectedSwapchainProperties.swapchainSuitable()) {
+        Log.warn("Swapchain not suitable");
+        return false;
+    }
+
     // For now just assume it's good
     Log.info("Selected Physical device {}", deviceProperties.deviceName);
     return true;

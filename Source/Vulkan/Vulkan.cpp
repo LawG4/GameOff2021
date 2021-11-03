@@ -39,6 +39,13 @@ bool initVulkan()
         Log.info("Created Vulkan Logical Device");
     }
 
+    if (!vk::createSwapchain()) {
+        Log.error("Could not create Vulkan Swapchain");
+        return false;
+    } else {
+        Log.info("Created Vulkan swapchain");
+    }
+
     vulkanInitialised = true;
     return true;
 }
@@ -46,6 +53,8 @@ bool initVulkan()
 void cleanupVulkan()
 {
     if (!vulkanInitialised) return;
+
+    vkDestroySwapchainKHR(vk::logialDevice, vk::swapchain, nullptr);
 
     vkDestroySurfaceKHR(vk::instance, vk::surface, nullptr);
 
