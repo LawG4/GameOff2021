@@ -2,7 +2,7 @@
 \File          : Main.cpp
 \Copyright     : MIT License
 \Brief         : Adds an entry point into the game
-\Contributors  : Lawrence G,
+\Contributors  : Lawrence G, Freddie M
  *********************************************************************************************************/
 #include "Log.h"
 #include "Render.h"
@@ -94,7 +94,12 @@ int main(int argc, char *argv[])
         // glfwSwapBuffers(window);
 
         //clearFrame(*window);
+
+        // Key input data 
         glfwSetKeyCallback(window, key_callback);
+        // Mouse input data
+        glfwSetCursorPosCallback(window, cursor_position_callback);
+
         //glfwSwapBuffers(*window);
     }
 
