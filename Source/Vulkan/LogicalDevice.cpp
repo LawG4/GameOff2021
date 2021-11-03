@@ -13,6 +13,11 @@ VkDevice vk::logialDevice;
 VkQueue vk::graphicsQueue;
 VkQueue vk::presentationQueue;
 
+// The device extensions we require
+std::vector<const char*> vk::requiredDeviceExtensions = {VK_KHR_SWAPCHAIN_EXTENSION_NAME};
+// Device extensions that we'd like to have but not fatal.
+std::vector<const char*> vk::requestedDeviceExtensions = {};
+
 /// <summary> Fetch the queues from the created physical device </summary>
 void fetchQueues();
 
@@ -42,6 +47,10 @@ bool vk::createLogicalDevice()
     createDeviceQueueInfos(queues);
     device.pQueueCreateInfos = queues.data();
     device.queueCreateInfoCount = queues.size();
+
+    // add the device extensions
+    device.ppEnabledExtensionNames = vk::requiredDeviceExtensions.data();
+    device.enabledExtensionCount = vk::requiredDeviceExtensions.size();
 
     // attach device features to the device create info
     device.pEnabledFeatures = &selectDeviceFeatures();
