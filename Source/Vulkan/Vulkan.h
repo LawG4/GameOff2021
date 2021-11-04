@@ -88,4 +88,8 @@ bool createShaderModules();
 /// <summary> Creates the graphics pipeline for this demo </summary>
 /// <returns>True if successful</returns>
 bool createGraphicsPipeline();
+
+/// <summary>Creates a framebuffer from the swapchain image views </summary>
+/// <returns>True if successful</returns>
+bool createFramebuffer();
 }  // namespace vk

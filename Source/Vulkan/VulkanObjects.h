@@ -49,6 +49,7 @@ extern VkFormat swapchainFormat;
 extern VkExtent2D swapchainExtent;
 extern std::vector<VkImage> swapchainImages;
 extern std::vector<VkImageView> swapchainImageViews;
+extern std::vector<VkFramebuffer> swapchainFb;
 
 extern VkRenderPass onscreenRenderPass;
 

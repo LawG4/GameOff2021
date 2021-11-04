@@ -18,9 +18,37 @@ VkExtent2D vk::swapchainExtent;
 std::vector<VkImage> vk::swapchainImages;
 std::vector<VkImageView> vk::swapchainImageViews;
 
+std::vector<VkFramebuffer> vk::swapchainFb;
+
 VkPresentModeKHR chooseSwapchainPresentMode();
 VkSurfaceFormatKHR chooseSwapchainFormat(std::vector<VkSurfaceFormatKHR>& formats);
 VkExtent2D chooseSwapchainExtent(VkSurfaceCapabilitiesKHR& capabilities);
+
+bool vk::createFramebuffer()
+{
+    vk::swapchainFb.resize(vk::swapLength);
+
+    VkFramebufferCreateInfo framebuffer;
+    memset(&framebuffer, 0, sizeof(VkFramebufferCreateInfo));
+    framebuffer.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+    framebuffer.attachmentCount = 1;
+    framebuffer.renderPass = vk::onscreenRenderPass;
+    framebuffer.width = vk::swapchainExtent.width;
+    framebuffer.height = vk::swapchainExtent.height;
+    framebuffer.layers = 1;
+
+    for (uint32_t i = 0; i < vk::swapLength; i++) {
+        framebuffer.pAttachments = &vk::swapchainImageViews.at(i);
+
+        if (vkCreateFramebuffer(vk::logialDevice, &framebuffer, nullptr, &vk::swapchainFb.at(i)) !=
+            VK_SUCCESS) {
+            Log.error("Couldn't create framebuffer index {}", i);
+            return true;
+        }
+    }
+
+    return true;
+}
 
 bool vk::createSwapchain()
 {

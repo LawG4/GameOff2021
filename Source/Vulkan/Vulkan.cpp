@@ -53,6 +53,13 @@ bool initVulkan()
         Log.info("Created Vulkan renderpass");
     }
 
+    if (!vk::createFramebuffer()) {
+        Log.error("Could not create framebuffers");
+        return false;
+    } else {
+        Log.info("Created Vulkan framebuffers");
+    }
+
     if (!vk::createShaderModules()) {
         Log.error("Could not create shader modules");
         return false;
@@ -78,6 +85,10 @@ void cleanupVulkan()
 
     vkDestroyShaderModule(vk::logialDevice, vk::vertModule, nullptr);
     vkDestroyShaderModule(vk::logialDevice, vk::fragModule, nullptr);
+
+    for (VkFramebuffer& fb : vk::swapchainFb) {
+        vkDestroyFramebuffer(vk::logialDevice, fb, nullptr);
+    }
 
     vkDestroyRenderPass(vk::logialDevice, vk::onscreenRenderPass, nullptr);
 
