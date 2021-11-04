@@ -77,11 +77,15 @@ bool createLogicalDevice();
 /// <returns>returns if successful</returns>
 bool createSwapchain();
 
+/// <summary> Retrieves the onscreen renderpass </summary>
+/// <returns>True if successful</returns>
+bool createOnScreenRenderpass();
+
 /// <summary> Creates the shader modules required for the basic pipeline </summary>
 /// <returns>True if successful</returns>
 bool createShaderModules();
 
-/// <summary> Retrieves the onscreen renderpass </summary>
+/// <summary> Creates the graphics pipeline for this demo </summary>
 /// <returns>True if successful</returns>
-bool createOnScreenRenderpass();
+bool createGraphicsPipeline();
 }  // namespace vk

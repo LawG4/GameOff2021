@@ -58,6 +58,13 @@ bool initVulkan()
         return false;
     }
 
+    if (!vk::createGraphicsPipeline()) {
+        Log.error("Could not create the graphics pipeline");
+        return false;
+    } else {
+        Log.info("Created Vulkan graphics pipeline");
+    }
+
     vulkanInitialised = true;
     return true;
 }
@@ -65,6 +72,9 @@ bool initVulkan()
 void cleanupVulkan()
 {
     if (!vulkanInitialised) return;
+
+    vkDestroyPipeline(vk::logialDevice, vk::graphicsPipeline, nullptr);
+    vkDestroyPipelineLayout(vk::logialDevice, vk::graphicsLayout, nullptr);
 
     vkDestroyShaderModule(vk::logialDevice, vk::vertModule, nullptr);
     vkDestroyShaderModule(vk::logialDevice, vk::fragModule, nullptr);

@@ -15,6 +15,7 @@ set(SOURCES
 	Surface.cpp
 	Renderpass.cpp
 	Shader.cpp
+	GraphicsPipeline.cpp
 )
 
 target_sources(${PROJ_NAME} PRIVATE ${HEADERS} ${SOURCES})

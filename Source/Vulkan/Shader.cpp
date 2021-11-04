@@ -11,8 +11,6 @@
 
 VkShaderModule vk::vertModule;
 VkShaderModule vk::fragModule;
-VkPipeline vk::graphicsPipeline;
-VkPipelineLayout vk::graphicsLayout;
 
 /// <summary> Reads in a spirv shader at the specified file location </summary>
 /// <param name="filePath">File path of shader local to working directory</param>
