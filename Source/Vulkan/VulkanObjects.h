@@ -50,6 +50,8 @@ extern VkExtent2D swapchainExtent;
 extern std::vector<VkImage> swapchainImages;
 extern std::vector<VkImageView> swapchainImageViews;
 
+extern VkRenderPass onscreenRenderPass;
+
 extern VkShaderModule vertModule;
 extern VkShaderModule fragModule;
 extern VkPipeline graphicsPipeline;

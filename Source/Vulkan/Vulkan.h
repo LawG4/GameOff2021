@@ -80,4 +80,8 @@ bool createSwapchain();
 /// <summary> Creates the shader modules required for the basic pipeline </summary>
 /// <returns>True if successful</returns>
 bool createShaderModules();
+
+/// <summary> Retrieves the onscreen renderpass </summary>
+/// <returns>True if successful</returns>
+bool createOnScreenRenderpass();
 }  // namespace vk

@@ -46,6 +46,13 @@ bool initVulkan()
         Log.info("Created Vulkan swapchain");
     }
 
+    if (!vk::createOnScreenRenderpass()) {
+        Log.error("Could not create Vukan Renderpass");
+        return false;
+    } else {
+        Log.info("Created Vulkan renderpass");
+    }
+
     if (!vk::createShaderModules()) {
         Log.error("Could not create shader modules");
         return false;
@@ -61,6 +68,8 @@ void cleanupVulkan()
 
     vkDestroyShaderModule(vk::logialDevice, vk::vertModule, nullptr);
     vkDestroyShaderModule(vk::logialDevice, vk::fragModule, nullptr);
+
+    vkDestroyRenderPass(vk::logialDevice, vk::onscreenRenderPass, nullptr);
 
     for (VkImageView& view : vk::swapchainImageViews) {
         vkDestroyImageView(vk::logialDevice, view, nullptr);

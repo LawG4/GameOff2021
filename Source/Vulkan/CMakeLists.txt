@@ -13,6 +13,7 @@ set(SOURCES
 	PhysicalDevice.cpp
 	LogicalDevice.cpp
 	Surface.cpp
+	Renderpass.cpp
 	Shader.cpp
 )
 
