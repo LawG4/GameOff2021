@@ -36,7 +36,7 @@ class player
     }
 };
 
-player build_player() { player new player_class; }
+player build_player() { player* player_class = new player; }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
