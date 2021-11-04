@@ -13,7 +13,7 @@ std::vector<VkCommandBuffer> vk::cmdBuffers;
 bool recordCommandBuffers()
 {
     // Set the clear colour for our onscreen attachment
-    VkClearValue clear = {0.0f, 0.0f, 0.0f, 1.0f};
+    VkClearValue clear = {0.0094117f, 0.00078431f, 0.00392156f, 1.0f};
 
     VkCommandBufferBeginInfo begin;
     memset(&begin, 0, sizeof(VkCommandBufferBeginInfo));
