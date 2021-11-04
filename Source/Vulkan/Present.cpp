@@ -7,20 +7,43 @@
 
 #include "Vulkan.h"
 
-// The semaphores for presenting don't need to be availble to other vulkan objects (right now)
-VkSemaphore vk::readyForRendering;
-VkSemaphore vk::finishedRendering;
+uint32_t currentFrameIndex = 0;
 
-bool vk::createSemaphores()
+// The semaphores for presenting
+std::vector<VkSemaphore> vk::readyForRendering;
+std::vector<VkSemaphore> vk::finishedRendering;
+
+// Fences for syncing with the CPU
+std::vector<VkFence> vk::inFlightFence;
+
+bool vk::createSyncObjects()
 {
+    vk::readyForRendering.resize(vk::swapLength);
+    vk::finishedRendering.resize(vk::swapLength);
+    vk::inFlightFence.resize(vk::swapLength);
+
     VkSemaphoreCreateInfo semaphore;
     memset(&semaphore, 0, sizeof(VkSemaphoreCreateInfo));
     semaphore.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
 
-    if (vkCreateSemaphore(vk::logialDevice, &semaphore, nullptr, &vk::readyForRendering) != VK_SUCCESS ||
-        vkCreateSemaphore(vk::logialDevice, &semaphore, nullptr, &vk::finishedRendering) != VK_SUCCESS) {
-        Log.error("Could not create semaphores");
-        return false;
+    VkFenceCreateInfo fence;
+    memset(&fence, 0, sizeof(VkFenceCreateInfo));
+    fence.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+    fence.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+
+    for (uint32_t i = 0; i < vk::swapLength; i++) {
+        if (vkCreateSemaphore(vk::logialDevice, &semaphore, nullptr, &vk::readyForRendering[i]) !=
+              VK_SUCCESS ||
+            vkCreateSemaphore(vk::logialDevice, &semaphore, nullptr, &vk::finishedRendering[i]) !=
+              VK_SUCCESS) {
+            Log.error("Could not create semaphores");
+            return false;
+        }
+
+        if (vkCreateFence(vk::logialDevice, &fence, nullptr, &vk::inFlightFence[i]) != VK_SUCCESS) {
+            Log.error("Couldn't create a fence");
+            return false;
+        }
     }
 
     return true;
@@ -28,11 +51,15 @@ bool vk::createSemaphores()
 
 bool vk::drawFrame()
 {
+    // Wait on the CPU side for the fence to be ready
+    vkWaitForFences(vk::logialDevice, 1, &vk::inFlightFence[currentFrameIndex], VK_TRUE,
+                    static_cast<uint64_t>(-1));
+    vkResetFences(vk::logialDevice, 1, &vk::inFlightFence[currentFrameIndex]);
+
     // Wait for the next frame to be availbe for rendering
     uint32_t imageIndex;
-    vkAcquireNextImageKHR(vk::logialDevice, vk::swapchain, static_cast<uint64_t>(-1), vk::readyForRendering,
-                          VK_NULL_HANDLE, &imageIndex);
-    Log.info("Image index is : {}", imageIndex);
+    vkAcquireNextImageKHR(vk::logialDevice, vk::swapchain, static_cast<uint64_t>(-1),
+                          vk::readyForRendering[currentFrameIndex], VK_NULL_HANDLE, &imageIndex);
 
     // Now that we have a frame ready, draw to it by submitting the command buffer
     VkSubmitInfo submit;
@@ -44,20 +71,20 @@ bool vk::drawFrame()
     // before running the command buffer
     VkPipelineStageFlags waitStage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
     submit.waitSemaphoreCount = 1;
-    submit.pWaitSemaphores = &vk::readyForRendering;
+    submit.pWaitSemaphores = &vk::readyForRendering[currentFrameIndex];
     submit.pWaitDstStageMask = &waitStage;
 
     // Tell vulkan which semaphore to signal once the command buffer has finished rendering
     // in this case we're telling Vulkan to signal finishedRendering once the command buffer is done
     submit.signalSemaphoreCount = 1;
-    submit.pSignalSemaphores = &vk::finishedRendering;
+    submit.pSignalSemaphores = &vk::finishedRendering[currentFrameIndex];
 
     // The command buffer we're submitting
     submit.commandBufferCount = 1;
     submit.pCommandBuffers = &vk::cmdBuffers.at(imageIndex);
 
     // Submit the command buffer
-    if (vkQueueSubmit(vk::graphicsQueue, 1, &submit, VK_NULL_HANDLE) != VK_SUCCESS) {
+    if (vkQueueSubmit(vk::graphicsQueue, 1, &submit, vk::inFlightFence[currentFrameIndex]) != VK_SUCCESS) {
         Log.error("Failed to submit graphics queue");
         return false;
     }
@@ -71,7 +98,10 @@ bool vk::drawFrame()
     present.swapchainCount = 1;
     present.pImageIndices = &imageIndex;
     present.waitSemaphoreCount = 1;
-    present.pWaitSemaphores = &vk::finishedRendering;
+    present.pWaitSemaphores = &vk::finishedRendering[currentFrameIndex];
+
+    // Advance Frame index
+    currentFrameIndex = (currentFrameIndex + 1) % vk::swapLength;
 
     vkQueuePresentKHR(vk::presentationQueue, &present);
 

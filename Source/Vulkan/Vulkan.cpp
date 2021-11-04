@@ -86,7 +86,7 @@ bool initVulkan()
         Log.info("Allocated Vulkan command buffers");
     }
 
-    if (!vk::createSemaphores()) {
+    if (!vk::createSyncObjects()) {
         Log.error("Could not create Vulkan semaphores");
         return false;
     } else {
@@ -104,8 +104,11 @@ void cleanupVulkan()
     // wait for the device to finish everything up
     vkDeviceWaitIdle(vk::logialDevice);
 
-    vkDestroySemaphore(vk::logialDevice, vk::readyForRendering, nullptr);
-    vkDestroySemaphore(vk::logialDevice, vk::finishedRendering, nullptr);
+    for (uint32_t i = 0; i < vk::swapLength; i++) {
+        vkDestroySemaphore(vk::logialDevice, vk::readyForRendering[i], nullptr);
+        vkDestroySemaphore(vk::logialDevice, vk::finishedRendering[i], nullptr);
+        vkDestroyFence(vk::logialDevice, vk::inFlightFence[i], nullptr);
+    }
 
     vkDestroyCommandPool(vk::logialDevice, vk::graphicsPool, nullptr);
 

@@ -101,9 +101,9 @@ bool createCommandPools();
 /// <returns>True if successful</returns>
 bool allocateCommandBuffers();
 
-/// <summary> Creates some semaphores for image ready and image done </summary>
+/// <summary> Creates some semaphores and fences for image ready and image done </summary>
 /// <returns>True if successful</returns>
-bool createSemaphores();
+bool createSyncObjects();
 
 /// <summary> Submits the command buffers and presents them to the screen </summary>
 /// <returns>true if sucessful </returns>
