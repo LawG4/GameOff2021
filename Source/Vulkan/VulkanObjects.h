@@ -50,4 +50,8 @@ extern VkExtent2D swapchainExtent;
 extern std::vector<VkImage> swapchainImages;
 extern std::vector<VkImageView> swapchainImageViews;
 
+extern VkShaderModule vertModule;
+extern VkShaderModule fragModule;
+extern VkPipeline graphicsPipeline;
+extern VkPipelineLayout graphicsLayout;
 }  // namespace vk

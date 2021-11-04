@@ -13,6 +13,7 @@ set(SOURCES
 	PhysicalDevice.cpp
 	LogicalDevice.cpp
 	Surface.cpp
+	Shader.cpp
 )
 
 target_sources(${PROJ_NAME} PRIVATE ${HEADERS} ${SOURCES})

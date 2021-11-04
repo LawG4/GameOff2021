@@ -46,6 +46,11 @@ bool initVulkan()
         Log.info("Created Vulkan swapchain");
     }
 
+    if (!vk::createShaderModules()) {
+        Log.error("Could not create shader modules");
+        return false;
+    }
+
     vulkanInitialised = true;
     return true;
 }
@@ -53,6 +58,9 @@ bool initVulkan()
 void cleanupVulkan()
 {
     if (!vulkanInitialised) return;
+
+    vkDestroyShaderModule(vk::logialDevice, vk::vertModule, nullptr);
+    vkDestroyShaderModule(vk::logialDevice, vk::fragModule, nullptr);
 
     for (VkImageView& view : vk::swapchainImageViews) {
         vkDestroyImageView(vk::logialDevice, view, nullptr);

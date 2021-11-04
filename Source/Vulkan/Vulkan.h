@@ -76,4 +76,8 @@ bool createLogicalDevice();
 /// <summary> Creates the swapchain suitable for the window </summary>
 /// <returns>returns if successful</returns>
 bool createSwapchain();
+
+/// <summary> Creates the shader modules required for the basic pipeline </summary>
+/// <returns>True if successful</returns>
+bool createShaderModules();
 }  // namespace vk
