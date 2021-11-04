@@ -36,11 +36,12 @@ class player
     }
 };
 
+player build_player() { player new player_class; }
+
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    player player_class;
-
     if (key == GLFW_KEY_E && action == GLFW_PRESS) {
+        player_class.player_step_size++;
         Log.info(player_class.player_step_size);
     }
     if (key == GLFW_KEY_W && action == GLFW_PRESS) {

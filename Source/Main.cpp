@@ -11,8 +11,6 @@
 
 #include "Player.h"
 
-
-
 #include <fstream>
 #include <iostream>
 
@@ -89,18 +87,22 @@ int main(int argc, char *argv[])
     // Enter into the windowing loop
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
-        
 
         // glfwSwapBuffers(window);
 
-        //clearFrame(*window);
+        // clearFrame(*window);
 
-        // Key input data 
+        // Build player class
+        player_class = build_player();
+        // Key input data
         glfwSetKeyCallback(window, key_callback);
-        // Mouse input data
-        //glfwSetCursorPosCallback(window, cursor_position_callback);
+        // Delete player class after keyboard stuff done
+        delete player_class;
 
-        //glfwSwapBuffers(*window);
+        // Mouse input data
+        // glfwSetCursorPosCallback(window, cursor_position_callback);
+
+        // glfwSwapBuffers(*window);
     }
 
     cleanUp();
