@@ -100,4 +100,12 @@ bool createCommandPools();
 /// <summary> Allocates all of the command buffers for the game </summary>
 /// <returns>True if successful</returns>
 bool allocateCommandBuffers();
+
+/// <summary> Creates some semaphores for image ready and image done </summary>
+/// <returns>True if successful</returns>
+bool createSemaphores();
+
+/// <summary> Submits the command buffers and presents them to the screen </summary>
+/// <returns>true if sucessful </returns>
+bool drawFrame();
 }  // namespace vk

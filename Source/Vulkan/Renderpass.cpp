@@ -56,6 +56,24 @@ bool vk::createOnScreenRenderpass()
     renderpass.subpassCount = 1;
     renderpass.pSubpasses = &subpass;
 
+    // Tell the render pass that the colour attachment has an external dependency
+    // ie turning from presentation back into renderable
+    VkSubpassDependency dependency;
+    memset(&dependency, 0, sizeof(VkSubpassDependency));
+    // Dependency is coming from outside the renderpass
+    dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+    dependency.dstSubpass = 0;
+    // We're transitioing the attachment from present to writable
+    dependency.srcAccessMask = 0;
+    dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+    // We want this transition to happen after the attachment has been displayed and before it gets written to
+    dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+
+    // Attach to render pass
+    renderpass.dependencyCount = 1;
+    renderpass.pDependencies = &dependency;
+
     if (vkCreateRenderPass(vk::logialDevice, &renderpass, nullptr, &vk::onscreenRenderPass) != VK_SUCCESS) {
         Log.error("Could not create the onscreen renderpass");
         return false;

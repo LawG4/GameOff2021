@@ -60,4 +60,7 @@ extern VkPipelineLayout graphicsLayout;
 
 extern VkCommandPool graphicsPool;
 extern std::vector<VkCommandBuffer> cmdBuffers;
+
+extern VkSemaphore readyForRendering;
+extern VkSemaphore finishedRendering;
 }  // namespace vk

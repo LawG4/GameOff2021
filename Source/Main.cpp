@@ -98,6 +98,7 @@ int main(int argc, char *argv[])
         // glfwSetCursorPosCallback(window, cursor_position_callback);
 
         // glfwSwapBuffers(*window);
+        vk::drawFrame();
     }
 
     cleanUp();

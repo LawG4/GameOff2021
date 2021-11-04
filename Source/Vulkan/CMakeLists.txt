@@ -17,6 +17,7 @@ set(SOURCES
 	Shader.cpp
 	GraphicsPipeline.cpp
 	CommndBuffer.cpp
+	Present.cpp
 )
 
 target_sources(${PROJ_NAME} PRIVATE ${HEADERS} ${SOURCES})
