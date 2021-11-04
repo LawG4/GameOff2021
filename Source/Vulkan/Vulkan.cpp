@@ -46,6 +46,53 @@ bool initVulkan()
         Log.info("Created Vulkan swapchain");
     }
 
+    if (!vk::createOnScreenRenderpass()) {
+        Log.error("Could not create Vukan Renderpass");
+        return false;
+    } else {
+        Log.info("Created Vulkan renderpass");
+    }
+
+    if (!vk::createFramebuffer()) {
+        Log.error("Could not create framebuffers");
+        return false;
+    } else {
+        Log.info("Created Vulkan framebuffers");
+    }
+
+    if (!vk::createShaderModules()) {
+        Log.error("Could not create shader modules");
+        return false;
+    }
+
+    if (!vk::createGraphicsPipeline()) {
+        Log.error("Could not create the graphics pipeline");
+        return false;
+    } else {
+        Log.info("Created Vulkan graphics pipeline");
+    }
+
+    if (!vk::createCommandPools()) {
+        Log.error("Could not create Vulkan command pools");
+        return false;
+    } else {
+        Log.info("Created Vulkan command pool");
+    }
+
+    if (!vk::allocateCommandBuffers()) {
+        Log.error("Could not allocate Vulkan command buffers");
+        return false;
+    } else {
+        Log.info("Allocated Vulkan command buffers");
+    }
+
+    if (!vk::createSyncObjects()) {
+        Log.error("Could not create Vulkan semaphores");
+        return false;
+    } else {
+        Log.info("Created Vulkan semaphores");
+    }
+
     vulkanInitialised = true;
     return true;
 }
@@ -53,6 +100,33 @@ bool initVulkan()
 void cleanupVulkan()
 {
     if (!vulkanInitialised) return;
+
+    // wait for the device to finish everything up
+    vkDeviceWaitIdle(vk::logialDevice);
+
+    for (uint32_t i = 0; i < vk::swapLength; i++) {
+        vkDestroySemaphore(vk::logialDevice, vk::readyForRendering[i], nullptr);
+        vkDestroySemaphore(vk::logialDevice, vk::finishedRendering[i], nullptr);
+        vkDestroyFence(vk::logialDevice, vk::inFlightFence[i], nullptr);
+    }
+
+    vkDestroyCommandPool(vk::logialDevice, vk::graphicsPool, nullptr);
+
+    vkDestroyPipeline(vk::logialDevice, vk::graphicsPipeline, nullptr);
+    vkDestroyPipelineLayout(vk::logialDevice, vk::graphicsLayout, nullptr);
+
+    vkDestroyShaderModule(vk::logialDevice, vk::vertModule, nullptr);
+    vkDestroyShaderModule(vk::logialDevice, vk::fragModule, nullptr);
+
+    for (VkFramebuffer& fb : vk::swapchainFb) {
+        vkDestroyFramebuffer(vk::logialDevice, fb, nullptr);
+    }
+
+    vkDestroyRenderPass(vk::logialDevice, vk::onscreenRenderPass, nullptr);
+
+    for (VkImageView& view : vk::swapchainImageViews) {
+        vkDestroyImageView(vk::logialDevice, view, nullptr);
+    }
 
     vkDestroySwapchainKHR(vk::logialDevice, vk::swapchain, nullptr);
 

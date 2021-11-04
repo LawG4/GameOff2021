@@ -76,4 +76,36 @@ bool createLogicalDevice();
 /// <summary> Creates the swapchain suitable for the window </summary>
 /// <returns>returns if successful</returns>
 bool createSwapchain();
+
+/// <summary> Retrieves the onscreen renderpass </summary>
+/// <returns>True if successful</returns>
+bool createOnScreenRenderpass();
+
+/// <summary> Creates the shader modules required for the basic pipeline </summary>
+/// <returns>True if successful</returns>
+bool createShaderModules();
+
+/// <summary> Creates the graphics pipeline for this demo </summary>
+/// <returns>True if successful</returns>
+bool createGraphicsPipeline();
+
+/// <summary>Creates a framebuffer from the swapchain image views </summary>
+/// <returns>True if successful</returns>
+bool createFramebuffer();
+
+/// <summary> Creates the command pools that we need for this demo </summary>
+/// <returns>True if successful</returns>
+bool createCommandPools();
+
+/// <summary> Allocates all of the command buffers for the game </summary>
+/// <returns>True if successful</returns>
+bool allocateCommandBuffers();
+
+/// <summary> Creates some semaphores and fences for image ready and image done </summary>
+/// <returns>True if successful</returns>
+bool createSyncObjects();
+
+/// <summary> Submits the command buffers and presents them to the screen </summary>
+/// <returns>true if sucessful </returns>
+bool drawFrame();
 }  // namespace vk
