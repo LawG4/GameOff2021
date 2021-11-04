@@ -72,6 +72,20 @@ bool initVulkan()
         Log.info("Created Vulkan graphics pipeline");
     }
 
+    if (!vk::createCommandPools()) {
+        Log.error("Could not create Vulkan command pools");
+        return false;
+    } else {
+        Log.info("Created Vulkan command pool");
+    }
+
+    if (!vk::allocateCommandBuffers()) {
+        Log.error("Could not allocate Vulkan command buffers");
+        return false;
+    } else {
+        Log.info("Allocated Vulkan command buffers");
+    }
+
     vulkanInitialised = true;
     return true;
 }
@@ -79,6 +93,8 @@ bool initVulkan()
 void cleanupVulkan()
 {
     if (!vulkanInitialised) return;
+
+    vkDestroyCommandPool(vk::logialDevice, vk::graphicsPool, nullptr);
 
     vkDestroyPipeline(vk::logialDevice, vk::graphicsPipeline, nullptr);
     vkDestroyPipelineLayout(vk::logialDevice, vk::graphicsLayout, nullptr);

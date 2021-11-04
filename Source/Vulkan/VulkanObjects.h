@@ -57,4 +57,7 @@ extern VkShaderModule vertModule;
 extern VkShaderModule fragModule;
 extern VkPipeline graphicsPipeline;
 extern VkPipelineLayout graphicsLayout;
+
+extern VkCommandPool graphicsPool;
+extern std::vector<VkCommandBuffer> cmdBuffers;
 }  // namespace vk

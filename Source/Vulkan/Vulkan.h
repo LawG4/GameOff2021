@@ -92,4 +92,12 @@ bool createGraphicsPipeline();
 /// <summary>Creates a framebuffer from the swapchain image views </summary>
 /// <returns>True if successful</returns>
 bool createFramebuffer();
+
+/// <summary> Creates the command pools that we need for this demo </summary>
+/// <returns>True if successful</returns>
+bool createCommandPools();
+
+/// <summary> Allocates all of the command buffers for the game </summary>
+/// <returns>True if successful</returns>
+bool allocateCommandBuffers();
 }  // namespace vk
