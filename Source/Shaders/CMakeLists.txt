@@ -3,5 +3,6 @@ cmake_minimum_required(VERSION 3.20)
 
 set(SHADER_FILES
 	${CMAKE_CURRENT_LIST_DIR}/TestShader.vert
-	CACHE STRING "List of GLSL shaders"
+	${CMAKE_CURRENT_LIST_DIR}/TestShader.frag
+	CACHE STRING "List of GLSL shaders" FORCE
 )
