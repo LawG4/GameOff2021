@@ -7,20 +7,22 @@
 
 #include "Vulkan.h"
 
-uint32_t currentFrameIndex = 0;
+uint32_t currentFrame = 0;
 
 // The semaphores for presenting
 std::vector<VkSemaphore> vk::readyForRendering;
 std::vector<VkSemaphore> vk::finishedRendering;
 
 // Fences for syncing with the CPU
-std::vector<VkFence> vk::inFlightFence;
+std::vector<VkFence> vk::inFlightCMDFence;
+std::vector<VkFence> vk::inFlightImageFence;
 
 bool vk::createSyncObjects()
 {
     vk::readyForRendering.resize(vk::swapLength);
     vk::finishedRendering.resize(vk::swapLength);
-    vk::inFlightFence.resize(vk::swapLength);
+    vk::inFlightCMDFence.resize(vk::swapLength);
+    vk::inFlightImageFence.resize(vk::swapLength, VK_NULL_HANDLE);
 
     VkSemaphoreCreateInfo semaphore;
     memset(&semaphore, 0, sizeof(VkSemaphoreCreateInfo));
@@ -40,7 +42,7 @@ bool vk::createSyncObjects()
             return false;
         }
 
-        if (vkCreateFence(vk::logialDevice, &fence, nullptr, &vk::inFlightFence[i]) != VK_SUCCESS) {
+        if (vkCreateFence(vk::logialDevice, &fence, nullptr, &vk::inFlightCMDFence[i]) != VK_SUCCESS) {
             Log.error("Couldn't create a fence");
             return false;
         }
@@ -51,15 +53,36 @@ bool vk::createSyncObjects()
 
 bool vk::drawFrame()
 {
-    // Wait on the CPU side for the fence to be ready
-    vkWaitForFences(vk::logialDevice, 1, &vk::inFlightFence[currentFrameIndex], VK_TRUE,
+    // Wait on the CPU side until the GPU work for the current frame has finished
+    vkWaitForFences(vk::logialDevice, 1, &vk::inFlightCMDFence[currentFrame], VK_TRUE,
                     static_cast<uint64_t>(-1));
-    vkResetFences(vk::logialDevice, 1, &vk::inFlightFence[currentFrameIndex]);
 
-    // Wait for the next frame to be availbe for rendering
-    uint32_t imageIndex;
-    vkAcquireNextImageKHR(vk::logialDevice, vk::swapchain, static_cast<uint64_t>(-1),
-                          vk::readyForRendering[currentFrameIndex], VK_NULL_HANDLE, &imageIndex);
+    uint32_t imageIndex = 0;
+    VkResult result;
+
+    // Request the next image in the swapchain
+    result = vkAcquireNextImageKHR(vk::logialDevice, vk::swapchain, static_cast<uint64_t>(-1),
+                                   vk::readyForRendering[currentFrame], VK_NULL_HANDLE, &imageIndex);
+
+    if (result == VK_ERROR_OUT_OF_DATE_KHR) {
+        Log.info("Attempt to recreate the swapchain");
+        recreateSwapchain();
+        return true;
+
+    } else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
+        Log.error("Failed to retrieve an image from the swapchain");
+        return false;
+    }
+
+    // The image we retrieved from the swapchain might be out of order, so we need to wait on the image to be
+    // ready, so if we have a fence set then wait on it
+    if (vk::inFlightImageFence[imageIndex] != VK_NULL_HANDLE) {
+        vkWaitForFences(vk::logialDevice, 1, &vk::inFlightImageFence[imageIndex], VK_TRUE,
+                        static_cast<uint64_t>(-1));
+    }
+
+    // Assign the current swapchain image as being used by this frame, so that we can tag the correct fence
+    vk::inFlightImageFence[imageIndex] = inFlightCMDFence[currentFrame];
 
     // Now that we have a frame ready, draw to it by submitting the command buffer
     VkSubmitInfo submit;
@@ -71,20 +94,23 @@ bool vk::drawFrame()
     // before running the command buffer
     VkPipelineStageFlags waitStage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
     submit.waitSemaphoreCount = 1;
-    submit.pWaitSemaphores = &vk::readyForRendering[currentFrameIndex];
+    submit.pWaitSemaphores = &vk::readyForRendering[currentFrame];
     submit.pWaitDstStageMask = &waitStage;
 
     // Tell vulkan which semaphore to signal once the command buffer has finished rendering
     // in this case we're telling Vulkan to signal finishedRendering once the command buffer is done
     submit.signalSemaphoreCount = 1;
-    submit.pSignalSemaphores = &vk::finishedRendering[currentFrameIndex];
+    submit.pSignalSemaphores = &vk::finishedRendering[currentFrame];
 
     // The command buffer we're submitting
     submit.commandBufferCount = 1;
     submit.pCommandBuffers = &vk::cmdBuffers.at(imageIndex);
 
-    // Submit the command buffer
-    if (vkQueueSubmit(vk::graphicsQueue, 1, &submit, vk::inFlightFence[currentFrameIndex]) != VK_SUCCESS) {
+    // Reset the fence just before submitting the command buffer
+    vkResetFences(vk::logialDevice, 1, &vk::inFlightCMDFence[currentFrame]);
+
+    // Submit the command queue
+    if (vkQueueSubmit(vk::graphicsQueue, 1, &submit, vk::inFlightCMDFence[currentFrame]) != VK_SUCCESS) {
         Log.error("Failed to submit graphics queue");
         return false;
     }
@@ -98,10 +124,10 @@ bool vk::drawFrame()
     present.swapchainCount = 1;
     present.pImageIndices = &imageIndex;
     present.waitSemaphoreCount = 1;
-    present.pWaitSemaphores = &vk::finishedRendering[currentFrameIndex];
+    present.pWaitSemaphores = &vk::finishedRendering[currentFrame];
 
     // Advance Frame index
-    currentFrameIndex = (currentFrameIndex + 1) % vk::swapLength;
+    currentFrame = (currentFrame + 1) % vk::swapLength;
 
     vkQueuePresentKHR(vk::presentationQueue, &present);
 

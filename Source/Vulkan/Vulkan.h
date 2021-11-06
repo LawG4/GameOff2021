@@ -77,6 +77,10 @@ bool createLogicalDevice();
 /// <returns>returns if successful</returns>
 bool createSwapchain();
 
+/// <summary>Recreates the swapchain if the user ever gets lost </summary>
+/// <returns>bool if successful</returns>
+bool recreateSwapchain();
+
 /// <summary> Retrieves the onscreen renderpass </summary>
 /// <returns>True if successful</returns>
 bool createOnScreenRenderpass();

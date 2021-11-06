@@ -70,6 +70,7 @@ bool vk::allocateCommandBuffers()
     buffer.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
     buffer.commandBufferCount = vk::swapLength;
 
+    vk::cmdBuffers.clear();
     vk::cmdBuffers.resize(swapLength);
 
     if (vkAllocateCommandBuffers(vk::logialDevice, &buffer, vk::cmdBuffers.data()) != VK_SUCCESS) {

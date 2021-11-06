@@ -107,7 +107,7 @@ void cleanupVulkan()
     for (uint32_t i = 0; i < vk::swapLength; i++) {
         vkDestroySemaphore(vk::logialDevice, vk::readyForRendering[i], nullptr);
         vkDestroySemaphore(vk::logialDevice, vk::finishedRendering[i], nullptr);
-        vkDestroyFence(vk::logialDevice, vk::inFlightFence[i], nullptr);
+        vkDestroyFence(vk::logialDevice, vk::inFlightCMDFence[i], nullptr);
     }
 
     vkDestroyCommandPool(vk::logialDevice, vk::graphicsPool, nullptr);

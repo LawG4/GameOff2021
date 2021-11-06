@@ -63,5 +63,6 @@ extern std::vector<VkCommandBuffer> cmdBuffers;
 
 extern std::vector<VkSemaphore> readyForRendering;
 extern std::vector<VkSemaphore> finishedRendering;
-extern std::vector<VkFence> inFlightFence;
+extern std::vector<VkFence> inFlightCMDFence;
+extern std::vector<VkFence> inFlightImageFence;
 }  // namespace vk

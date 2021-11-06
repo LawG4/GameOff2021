@@ -24,6 +24,37 @@ VkPresentModeKHR chooseSwapchainPresentMode();
 VkSurfaceFormatKHR chooseSwapchainFormat(std::vector<VkSurfaceFormatKHR>& formats);
 VkExtent2D chooseSwapchainExtent(VkSurfaceCapabilitiesKHR& capabilities);
 
+bool vk::recreateSwapchain()
+{
+    Log.info("Recreating Vulkan Swapchain");
+
+    // Wait for device to finish any commands
+    vkDeviceWaitIdle(vk::logialDevice);
+
+    // Destroy the resources
+    for (uint32_t i = 0; i < vk::swapLength; i++) {
+        // Per frame resources
+        vkDestroyFramebuffer(vk::logialDevice, vk::swapchainFb[i], nullptr);
+        vkDestroyImageView(vk::logialDevice, vk::swapchainImageViews[i], nullptr);
+    }
+    vkFreeCommandBuffers(vk::logialDevice, vk::graphicsPool, vk::swapLength, vk::cmdBuffers.data());
+
+    vkDestroyPipeline(vk::logialDevice, vk::graphicsPipeline, nullptr);
+    vkDestroyPipelineLayout(vk::logialDevice, vk::graphicsLayout, nullptr);
+    vkDestroyRenderPass(vk::logialDevice, vk::onscreenRenderPass, nullptr);
+    vkDestroySwapchainKHR(vk::logialDevice, vk::swapchain, nullptr);
+
+    // recreate the lost resources
+    vk::selectedSwapchainProperties.populate(vk::physicalDevice);
+    vk::createSwapchain();
+    vk::createOnScreenRenderpass();
+    vk::createFramebuffer();
+    vk::createGraphicsPipeline();
+    vk::allocateCommandBuffers();
+
+    return true;
+}
+
 bool vk::createFramebuffer()
 {
     vk::swapchainFb.resize(vk::swapLength);
