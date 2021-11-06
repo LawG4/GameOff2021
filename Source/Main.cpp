@@ -93,9 +93,9 @@ int main(int argc, char *argv[])
         // clearFrame(*window);
 
         // Build player class
-        player_class = build_player();
+
         // Key input data
-        glfwSetKeyCallback(window, key_callback);
+        glfwSetKeyCallback(window, key_callback);  //, player_class);
         // Delete player class after keyboard stuff done
         delete player_class;
 

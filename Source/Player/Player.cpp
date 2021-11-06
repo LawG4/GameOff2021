@@ -6,7 +6,7 @@
  *********************************************************************************************************/
 
 #include <iostream>
-#include "Log.h"
+//#include "Log.h"
 #include "Window.h"
 
 /*
@@ -36,9 +36,13 @@ class player
     }
 };
 
-player build_player() { player* player_class = new player; }
+player build_player()
+{
+    player* player_obejct = new player;
+    return player_obejct * ();
+}
 
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)  //, player* player_class)
 {
     if (key == GLFW_KEY_E && action == GLFW_PRESS) {
         player_class.player_step_size++;
