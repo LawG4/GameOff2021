@@ -10,6 +10,7 @@
 #include "nlohmann/json.hpp"
 
 #include "Player.h"
+#include "Player_object.h"
 
 #include <fstream>
 #include <iostream>
@@ -28,7 +29,7 @@ void cleanUp()
     Log.info("All resources destroyed");
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     if (!initLog()) {
         std::cout << "Somehow the logger failed to init!\nWhat on earth happened??" << std::endl;
@@ -93,9 +94,10 @@ int main(int argc, char *argv[])
         // clearFrame(*window);
 
         // Build player class
+        player* player_class = new player;
 
         // Key input data
-        glfwSetKeyCallback(window, key_callback);  //, player_class);
+        glfwSetKeyCallback(window, key_callback(window, player_class));
         // Delete player class after keyboard stuff done
         delete player_class;
 
