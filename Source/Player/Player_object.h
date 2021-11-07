@@ -4,7 +4,7 @@
 \Brief         : Define player object
 \Contributors  : Freddie M,
  *********************************************************************************************************/
-#pragma once #
+#pragma once
 #include "Player.h"
 
 class player
@@ -16,10 +16,7 @@ class player
 
     player();
     ~player();
-    void out_player_damage();
+    int out_player_damage();
 };
 
 extern player* player_class;
-
-// deffine player object
-// player build_player();
