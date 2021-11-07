@@ -10,6 +10,8 @@
 #include "nlohmann/json.hpp"
 
 #include "Player.h"
+#include "Player_object.h"
+
 
 #include <fstream>
 #include <iostream>
@@ -28,7 +30,7 @@ void cleanUp()
     Log.info("All resources destroyed");
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     if (!initLog()) {
         std::cout << "Somehow the logger failed to init!\nWhat on earth happened??" << std::endl;
@@ -94,11 +96,15 @@ int main(int argc, char *argv[])
 
         // Key input data
         glfwSetKeyCallback(window, key_callback);
+        // Delete player class after keyboard stuff done
+
         // Mouse input data
         // glfwSetCursorPosCallback(window, cursor_position_callback);
 
         // glfwSwapBuffers(*window);
+
         vk::drawFrame();
+
     }
 
     cleanUp();

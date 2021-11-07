@@ -3,10 +3,12 @@ cmake_minimum_required(VERSION 3.20)
 
 set(HEADERS
 	Player.h
+	Player_object.h
 )
 
 set(SOURCES
 	Player.cpp
+	Player_object.cpp
 )
 
 target_sources(${PROJ_NAME} PRIVATE ${HEADERS} ${SOURCES})
