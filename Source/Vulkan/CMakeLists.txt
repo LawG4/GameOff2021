@@ -13,6 +13,11 @@ set(SOURCES
 	PhysicalDevice.cpp
 	LogicalDevice.cpp
 	Surface.cpp
+	Renderpass.cpp
+	Shader.cpp
+	GraphicsPipeline.cpp
+	CommndBuffer.cpp
+	Present.cpp
 )
 
 target_sources(${PROJ_NAME} PRIVATE ${HEADERS} ${SOURCES})

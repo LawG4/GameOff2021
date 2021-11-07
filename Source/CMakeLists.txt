@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.20)
 set(COMPONENTS
 	Window
 	Vulkan
+	Shaders
 	Log
 	Render
 	Player

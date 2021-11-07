@@ -48,5 +48,20 @@ extern SwapchainProperties selectedSwapchainProperties;
 extern VkFormat swapchainFormat;
 extern VkExtent2D swapchainExtent;
 extern std::vector<VkImage> swapchainImages;
+extern std::vector<VkImageView> swapchainImageViews;
+extern std::vector<VkFramebuffer> swapchainFb;
 
+extern VkRenderPass onscreenRenderPass;
+
+extern VkShaderModule vertModule;
+extern VkShaderModule fragModule;
+extern VkPipeline graphicsPipeline;
+extern VkPipelineLayout graphicsLayout;
+
+extern VkCommandPool graphicsPool;
+extern std::vector<VkCommandBuffer> cmdBuffers;
+
+extern std::vector<VkSemaphore> readyForRendering;
+extern std::vector<VkSemaphore> finishedRendering;
+extern std::vector<VkFence> inFlightFence;
 }  // namespace vk

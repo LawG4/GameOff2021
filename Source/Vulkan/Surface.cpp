@@ -16,10 +16,39 @@ SwapchainProperties vk::selectedSwapchainProperties;
 VkFormat vk::swapchainFormat;
 VkExtent2D vk::swapchainExtent;
 std::vector<VkImage> vk::swapchainImages;
+std::vector<VkImageView> vk::swapchainImageViews;
+
+std::vector<VkFramebuffer> vk::swapchainFb;
 
 VkPresentModeKHR chooseSwapchainPresentMode();
 VkSurfaceFormatKHR chooseSwapchainFormat(std::vector<VkSurfaceFormatKHR>& formats);
 VkExtent2D chooseSwapchainExtent(VkSurfaceCapabilitiesKHR& capabilities);
+
+bool vk::createFramebuffer()
+{
+    vk::swapchainFb.resize(vk::swapLength);
+
+    VkFramebufferCreateInfo framebuffer;
+    memset(&framebuffer, 0, sizeof(VkFramebufferCreateInfo));
+    framebuffer.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+    framebuffer.attachmentCount = 1;
+    framebuffer.renderPass = vk::onscreenRenderPass;
+    framebuffer.width = vk::swapchainExtent.width;
+    framebuffer.height = vk::swapchainExtent.height;
+    framebuffer.layers = 1;
+
+    for (uint32_t i = 0; i < vk::swapLength; i++) {
+        framebuffer.pAttachments = &vk::swapchainImageViews.at(i);
+
+        if (vkCreateFramebuffer(vk::logialDevice, &framebuffer, nullptr, &vk::swapchainFb.at(i)) !=
+            VK_SUCCESS) {
+            Log.error("Couldn't create framebuffer index {}", i);
+            return true;
+        }
+    }
+
+    return true;
+}
 
 bool vk::createSwapchain()
 {
@@ -69,6 +98,34 @@ bool vk::createSwapchain()
     vkGetSwapchainImagesKHR(vk::logialDevice, vk::swapchain, &vk::swapLength, nullptr);
     vk::swapchainImages.resize(vk::swapLength);
     vkGetSwapchainImagesKHR(vk::logialDevice, vk::swapchain, &vk::swapLength, vk::swapchainImages.data());
+
+    // Create a good template for creating the image views
+    VkImageViewCreateInfo imageView;
+    memset(&imageView, 0, sizeof(VkImageViewCreateInfo));
+    imageView.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+    imageView.format = vk::swapchainFormat;
+    imageView.viewType = VK_IMAGE_VIEW_TYPE_2D;
+
+    imageView.components = {VK_COMPONENT_SWIZZLE_IDENTITY, VK_COMPONENT_SWIZZLE_IDENTITY,
+                            VK_COMPONENT_SWIZZLE_IDENTITY, VK_COMPONENT_SWIZZLE_IDENTITY};
+    imageView.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    imageView.subresourceRange.baseMipLevel = 0;
+    imageView.subresourceRange.levelCount = 1;
+    imageView.subresourceRange.baseArrayLayer = 0;
+    imageView.subresourceRange.layerCount = 1;
+
+    vk::swapchainImageViews.resize(vk::swapLength);
+
+    // Create the image views
+    for (uint32_t i = 0; i < vk::swapLength; i++) {
+        imageView.image = vk::swapchainImages.at(i);
+
+        if (vkCreateImageView(vk::logialDevice, &imageView, nullptr, &vk::swapchainImageViews.at(i)) !=
+            VK_SUCCESS) {
+            Log.error("Could not retrieve swapchain image views");
+            return false;
+        }
+    }
 
     return true;
 }
