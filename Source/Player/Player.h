@@ -5,21 +5,12 @@
 \Contributors  : Freddie M,
  *********************************************************************************************************/
 
-
 #pragma once
 
-
-// We also need to tell glfw to use glad, that way extensions know to be laoded
-
-
+#include "Vulkan.h"
+// GLFW inclusion before vk headers causes error with vk
 #include <GLFW/glfw3.h>
+#include "Player_object.h"
 
-// Actual code here 
+// Actual code here
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-
-
-//static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
-
-
-
-

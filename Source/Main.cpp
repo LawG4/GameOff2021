@@ -10,6 +10,7 @@
 #include "nlohmann/json.hpp"
 
 #include "Player.h"
+#include "Player_object.h"
 
 #include <fstream>
 #include <iostream>
@@ -94,10 +95,12 @@ int main(int argc, char *argv[])
 
         // Key input data
         glfwSetKeyCallback(window, key_callback);
+
         // Mouse input data
         // glfwSetCursorPosCallback(window, cursor_position_callback);
 
         // glfwSwapBuffers(*window);
+
         vk::drawFrame();
     }
 
