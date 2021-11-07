@@ -10,9 +10,10 @@
 
 // We also need to tell glfw to use glad, that way extensions know to be laoded
 
-//#include <GLFW/glfw3.h>
+#include <GLFW/glfw3.h>
 
 // Actual code here
-void key_callback(GLFWwindow* window, player* player_class, int key, int scancode, int action, int mods);
+void key_callback(GLFWwindow* window, int key, int scancode, int action,
+                  int mods);  //, player* player_class);
 
 // static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);

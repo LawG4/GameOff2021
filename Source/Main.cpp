@@ -93,13 +93,9 @@ int main(int argc, char* argv[])
 
         // clearFrame(*window);
 
-        // Build player class
-        player* player_class = new player;
-
         // Key input data
-        glfwSetKeyCallback(window, key_callback(window, player_class));
+        glfwSetKeyCallback(window, key_callback);
         // Delete player class after keyboard stuff done
-        delete player_class;
 
         // Mouse input data
         // glfwSetCursorPosCallback(window, cursor_position_callback);

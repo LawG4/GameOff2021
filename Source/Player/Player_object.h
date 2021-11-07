@@ -13,7 +13,13 @@ class player
     int player_health;
     int player_damage;
     int player_step_size;
+
+    player();
+    ~player();
+    void out_player_damage();
 };
+
+extern player* player_class;
 
 // deffine player object
 // player build_player();

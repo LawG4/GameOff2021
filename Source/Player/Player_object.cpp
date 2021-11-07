@@ -8,6 +8,7 @@
 #include "Player_object.h"
 #include <iostream>
 #include "Log.h"
+#include "Player.h"
 
 /*
 === Plan ===
@@ -21,27 +22,32 @@ updates, all all player data e.g attack pwoer ect])
 
 */
 
-class player
-{  // Player class to hold player data and basic player functions
-   public:
-    int player_health;
-    int player_damage;
-    int player_step_size;
+// Player class methods
+player::player()
+{  // Player constructor to create base player data values
+    player_health = 100;
+    player_damage = 5;
+    player_step_size = 1;
+    player_step_size = 1;
+    std::cout << "Player object created" << std::endl;
+}
 
-    player()
-    {  // Player constructor to create base player data values
-        player_health = 100;
-        player_damage = 5;
-        player_step_size = 1;
-    }
+player::~player()
+{  // Message for when destructor called
+    std::cout << "Player object destroyed" << std::endl;
+}
 
-    ~player()
-    {  // Message for when destructor called
-        Log.info("Player object destroyed");
-    }
-};
+void player::out_player_damage()
+{  // Print out player damage
+    std::cout << player_damage << std::endl;
+}
 
+// Build player class as GLOBAL
+player* player_class = new player;
+
+/*
 player* build_player()
 {  // Function to create player object
     return new player();
 }
+*/
