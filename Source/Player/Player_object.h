@@ -4,7 +4,7 @@
 \Brief         : Define player object
 \Contributors  : Freddie M,
  *********************************************************************************************************/
-#pragma once #
+#pragma once
 #include "Player.h"
 
 class player
