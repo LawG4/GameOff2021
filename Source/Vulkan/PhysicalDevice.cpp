@@ -5,6 +5,7 @@
 \Contributors  : Lawrence G,
  *********************************************************************************************************/
 
+#include "Memory.h"
 #include "Vulkan.h"
 
 #include <optional>
@@ -93,6 +94,9 @@ bool vk::selectBestPhysicalDevice()
     for (auto device : devices) {
         if (isDeviceSuitable(device)) {
             vk::physicalDevice = device;
+
+            // Store the memory properties of the selected device
+            vkGetPhysicalDeviceMemoryProperties(vk::physicalDevice, &vk::memory::memProperties);
             break;
         }
     }

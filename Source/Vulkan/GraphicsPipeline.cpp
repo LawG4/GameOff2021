@@ -5,8 +5,8 @@
 \Contributors  : Lawrence G,
  *********************************************************************************************************/
 
+#include "Vertex.h"
 #include "Vulkan.h"
-
 VkPipeline vk::graphicsPipeline;
 VkPipelineLayout vk::graphicsLayout;
 
@@ -14,6 +14,9 @@ VkPipelineLayout vk::graphicsLayout;
 void createFixedFunctionStateVariables();
 
 VkPipelineVertexInputStateCreateInfo vertexInput;
+VkVertexInputBindingDescription bindingDesc;
+std::vector<VkVertexInputAttributeDescription> attributes;
+
 VkPipelineInputAssemblyStateCreateInfo inputAssembly;
 
 VkPipelineViewportStateCreateInfo viewportState;
@@ -94,6 +97,14 @@ void createFixedFunctionStateVariables()
     // Tell the pipeline how it can expect to recieve vertices
     memset(&vertexInput, 0, sizeof(VkPipelineVertexInputStateCreateInfo));
     vertexInput.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+
+    bindingDesc = Vertex::getBindingDescription();
+    vertexInput.pVertexBindingDescriptions = &bindingDesc;
+    vertexInput.vertexBindingDescriptionCount = 1;
+
+    attributes = Vertex::getAttributeDescriptions();
+    vertexInput.pVertexAttributeDescriptions = attributes.data();
+    vertexInput.vertexAttributeDescriptionCount = attributes.size();
 
     // Tell the pipeline how to reconstruct the recieved vertex data
     memset(&inputAssembly, 0, sizeof(VkPipelineInputAssemblyStateCreateInfo));

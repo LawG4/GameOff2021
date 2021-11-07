@@ -7,6 +7,7 @@ set(COMPONENTS
 	Log
 	Render
 	Player
+	Model
 )
 
 foreach(directory ${COMPONENTS})

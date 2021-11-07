@@ -5,6 +5,7 @@
 \Contributors  : Lawrence G,
  *********************************************************************************************************/
 #include "Vulkan.h"
+#include "Memory.h"
 #include "Window.h"
 bool vulkanInitialised = false;
 
@@ -60,6 +61,12 @@ bool initVulkan()
         Log.info("Created Vulkan framebuffers");
     }
 
+    // Create a vertex buffer for the onscreen triangle
+    const std::vector<Vertex> triangleBuffer = {{{0.0f, -0.5f, 0.0f}, {1.0f, 1.0f, 1.0f}},
+                                                {{0.5f, 0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}},
+                                                {{-0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}}};
+    vk::addVertexBuffer("VertexBuffer", triangleBuffer);
+
     if (!vk::createShaderModules()) {
         Log.error("Could not create shader modules");
         return false;
@@ -103,6 +110,8 @@ void cleanupVulkan()
 
     // wait for the device to finish everything up
     vkDeviceWaitIdle(vk::logialDevice);
+
+    vk::destroyBuffers();
 
     for (uint32_t i = 0; i < vk::swapLength; i++) {
         vkDestroySemaphore(vk::logialDevice, vk::readyForRendering[i], nullptr);

@@ -5,6 +5,7 @@
 \Contributors  : Lawrence G,
  *********************************************************************************************************/
 
+#include "Memory.h"
 #include "Vulkan.h"
 
 VkCommandPool vk::graphicsPool;
@@ -47,6 +48,11 @@ bool recordCommandBuffers()
 
         // Bind the graphics pipeline
         vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, vk::graphicsPipeline);
+
+        // Bind to the vertex buffers
+        VkDeviceSize offSets[] = {0};
+        VkBuffer vertexBuffers[] = {vk::bufferStorageMap.at(0).buffer};
+        vkCmdBindVertexBuffers(cmd, 0, 1, vertexBuffers, offSets);
 
         vkCmdDraw(cmd, 3, 1, 0, 0);
 
