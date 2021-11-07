@@ -6,14 +6,11 @@
  *********************************************************************************************************/
 
 #pragma once
+
+#include "Vulkan.h"
+// GLFW inclusion before vk headers causes error with vk
+#include <GLFW/glfw3.h>
 #include "Player_object.h"
 
-// We also need to tell glfw to use glad, that way extensions know to be laoded
-
-#include <GLFW/glfw3.h>
-
 // Actual code here
-void key_callback(GLFWwindow* window, int key, int scancode, int action,
-                  int mods);  //, player* player_class);
-
-// static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
