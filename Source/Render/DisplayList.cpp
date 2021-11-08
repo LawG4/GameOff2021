@@ -1,6 +1,6 @@
 /*!********************************************************************************************************
 \File          : DisplayList.cpp
-\Copyright     : MIT License
+\Copyright     : GPL-3.0 License
 \Brief         : Holds the basic display list to render everything this frame
 \Contributors  : Lawrence G,
  *********************************************************************************************************/

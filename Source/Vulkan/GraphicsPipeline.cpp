@@ -1,6 +1,6 @@
 /*!********************************************************************************************************
 \File          : GraphicsPipeline.cpp
-\Copyright     : MIT License
+\Copyright     : GPL-3.0 License
 \Brief         : Handles creating the graphics pipeline
 \Contributors  : Lawrence G,
  *********************************************************************************************************/

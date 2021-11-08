@@ -1,6 +1,6 @@
 /*!********************************************************************************************************
 \File          : Render.h
-\Copyright     : MIT License
+\Copyright     : GPL-3.0 License
 \Brief         : Handels rendering the current frame
 \Contributors  : Lawrence G,
  *********************************************************************************************************/

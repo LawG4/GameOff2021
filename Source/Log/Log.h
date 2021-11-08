@@ -1,6 +1,6 @@
 /*!********************************************************************************************************
 \File          : Log.h
-\Copyright     : MIT License
+\Copyright     : GPL-3.0 License
 \Brief         : Adds a header for initing the loging system
 \Contributors  : Lawrence G,
  *********************************************************************************************************/

@@ -1,6 +1,6 @@
 /*!********************************************************************************************************
 \File          : Vulkan.h
-\Copyright     : MIT License
+\Copyright     : GPL-3.0 License
 \Brief         : Adds vulkan validation layer support
 \Contributors  : Lawrence G,
  *********************************************************************************************************/

@@ -1,6 +1,6 @@
 /*!********************************************************************************************************
 \File          : Vulkan.cpp
-\Copyright     : MIT License
+\Copyright     : GPL-3.0 License
 \Brief         : Provides the function definition for initing Vulkan
 \Contributors  : Lawrence G,
  *********************************************************************************************************/

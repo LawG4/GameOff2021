@@ -1,6 +1,6 @@
 /*!********************************************************************************************************
 \File          : PhysicalDevice.cpp
-\Copyright     : MIT License
+\Copyright     : GPL-3.0 License
 \Brief         : Selects the best physical device
 \Contributors  : Lawrence G,
  *********************************************************************************************************/

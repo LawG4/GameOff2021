@@ -1,6 +1,6 @@
 /*!********************************************************************************************************
 \File          : Main.cpp
-\Copyright     : MIT License
+\Copyright     : GPL-3.0 License
 \Brief         : Adds an entry point into the game
 \Contributors  : Lawrence G, Freddie M
  *********************************************************************************************************/

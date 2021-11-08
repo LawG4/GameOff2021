@@ -1,6 +1,6 @@
 /*!********************************************************************************************************
 \File          : Keyboard_input.h
-\Copyright     : MIT License
+\Copyright     : GPL-3.0 License
 \Brief         : Adds a header for window keyboard input
 \Contributors  : Freddie M,
  *********************************************************************************************************/

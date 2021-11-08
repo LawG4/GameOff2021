@@ -1,6 +1,6 @@
 /*!********************************************************************************************************
 \File          : Buffer.cpp
-\Copyright     : MIT License
+\Copyright     : GPL-3.0 License
 \Brief         : Provides utility for writing useful bufers
 \Contributors  : Lawrence G,
  *********************************************************************************************************/
@@ -108,7 +108,7 @@ void copyBufferWithFreshCmdBuffer(const VkBuffer& src, const VkBuffer& dst, VkDe
     // end command buffer
     vkEndCommandBuffer(cmd);
 
-    // Submit the command buffer
+    // SubGPL-3.0 Licensethe command buffer
     VkSubmitInfo submit;
     memset(&submit, 0, sizeof(VkSubmitInfo));
     submit.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;

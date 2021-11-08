@@ -1,6 +1,6 @@
 /*!********************************************************************************************************
 \File          : Memory.h
-\Copyright     : MIT License
+\Copyright     : GPL-3.0 License
 \Brief         : Provides utility for allocating device memory
 \Contributors  : Lawrence G,
  *********************************************************************************************************/

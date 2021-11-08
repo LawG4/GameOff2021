@@ -1,6 +1,6 @@
 /*!********************************************************************************************************
 \File          : Shader.cpp
-\Copyright     : MIT License
+\Copyright     : GPL-3.0 License
 \Brief         : Provides Shader module creation
 \Contributors  : Lawrence G,
  *********************************************************************************************************/

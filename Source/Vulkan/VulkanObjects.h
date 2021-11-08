@@ -1,6 +1,6 @@
 /*!********************************************************************************************************
 \File          : Vulkan.h
-\Copyright     : MIT License
+\Copyright     : GPL-3.0 License
 \Brief         : Header for declaring all the Vulkan objects
 \Contributors  : Lawrence G,
  *********************************************************************************************************/

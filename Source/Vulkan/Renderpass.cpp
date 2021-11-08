@@ -1,6 +1,6 @@
 /*!********************************************************************************************************
 \File          : Renderpass.cpp
-\Copyright     : MIT License
+\Copyright     : GPL-3.0 License
 \Brief         : Provides functionality for constructing renderpasses
 \Contributors  : Lawrence G,
  *********************************************************************************************************/

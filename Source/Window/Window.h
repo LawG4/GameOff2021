@@ -1,6 +1,6 @@
 /*!********************************************************************************************************
 \File          : Window.h
-\Copyright     : MIT License
+\Copyright     : GPL-3.0 License
 \Brief         : Adds a header for window abstraction through GLFW
 \Contributors  : Lawrence G,
  *********************************************************************************************************/

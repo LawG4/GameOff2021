@@ -1,6 +1,6 @@
 /*!********************************************************************************************************
 \File          : Log.cpp
-\Copyright     : MIT License
+\Copyright     : GPL-3.0 License
 \Brief         : Adds an implementation for initing the loging system
 \Contributors  : Lawrence G,
  *********************************************************************************************************/

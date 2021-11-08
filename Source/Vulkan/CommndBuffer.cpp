@@ -1,6 +1,6 @@
 /*!********************************************************************************************************
 \File          : CommandBuffer.cpp
-\Copyright     : MIT License
+\Copyright     : GPL-3.0 License
 \Brief         : Created command buffers and pools
 \Contributors  : Lawrence G,
  *********************************************************************************************************/

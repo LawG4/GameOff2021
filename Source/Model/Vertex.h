@@ -1,6 +1,6 @@
 /*!********************************************************************************************************
 \File          : Vertex.h
-\Copyright     : MIT License
+\Copyright     : GPL-3.0 License
 \Brief         : Models are constructed as a list of vertices
 \Contributors  : Lawrence G,
  *********************************************************************************************************/

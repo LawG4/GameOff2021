@@ -1,6 +1,6 @@
 /*!********************************************************************************************************
 \File          : Window.cpp
-\Copyright     : MIT License
+\Copyright     : GPL-3.0 License
 \Brief         : Adds a definitions for the declared functions and variables in Window.h
 \Contributors  : Lawrence G, Freddie M
  *********************************************************************************************************/

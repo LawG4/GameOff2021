@@ -1,6 +1,6 @@
 /*!********************************************************************************************************
 \File          : Present.cpp
-\Copyright     : MIT License
+\Copyright     : GPL-3.0 License
 \Brief         : Provides presenting the final image to the swapchain
 \Contributors  : Lawrence G,
  *********************************************************************************************************/
@@ -109,9 +109,9 @@ bool vk::drawFrame()
     // Reset the fence just before submitting the command buffer
     vkResetFences(vk::logialDevice, 1, &vk::inFlightCMDFence[currentFrame]);
 
-    // Submit the command queue
+    // SubGPL-3.0 Licensethe command queue
     if (vkQueueSubmit(vk::graphicsQueue, 1, &submit, vk::inFlightCMDFence[currentFrame]) != VK_SUCCESS) {
-        Log.error("Failed to submit graphics queue");
+        Log.error("Failed to subGPL-3.0 Licensegraphics queue");
         return false;
     }
 

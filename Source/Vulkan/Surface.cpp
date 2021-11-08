@@ -1,6 +1,6 @@
 /*!********************************************************************************************************
 \File          : Surface
-\Copyright     : MIT License
+\Copyright     : GPL-3.0 License
 \Brief         : Handels surface and swapchain creation and recreation
 \Contributors  : Lawrence G,
  *********************************************************************************************************/
