@@ -31,48 +31,55 @@ uint32_t findMemoryIndex(uint32_t typeFilter, VkMemoryPropertyFlags properties)
     return static_cast<uint32_t>(-1);  // Just fuck things up not exactly safe but oh well
 }
 
-void vk::addVertexBuffer(const char* bufferName, const std::vector<Vertex>& vertexBuffer)
+vk::BufferGroup createBufferGroup(VkDeviceSize size, VkBufferUsageFlags usage,
+                                  VkMemoryPropertyFlags properties)
 {
-    // Create a vk buffer
     vk::BufferGroup buff;
     memset(&buff, 0, sizeof(vk::BufferGroup));
 
-    // Underlying buffer
+    // Create the buffer
     VkBufferCreateInfo buffer;
     memset(&buffer, 0, sizeof(VkBufferCreateInfo));
     buffer.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-    buffer.size = sizeof(Vertex) * vertexBuffer.size();
-    buffer.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+    buffer.size = size;
+    buffer.usage = usage;
     buffer.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
     if (vkCreateBuffer(vk::logialDevice, &buffer, nullptr, &buff.buffer) != VK_SUCCESS) {
-        Log.error("Could not create buffer");
-        return;
+        Log.error("Could not create vkBuffer");
+        return buff;
     }
 
-    // Get the memory properties that would be required for a buffer of this type
-    VkMemoryRequirements memRequirements;
-    vkGetBufferMemoryRequirements(vk::logialDevice, buff.buffer, &memRequirements);
+    // Get the memory properties of this buffer so we know what kind of memory we need to allocate
+    VkMemoryRequirements requirements;
+    vkGetBufferMemoryRequirements(vk::logialDevice, buff.buffer, &requirements);
 
-    // Allocate enough space for the buffer
+    // Allocate the underlying memory
     VkMemoryAllocateInfo alloc;
     memset(&alloc, 0, sizeof(VkMemoryAllocateInfo));
     alloc.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-    alloc.allocationSize = memRequirements.size;
-    alloc.memoryTypeIndex =
-      findMemoryIndex(memRequirements.memoryTypeBits,
-                      VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+    alloc.allocationSize = requirements.size;
+    alloc.memoryTypeIndex = findMemoryIndex(requirements.memoryTypeBits, properties);
 
     if (vkAllocateMemory(vk::logialDevice, &alloc, nullptr, &buff.mem) != VK_SUCCESS) {
-        Log.error("Couldn't allocate memory for the buffer");
-        return;
+        Log.error("Could not allocate vkMemory");
+        return buff;
     }
 
-    // Associate the buffer with this device memory
-    if (vkBindBufferMemory(vk::logialDevice, buff.buffer, buff.mem, 0) != VK_SUCCESS) {
-        Log.error("Couldn't Bind buffer to memory");
-        return;
-    }
+    // Associate the buffer with its device memory
+    vkBindBufferMemory(vk::logialDevice, buff.buffer, buff.mem, 0);
+    return buff;
+}
+
+void vk::addVertexBuffer(const char* bufferName, const std::vector<Vertex>& vertexBuffer)
+{
+    // Get the size of the memory we need
+    VkDeviceSize size = sizeof(Vertex) * vertexBuffer.size();
+
+    // Create the buffer group using our utility function
+    vk::BufferGroup buff =
+      createBufferGroup(size, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+                        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
     // Now we write the contents of the vertex buffer to the buffer on the device
     // Start by mapping the memory on the GPU to a CPU visible section of memory
