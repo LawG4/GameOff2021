@@ -120,7 +120,7 @@ QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device)
     std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
     vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
 
-    // Now loop through each one of the Queues looking for the graphics queue
+    // Now loop through each one of the Queues looking for the specific queues
     for (uint32_t i = 0; i < queueFamilies.size(); i++) {
         VkQueueFlags flags = queueFamilies.at(i).queueFlags;
 
