@@ -61,6 +61,13 @@ bool initVulkan()
         Log.info("Created Vulkan framebuffers");
     }
 
+    if (!vk::createCommandPools()) {
+        Log.error("Could not create Vulkan command pools");
+        return false;
+    } else {
+        Log.info("Created Vulkan command pool");
+    }
+
     // Create a vertex buffer for the onscreen triangle
     const std::vector<Vertex> triangleBuffer = {{{0.0f, -0.5f, 0.0f}, {1.0f, 1.0f, 1.0f}},
                                                 {{0.5f, 0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}},
@@ -77,13 +84,6 @@ bool initVulkan()
         return false;
     } else {
         Log.info("Created Vulkan graphics pipeline");
-    }
-
-    if (!vk::createCommandPools()) {
-        Log.error("Could not create Vulkan command pools");
-        return false;
-    } else {
-        Log.info("Created Vulkan command pool");
     }
 
     if (!vk::allocateCommandBuffers()) {
