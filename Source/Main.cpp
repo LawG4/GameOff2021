@@ -21,6 +21,9 @@ void cleanUp()
     // First destroy Vulkan
     cleanupVulkan();
 
+    // Destroy player object
+    delete player_class;
+
     // If the window exists destroy it
     if (window) glfwDestroyWindow(window);
     glfwTerminate();
