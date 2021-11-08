@@ -22,13 +22,13 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (key == GLFW_KEY_A && action == GLFW_PRESS) {  // A
         Log.info("button A pressed");
     }
-    if (key == GLFW_KEY_A && action == GLFW_PRESS) {  // S
+    if (key == GLFW_KEY_S && action == GLFW_PRESS) {  // S
         Log.info("button S pressed");
     }
-    if (key == GLFW_KEY_A && action == GLFW_PRESS) {  // D
+    if (key == GLFW_KEY_D && action == GLFW_PRESS) {  // D
         Log.info("button D pressed");
     }
-    if (key == GLFW_KEY_A && action == GLFW_PRESS) {  // Q
+    if (key == GLFW_KEY_Q && action == GLFW_PRESS) {  // Q
         Log.info("button Q pressed");
     }
 }
