@@ -32,7 +32,7 @@ player::player()
 
 player::~player()
 {  // Message for when destructor called
-    player_step_size++;
+    Log.info("Player object destroyed");
 };
 
 int player::out_player_damage()

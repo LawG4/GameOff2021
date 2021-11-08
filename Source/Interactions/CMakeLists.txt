@@ -2,12 +2,12 @@ cmake_minimum_required(VERSION 3.20)
 # Add the sources for the windowing system
 
 set(HEADERS
-	Player.h
+	Keyboard_input.h
 	Player_object.h
 )
 
 set(SOURCES
-	Player.cpp
+	Keyboard_input.cpp
 	Player_object.cpp
 )
 
