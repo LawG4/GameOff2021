@@ -1,7 +1,7 @@
 /*!********************************************************************************************************
-\File          : Player.h
+\File          : Keyboard_input.h
 \Copyright     : MIT License
-\Brief         : Adds a header for window input
+\Brief         : Adds a header for window keyboard input
 \Contributors  : Freddie M,
  *********************************************************************************************************/
 

@@ -6,7 +6,7 @@ set(COMPONENTS
 	Shaders
 	Log
 	Render
-	Player
+	Interactions
 	Model
 )
 
