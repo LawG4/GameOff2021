@@ -53,6 +53,8 @@ extern std::vector<VkFramebuffer> swapchainFb;
 
 extern VkRenderPass onscreenRenderPass;
 
+extern VkDescriptorPool descriptorPool;
+
 extern VkShaderModule vertModule;
 extern VkShaderModule fragModule;
 extern VkPipeline graphicsPipeline;

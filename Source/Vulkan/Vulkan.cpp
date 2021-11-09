@@ -68,6 +68,13 @@ bool initVulkan()
         Log.info("Created Vulkan command pool");
     }
 
+    if (!vk::createDescriptorPoolAndSets()) {
+        Log.error("Could not create descriptor pools");
+        return false;
+    } else {
+        Log.info("Created Descriptor set and pool");
+    }
+
     // Create a vertex buffer for the onscreen triangle
     const std::vector<Vertex> triangleBuffer = {{{0.0f, -0.5f, 0.0f}, {1.0f, 1.0f, 1.0f}},
                                                 {{0.5f, 0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}},
@@ -118,6 +125,8 @@ void cleanupVulkan()
         vkDestroySemaphore(vk::logialDevice, vk::finishedRendering[i], nullptr);
         vkDestroyFence(vk::logialDevice, vk::inFlightCMDFence[i], nullptr);
     }
+
+    vkDestroyDescriptorPool(vk::logialDevice, vk::descriptorPool, nullptr);
 
     vkDestroyCommandPool(vk::logialDevice, vk::graphicsPool, nullptr);
 
