@@ -3,11 +3,13 @@ cmake_minimum_required(VERSION 3.20)
 
 set(HEADERS
 	Keyboard_input.h
+	Cursor_input.h
 	Player_object.h
 )
 
 set(SOURCES
 	Keyboard_input.cpp
+	Cursor_input.cpp
 	Player_object.cpp
 )
 
