@@ -23,6 +23,7 @@ struct BufferGroup {
 extern std::vector<vk::BufferGroup> bufferStorageMap;
 
 struct DescriptorGroup {
+    VkDescriptorSetLayout layout;
     std::vector<VkDescriptorSet> descSets;
     std::vector<BufferGroup> buffers;
 };
@@ -44,6 +45,9 @@ void addVertexBuffer(const char *bufferName, const std::vector<Vertex> &vertexBu
 
 /// <summary> Destorys all of the buffers in the hash table </summary>
 void destroyBuffers();
+
+/// <summary> Writes the temporary uniform buffer </summary>
+void addUniformBuffer();
 
 namespace memory
 {
