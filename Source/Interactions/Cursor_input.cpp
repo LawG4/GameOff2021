@@ -7,11 +7,11 @@
 
 #include "Cursor_input.h"
 
-static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
+void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
     // Convert double to string
     std::string varAsString = std::to_string(xpos);
-    varAsString = varAsString + std::to_string(ypos);
+    varAsString = varAsString + "  " + std::to_string(ypos);
 
     Log.info(varAsString);
 }

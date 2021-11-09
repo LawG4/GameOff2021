@@ -93,17 +93,11 @@ int main(int argc, char *argv[])
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
 
-        // glfwSwapBuffers(window);
-
-        // clearFrame(*window);
-
         // Key input data
         glfwSetKeyCallback(window, key_callback);
 
         // Mouse input data
         glfwSetCursorPosCallback(window, cursor_position_callback);
-
-        // glfwSwapBuffers(*window);
 
         vk::drawFrame();
     }

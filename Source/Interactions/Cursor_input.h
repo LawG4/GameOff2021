@@ -1,5 +1,5 @@
 /*!********************************************************************************************************
-\File          : Cursor_input.cpp
+\File          : Cursor_input.h
 \Copyright     : GPL-3.0 License
 \Brief         : Cursor input and interactions
 \Contributors  : Freddie M
@@ -10,4 +10,4 @@
 // GLFW inclusion before vk headers causes error with vk
 #include <GLFW/glfw3.h>
 
-static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
+void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);

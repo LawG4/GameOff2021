@@ -31,4 +31,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (key == GLFW_KEY_Q && action == GLFW_PRESS) {  // Q
         Log.info("button Q pressed");
     }
+
+    // Close window added
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {  // Esc
+        Log.info("Esc key pressed, escaping game");
+        glfwSetWindowShouldClose(window, true);
+    }
 }
