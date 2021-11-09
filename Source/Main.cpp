@@ -9,6 +9,7 @@
 #include "Window.h"
 #include "nlohmann/json.hpp"
 
+#include "Cursor_input.h"
 #include "Keyboard_input.h"
 #include "Player_object.h"
 
@@ -100,7 +101,7 @@ int main(int argc, char *argv[])
         glfwSetKeyCallback(window, key_callback);
 
         // Mouse input data
-        // glfwSetCursorPosCallback(window, cursor_position_callback);
+        glfwSetCursorPosCallback(window, cursor_position_callback);
 
         // glfwSwapBuffers(*window);
 

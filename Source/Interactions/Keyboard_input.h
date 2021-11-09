@@ -12,5 +12,5 @@
 #include <GLFW/glfw3.h>
 #include "Player_object.h"
 
-// Actual code here
+// Keyboard input function
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
