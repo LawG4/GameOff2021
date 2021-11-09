@@ -59,6 +59,8 @@ bool createShaderModule(const char* filePath, VkShaderModule& shaderModule)
         Log.error("Failed to create shader module {}", filePath);
         return false;
     }
+
+    return true;
 }
 
 bool vk::createShaderModules()

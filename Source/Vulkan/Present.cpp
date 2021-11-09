@@ -5,6 +5,7 @@
 \Contributors  : Lawrence G,
  *********************************************************************************************************/
 
+#include "Memory.h"
 #include "Vulkan.h"
 
 uint32_t currentFrame = 0;
@@ -83,6 +84,13 @@ bool vk::drawFrame()
 
     // Assign the current swapchain image as being used by this frame, so that we can tag the correct fence
     vk::inFlightImageFence[imageIndex] = inFlightCMDFence[currentFrame];
+
+    // Use the image index to update the uniform buffer for the command buffer about to be submitted
+    UniformBufferObject obj;
+    obj.modelMatrix =
+      glm::mat4{glm::vec4(1, 0, 0, 0), glm::vec4(1, 0, 0, 0), glm::vec4(1, 0, 0, 0), glm::vec4(1, 0, 0, 0)};
+
+    vk::updateUniformAtSwapIndex(vk::descGroup, imageIndex, obj);
 
     // Now that we have a frame ready, draw to it by submitting the command buffer
     VkSubmitInfo submit;

@@ -8,25 +8,18 @@
 
 #include "Vertex.h"
 #include "Vulkan.h"
+#include "VulkanObjects.h"
 
 #include <unordered_map>
+
+struct UniformBufferObject {
+    glm::mat4 modelMatrix;
+};
 
 namespace vk
 {
 
-struct BufferGroup {
-    VkBuffer buffer;
-    VkBufferView view;
-    VkDeviceMemory mem;
-};
-
 extern std::vector<vk::BufferGroup> bufferStorageMap;
-
-struct DescriptorGroup {
-    VkDescriptorSetLayout layout;
-    std::vector<VkDescriptorSet> descSets;
-    std::vector<BufferGroup> buffers;
-};
 
 extern std::vector<vk::DescriptorGroup> descriptorStorageMap;
 
@@ -48,6 +41,9 @@ void destroyBuffers();
 
 /// <summary> Writes the temporary uniform buffer </summary>
 void addUniformBuffer();
+
+/// <summary>Updates a vertex buffer for the current swap index </summary>
+void updateUniformAtSwapIndex(vk::DescriptorGroup desc, uint32_t swapIndex, UniformBufferObject obj);
 
 namespace memory
 {

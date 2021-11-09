@@ -9,10 +9,7 @@
 #include "Vulkan.h"
 
 VkDescriptorPool vk::descriptorPool;
-
-struct UniformBufferObject {
-    glm::mat4 modelMatrix;
-};
+vk::DescriptorGroup vk::descGroup;
 
 void vk::addUniformBuffer()
 {
@@ -85,6 +82,8 @@ void vk::addUniformBuffer()
     }
 
     vkUpdateDescriptorSets(vk::logialDevice, descriptorWriter.size(), descriptorWriter.data(), 0, nullptr);
+
+    vk::descGroup = desc;
 }
 
 bool vk::createDescriptorPoolAndSets()
@@ -112,4 +111,15 @@ bool vk::createDescriptorPoolAndSets()
     vk::addUniformBuffer();
 
     return true;
+}
+
+void vk::updateUniformAtSwapIndex(vk::DescriptorGroup desc, uint32_t swapIndex, UniformBufferObject obj)
+{
+    // Map the memory for the current frame
+    void* data;
+    vkMapMemory(vk::logialDevice, desc.buffers.at(swapIndex).mem, 0, sizeof(UniformBufferObject), 0, &data);
+
+    memcpy(data, &obj, sizeof(UniformBufferObject));
+
+    vkUnmapMemory(vk::logialDevice, desc.buffers.at(swapIndex).mem);
 }

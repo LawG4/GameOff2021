@@ -31,6 +31,18 @@ struct SwapchainProperties {
 
 namespace vk
 {
+struct BufferGroup {
+    VkBuffer buffer;
+    VkBufferView view;
+    VkDeviceMemory mem;
+};
+
+struct DescriptorGroup {
+    VkDescriptorSetLayout layout;
+    std::vector<VkDescriptorSet> descSets;
+    std::vector<BufferGroup> buffers;
+};
+
 extern VkInstance instance;
 extern VkDebugUtilsMessengerEXT messenger;
 
@@ -54,6 +66,7 @@ extern std::vector<VkFramebuffer> swapchainFb;
 extern VkRenderPass onscreenRenderPass;
 
 extern VkDescriptorPool descriptorPool;
+extern vk::DescriptorGroup descGroup;
 
 extern VkShaderModule vertModule;
 extern VkShaderModule fragModule;
