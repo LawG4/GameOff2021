@@ -36,6 +36,10 @@ bool vk::createGraphicsPipeline()
     memset(&layout, 0, sizeof(VkPipelineLayoutCreateInfo));
     layout.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
 
+    // Layout has one descriptor set layout
+    layout.pSetLayouts = &vk::descGroup.layout;
+    layout.setLayoutCount = 1;
+
     if (vkCreatePipelineLayout(vk::logialDevice, &layout, nullptr, &vk::graphicsLayout) != VK_SUCCESS) {
         Log.error("Could not create graphics pipeline layout");
         return false;

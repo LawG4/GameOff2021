@@ -18,6 +18,10 @@ std::vector<VkSemaphore> vk::finishedRendering;
 std::vector<VkFence> vk::inFlightCMDFence;
 std::vector<VkFence> vk::inFlightImageFence;
 
+// temp stuff to spin this triangle
+#include <glm/gtc/matrix_transform.hpp>
+glm::mat4 transform = glm::identity<glm::mat4>();
+
 bool vk::createSyncObjects()
 {
     vk::readyForRendering.resize(vk::swapLength);
@@ -87,9 +91,7 @@ bool vk::drawFrame()
 
     // Use the image index to update the uniform buffer for the command buffer about to be submitted
     UniformBufferObject obj;
-    obj.modelMatrix =
-      glm::mat4{glm::vec4(1, 0, 0, 0), glm::vec4(1, 0, 0, 0), glm::vec4(1, 0, 0, 0), glm::vec4(1, 0, 0, 0)};
-
+    obj.modelMatrix = transform;
     vk::updateUniformAtSwapIndex(vk::descGroup, imageIndex, obj);
 
     // Now that we have a frame ready, draw to it by submitting the command buffer
@@ -138,6 +140,9 @@ bool vk::drawFrame()
     currentFrame = (currentFrame + 1) % vk::swapLength;
 
     vkQueuePresentKHR(vk::presentationQueue, &present);
+
+    // now rotate the temp matrix a little bit
+    transform = glm::rotate(transform, 0.2f, glm::vec3(0.0, 0.0, 1.0));
 
     return true;
 }

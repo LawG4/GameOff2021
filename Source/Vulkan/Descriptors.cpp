@@ -38,7 +38,7 @@ void vk::addUniformBuffer()
     binding.binding = 0;
     binding.descriptorCount = 1;
     binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-    binding.stageFlags = VK_PIPELINE_STAGE_VERTEX_SHADER_BIT;
+    binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 
     layout.bindingCount = 1;
     layout.pBindings = &binding;

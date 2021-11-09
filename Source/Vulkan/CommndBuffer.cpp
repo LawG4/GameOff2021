@@ -54,6 +54,10 @@ bool recordCommandBuffers()
         VkBuffer vertexBuffers[] = {vk::bufferStorageMap.at(0).buffer};
         vkCmdBindVertexBuffers(cmd, 0, 1, vertexBuffers, offSets);
 
+        // Bind to the descriptor set
+        vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, vk::graphicsLayout, 0, 1,
+                                &vk::descGroup.descSets.at(i), 0, nullptr);
+
         vkCmdDraw(cmd, 3, 1, 0, 0);
 
         vkCmdEndRenderPass(cmd);
