@@ -10,4 +10,5 @@
 // GLFW inclusion before vk headers causes error with vk
 #include <GLFW/glfw3.h>
 
+// Create cursor class
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
