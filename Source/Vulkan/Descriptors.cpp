@@ -65,6 +65,26 @@ void vk::addUniformBuffer()
         Log.error("Couldn't allocate descriptor sets");
         return;
     }
+
+    VkWriteDescriptorSet write;
+    memset(&write, 0, sizeof(VkWriteDescriptorSet));
+    write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    write.descriptorCount = 1;
+    write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+
+    std::vector<VkWriteDescriptorSet> descriptorWriter;
+    for (uint32_t i = 0; i < vk::swapLength; i++) {
+        VkDescriptorBufferInfo info;
+        info.buffer = desc.buffers.at(i).buffer;
+        info.offset = 0;
+        info.range = VK_WHOLE_SIZE;
+
+        write.pBufferInfo = &info;
+        write.dstSet = desc.descSets.at(i);
+        descriptorWriter.push_back(write);
+    }
+
+    vkUpdateDescriptorSets(vk::logialDevice, descriptorWriter.size(), descriptorWriter.data(), 0, nullptr);
 }
 
 bool vk::createDescriptorPoolAndSets()
