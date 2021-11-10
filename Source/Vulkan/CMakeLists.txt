@@ -20,6 +20,7 @@ set(SOURCES
 	CommndBuffer.cpp
 	Present.cpp
 	Buffer.cpp
+	Descriptors.cpp
 )
 
 target_sources(${PROJ_NAME} PRIVATE ${HEADERS} ${SOURCES})

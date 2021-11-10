@@ -31,8 +31,8 @@ uint32_t findMemoryIndex(uint32_t typeFilter, VkMemoryPropertyFlags properties)
     return static_cast<uint32_t>(-1);  // Just fuck things up not exactly safe but oh well
 }
 
-vk::BufferGroup createBufferGroup(VkDeviceSize size, VkBufferUsageFlags usage,
-                                  VkMemoryPropertyFlags properties)
+vk::BufferGroup vk::createBufferGroup(VkDeviceSize size, VkBufferUsageFlags usage,
+                                      VkMemoryPropertyFlags properties)
 {
     vk::BufferGroup buff;
     memset(&buff, 0, sizeof(vk::BufferGroup));

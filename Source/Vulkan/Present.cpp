@@ -5,6 +5,7 @@
 \Contributors  : Lawrence G,
  *********************************************************************************************************/
 
+#include "Memory.h"
 #include "Vulkan.h"
 
 uint32_t currentFrame = 0;
@@ -16,6 +17,10 @@ std::vector<VkSemaphore> vk::finishedRendering;
 // Fences for syncing with the CPU
 std::vector<VkFence> vk::inFlightCMDFence;
 std::vector<VkFence> vk::inFlightImageFence;
+
+// temp stuff to spin this triangle
+#include <glm/gtc/matrix_transform.hpp>
+glm::mat4 transform = glm::identity<glm::mat4>();
 
 bool vk::createSyncObjects()
 {
@@ -84,6 +89,11 @@ bool vk::drawFrame()
     // Assign the current swapchain image as being used by this frame, so that we can tag the correct fence
     vk::inFlightImageFence[imageIndex] = inFlightCMDFence[currentFrame];
 
+    // Use the image index to update the uniform buffer for the command buffer about to be submitted
+    UniformBufferObject obj;
+    obj.modelMatrix = transform;
+    vk::updateUniformAtSwapIndex(vk::descGroup, imageIndex, obj);
+
     // Now that we have a frame ready, draw to it by submitting the command buffer
     VkSubmitInfo submit;
     memset(&submit, 0, sizeof(VkSubmitInfo));
@@ -130,6 +140,9 @@ bool vk::drawFrame()
     currentFrame = (currentFrame + 1) % vk::swapLength;
 
     vkQueuePresentKHR(vk::presentationQueue, &present);
+
+    // now rotate the temp matrix a little bit
+    transform = glm::rotate(transform, 0.2f, glm::vec3(0.0, 0.0, 1.0));
 
     return true;
 }

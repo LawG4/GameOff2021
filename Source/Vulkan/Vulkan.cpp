@@ -74,6 +74,13 @@ bool initVulkan()
                                                 {{-0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}}};
     vk::addVertexBuffer("VertexBuffer", triangleBuffer);
 
+    if (!vk::createDescriptorPoolAndSets()) {
+        Log.error("Could not create descriptor pools");
+        return false;
+    } else {
+        Log.info("Created Descriptor set and pool");
+    }
+
     if (!vk::createShaderModules()) {
         Log.error("Could not create shader modules");
         return false;
@@ -111,6 +118,7 @@ void cleanupVulkan()
     // wait for the device to finish everything up
     vkDeviceWaitIdle(vk::logialDevice);
 
+    vk::destroyDescriptorResources();
     vk::destroyBuffers();
 
     for (uint32_t i = 0; i < vk::swapLength; i++) {
@@ -118,6 +126,8 @@ void cleanupVulkan()
         vkDestroySemaphore(vk::logialDevice, vk::finishedRendering[i], nullptr);
         vkDestroyFence(vk::logialDevice, vk::inFlightCMDFence[i], nullptr);
     }
+
+    vkDestroyDescriptorPool(vk::logialDevice, vk::descriptorPool, nullptr);
 
     vkDestroyCommandPool(vk::logialDevice, vk::graphicsPool, nullptr);
 

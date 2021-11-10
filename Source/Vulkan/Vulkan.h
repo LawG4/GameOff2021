@@ -101,6 +101,10 @@ bool createFramebuffer();
 /// <returns>True if successful</returns>
 bool createCommandPools();
 
+/// <summary> Creates the descriptor pool and temp descriptor sets </summary>
+/// <returns>True if successful</returns>
+bool createDescriptorPoolAndSets();
+
 /// <summary> Allocates all of the command buffers for the game </summary>
 /// <returns>True if successful</returns>
 bool allocateCommandBuffers();
