@@ -45,6 +45,9 @@ void addUniformBuffer();
 /// <summary>Updates a vertex buffer for the current swap index </summary>
 void updateUniformAtSwapIndex(vk::DescriptorGroup desc, uint32_t swapIndex, UniformBufferObject obj);
 
+/// <summary> Destroys buffers with a descriptor set </summary>
+void destroyDescriptorResources();
+
 namespace memory
 {
 extern VkPhysicalDeviceMemoryProperties memProperties;

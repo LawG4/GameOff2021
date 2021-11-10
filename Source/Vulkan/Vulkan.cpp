@@ -68,18 +68,18 @@ bool initVulkan()
         Log.info("Created Vulkan command pool");
     }
 
+    // Create a vertex buffer for the onscreen triangle
+    const std::vector<Vertex> triangleBuffer = {{{0.0f, -0.5f, 0.0f}, {1.0f, 1.0f, 1.0f}},
+                                                {{0.5f, 0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}},
+                                                {{-0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}}};
+    vk::addVertexBuffer("VertexBuffer", triangleBuffer);
+
     if (!vk::createDescriptorPoolAndSets()) {
         Log.error("Could not create descriptor pools");
         return false;
     } else {
         Log.info("Created Descriptor set and pool");
     }
-
-    // Create a vertex buffer for the onscreen triangle
-    const std::vector<Vertex> triangleBuffer = {{{0.0f, -0.5f, 0.0f}, {1.0f, 1.0f, 1.0f}},
-                                                {{0.5f, 0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}},
-                                                {{-0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}}};
-    vk::addVertexBuffer("VertexBuffer", triangleBuffer);
 
     if (!vk::createShaderModules()) {
         Log.error("Could not create shader modules");
@@ -118,6 +118,7 @@ void cleanupVulkan()
     // wait for the device to finish everything up
     vkDeviceWaitIdle(vk::logialDevice);
 
+    vk::destroyDescriptorResources();
     vk::destroyBuffers();
 
     for (uint32_t i = 0; i < vk::swapLength; i++) {

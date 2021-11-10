@@ -123,3 +123,13 @@ void vk::updateUniformAtSwapIndex(vk::DescriptorGroup desc, uint32_t swapIndex, 
 
     vkUnmapMemory(vk::logialDevice, desc.buffers.at(swapIndex).mem);
 }
+
+void vk::destroyDescriptorResources()
+{
+    for (uint32_t i = 0; i < vk::swapLength; i++) {
+        vkDestroyBuffer(vk::logialDevice, vk::descGroup.buffers.at(i).buffer, nullptr);
+        vkFreeMemory(vk::logialDevice, vk::descGroup.buffers.at(i).mem, nullptr);
+    }
+
+    vkDestroyDescriptorSetLayout(vk::logialDevice, vk::descGroup.layout, nullptr);
+}
