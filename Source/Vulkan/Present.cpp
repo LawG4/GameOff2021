@@ -89,6 +89,8 @@ bool vk::drawFrame()
     // Assign the current swapchain image as being used by this frame, so that we can tag the correct fence
     vk::inFlightImageFence[imageIndex] = inFlightCMDFence[currentFrame];
 
+    // Now it is most likely that we have to record the command buffer every single frame
+
     // Use the image index to update the uniform buffer for the command buffer about to be submitted
     UniformBufferObject obj;
     obj.modelMatrix = transform;
