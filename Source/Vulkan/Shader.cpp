@@ -5,6 +5,7 @@
 \Contributors  : Lawrence G,
  *********************************************************************************************************/
 
+#include "Pipelines.h"
 #include "Vulkan.h"
 
 #include <fstream>
@@ -38,8 +39,10 @@ bool readSpirv(const char* filePath, std::vector<uint32_t>& shaderSource)
     return true;
 }
 
-bool createShaderModule(const char* filePath, VkShaderModule& shaderModule)
+VkShaderModule vk::createShaderModule(const char* filePath)
 {
+    VkShaderModule shaderModule;
+
     // Read in shader source
     std::vector<uint32_t> shaderSource;
     if (!readSpirv(filePath, shaderSource)) {
@@ -54,8 +57,7 @@ bool createShaderModule(const char* filePath, VkShaderModule& shaderModule)
 
     if (vkCreateShaderModule(vk::logialDevice, &module, nullptr, &shaderModule) != VK_SUCCESS) {
         Log.error("Failed to create shader module {}", filePath);
-        return false;
     }
 
-    return true;
+    return shaderModule;
 }

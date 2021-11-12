@@ -5,6 +5,8 @@ void prepareCommandBuffer(uint32_t swapIndex);
 
 namespace vk
 {
+VkShaderModule createShaderModule(const char* filePath);
+
 void createPipelines();
 void destroyPipelines();
 }  // namespace vk
