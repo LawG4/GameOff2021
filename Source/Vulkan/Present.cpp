@@ -6,6 +6,7 @@
  *********************************************************************************************************/
 
 #include "Memory.h"
+#include "Pipelines.h"
 #include "Vulkan.h"
 
 uint32_t currentFrame = 0;
@@ -90,6 +91,7 @@ bool vk::drawFrame()
     vk::inFlightImageFence[imageIndex] = inFlightCMDFence[currentFrame];
 
     // Now it is most likely that we have to record the command buffer every single frame
+    prepareCommandBuffer(imageIndex);
 
     // Use the image index to update the uniform buffer for the command buffer about to be submitted
     UniformBufferObject obj;
@@ -123,7 +125,7 @@ bool vk::drawFrame()
 
     // SubGPL-3.0 Licensethe command queue
     if (vkQueueSubmit(vk::graphicsQueue, 1, &submit, vk::inFlightCMDFence[currentFrame]) != VK_SUCCESS) {
-        Log.error("Failed to subGPL-3.0 Licensegraphics queue");
+        Log.error("Failed to submit graphics queue");
         return false;
     }
 

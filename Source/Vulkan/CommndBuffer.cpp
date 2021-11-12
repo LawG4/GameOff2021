@@ -8,7 +8,7 @@
 #include "Memory.h"
 #include "Vulkan.h"
 
-VkCommandPool vk::graphicsPool;
+std::vector<VkCommandPool> vk::graphicsPools;
 std::vector<VkCommandBuffer> vk::cmdBuffers;
 
 bool recordCommandBuffers()
@@ -73,25 +73,23 @@ bool recordCommandBuffers()
 
 bool vk::allocateCommandBuffers()
 {
-    VkCommandBufferAllocateInfo buffer;
-    memset(&buffer, 0, sizeof(VkCommandBufferAllocateInfo));
-    buffer.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    buffer.commandPool = vk::graphicsPool;
-    buffer.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-    buffer.commandBufferCount = vk::swapLength;
-
     vk::cmdBuffers.clear();
     vk::cmdBuffers.resize(swapLength);
 
-    if (vkAllocateCommandBuffers(vk::logialDevice, &buffer, vk::cmdBuffers.data()) != VK_SUCCESS) {
-        Log.error("Failed to allocated graphics command buffers");
-        return false;
+    for (uint32_t i = 0; i < vk::swapLength; i++) {
+        VkCommandBufferAllocateInfo buffer;
+        memset(&buffer, 0, sizeof(VkCommandBufferAllocateInfo));
+        buffer.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+        buffer.commandPool = vk::graphicsPools.at(i);
+        buffer.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+        buffer.commandBufferCount = 1;
+
+        if (vkAllocateCommandBuffers(vk::logialDevice, &buffer, &vk::cmdBuffers.at(i)) != VK_SUCCESS) {
+            Log.error("Failed to allocated graphics command buffers");
+            return false;
+        }
     }
 
-    if (!recordCommandBuffers()) {
-        Log.error("Failed to record command buffer");
-        return false;
-    }
     return true;
 }
 
@@ -103,9 +101,13 @@ bool vk::createCommandPools()
     pool.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
     pool.queueFamilyIndex = vk::selectedQueueFamilies.graphicsFamily.value();
 
-    if (vkCreateCommandPool(vk::logialDevice, &pool, nullptr, &vk::graphicsPool) != VK_SUCCESS) {
-        Log.error("Couldn't create command pool");
-        return false;
+    graphicsPools.resize(vk::swapLength);
+    for (uint32_t i = 0; i < vk::swapLength; i++) {
+        if (vkCreateCommandPool(vk::logialDevice, &pool, nullptr, &vk::graphicsPools.at(i)) != VK_SUCCESS) {
+            Log.error("Couldn't create command pool");
+            return false;
+        }
     }
+
     return true;
 }

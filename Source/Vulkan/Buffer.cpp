@@ -89,7 +89,7 @@ void copyBufferWithFreshCmdBuffer(const VkBuffer& src, const VkBuffer& dst, VkDe
     memset(&alloc, 0, sizeof(VkCommandBufferAllocateInfo));
     alloc.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
     alloc.commandBufferCount = 1;
-    alloc.commandPool = vk::graphicsPool;
+    alloc.commandPool = vk::graphicsPools.at(0);
     alloc.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
 
     VkCommandBuffer cmd;
@@ -119,7 +119,7 @@ void copyBufferWithFreshCmdBuffer(const VkBuffer& src, const VkBuffer& dst, VkDe
     vkQueueWaitIdle(vk::graphicsQueue);
 
     // Free the command buffer
-    vkFreeCommandBuffers(vk::logialDevice, vk::graphicsPool, 1, &cmd);
+    vkFreeCommandBuffers(vk::logialDevice, vk::graphicsPools.at(0), 1, &cmd);
 }
 
 void vk::addVertexBuffer(const char* bufferName, const std::vector<Vertex>& vertexBuffer)

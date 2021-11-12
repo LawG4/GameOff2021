@@ -125,11 +125,11 @@ void cleanupVulkan()
         vkDestroySemaphore(vk::logialDevice, vk::readyForRendering[i], nullptr);
         vkDestroySemaphore(vk::logialDevice, vk::finishedRendering[i], nullptr);
         vkDestroyFence(vk::logialDevice, vk::inFlightCMDFence[i], nullptr);
+
+        vkDestroyCommandPool(vk::logialDevice, vk::graphicsPools.at(i), nullptr);
     }
 
     vkDestroyDescriptorPool(vk::logialDevice, vk::descriptorPool, nullptr);
-
-    vkDestroyCommandPool(vk::logialDevice, vk::graphicsPool, nullptr);
 
     vkDestroyPipeline(vk::logialDevice, vk::graphicsPipeline, nullptr);
     vkDestroyPipelineLayout(vk::logialDevice, vk::graphicsLayout, nullptr);
