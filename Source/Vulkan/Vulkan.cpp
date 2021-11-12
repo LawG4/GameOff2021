@@ -6,6 +6,7 @@
  *********************************************************************************************************/
 #include "Vulkan.h"
 #include "Memory.h"
+#include "Pipelines.h"
 #include "Window.h"
 bool vulkanInitialised = false;
 
@@ -81,17 +82,7 @@ bool initVulkan()
         Log.info("Created Descriptor set and pool");
     }
 
-    if (!vk::createShaderModules()) {
-        Log.error("Could not create shader modules");
-        return false;
-    }
-
-    if (!vk::createGraphicsPipeline()) {
-        Log.error("Could not create the graphics pipeline");
-        return false;
-    } else {
-        Log.info("Created Vulkan graphics pipeline");
-    }
+    vk::createPipelines();
 
     if (!vk::allocateCommandBuffers()) {
         Log.error("Could not allocate Vulkan command buffers");
@@ -131,11 +122,7 @@ void cleanupVulkan()
 
     vkDestroyDescriptorPool(vk::logialDevice, vk::descriptorPool, nullptr);
 
-    vkDestroyPipeline(vk::logialDevice, vk::graphicsPipeline, nullptr);
-    vkDestroyPipelineLayout(vk::logialDevice, vk::graphicsLayout, nullptr);
-
-    vkDestroyShaderModule(vk::logialDevice, vk::vertModule, nullptr);
-    vkDestroyShaderModule(vk::logialDevice, vk::fragModule, nullptr);
+    vk::destroyPipelines();
 
     for (VkFramebuffer& fb : vk::swapchainFb) {
         vkDestroyFramebuffer(vk::logialDevice, fb, nullptr);

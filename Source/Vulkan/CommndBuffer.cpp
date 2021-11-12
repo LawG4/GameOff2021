@@ -11,66 +11,6 @@
 std::vector<VkCommandPool> vk::graphicsPools;
 std::vector<VkCommandBuffer> vk::cmdBuffers;
 
-bool recordCommandBuffers()
-{
-    // Set the clear colour for our onscreen attachment
-    VkClearValue clear = {0.0094117f, 0.00078431f, 0.00392156f, 1.0f};
-
-    VkCommandBufferBeginInfo begin;
-    memset(&begin, 0, sizeof(VkCommandBufferBeginInfo));
-    begin.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-
-    // Start by begining the render pass
-    VkRenderPassBeginInfo renderpass;
-    memset(&renderpass, 0, sizeof(VkRenderPassBeginInfo));
-    renderpass.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-    renderpass.clearValueCount = 1;
-    renderpass.pClearValues = &clear;
-
-    // Attach to onscreen renderpass
-    renderpass.renderPass = vk::onscreenRenderPass;
-    renderpass.renderArea.extent = vk::swapchainExtent;
-    renderpass.renderArea.offset = {0, 0};
-
-    // The things that change per frame in swapchain
-    for (uint32_t i = 0; i < vk::swapLength; i++) {
-        VkCommandBuffer &cmd = vk::cmdBuffers.at(i);
-
-        // begin the command buffer recording
-        if (vkBeginCommandBuffer(cmd, &begin) != VK_SUCCESS) {
-            Log.error("Could not start recording the command buffer");
-            return false;
-        }
-
-        // begin the renderpass
-        renderpass.framebuffer = vk::swapchainFb.at(i);
-        vkCmdBeginRenderPass(cmd, &renderpass, VK_SUBPASS_CONTENTS_INLINE);
-
-        // Bind the graphics pipeline
-        vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, vk::graphicsPipeline);
-
-        // Bind to the vertex buffers
-        VkDeviceSize offSets[] = {0};
-        VkBuffer vertexBuffers[] = {vk::bufferStorageMap.at(0).buffer};
-        vkCmdBindVertexBuffers(cmd, 0, 1, vertexBuffers, offSets);
-
-        // Bind to the descriptor set
-        vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, vk::graphicsLayout, 0, 1,
-                                &vk::descGroup.descSets.at(i), 0, nullptr);
-
-        vkCmdDraw(cmd, 3, 1, 0, 0);
-
-        vkCmdEndRenderPass(cmd);
-
-        if (vkEndCommandBuffer(cmd) != VK_SUCCESS) {
-            Log.error("Failed to finish recording the command buffer");
-            return false;
-        }
-    }
-
-    return true;
-}
-
 bool vk::allocateCommandBuffers()
 {
     vk::cmdBuffers.clear();

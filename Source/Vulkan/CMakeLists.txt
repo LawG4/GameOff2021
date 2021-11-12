@@ -16,7 +16,6 @@ set(SOURCES
 	Surface.cpp
 	Renderpass.cpp
 	Shader.cpp
-	GraphicsPipeline.cpp
 	CommndBuffer.cpp
 	Present.cpp
 	Buffer.cpp

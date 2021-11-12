@@ -4,6 +4,7 @@
 \Brief         : Handels surface and swapchain creation and recreation
 \Contributors  : Lawrence G,
  *********************************************************************************************************/
+#include "Pipelines.h"
 #include "Vulkan.h"
 #include "Window.h"
 
@@ -36,11 +37,9 @@ bool vk::recreateSwapchain()
         // Per frame resources
         vkDestroyFramebuffer(vk::logialDevice, vk::swapchainFb[i], nullptr);
         vkDestroyImageView(vk::logialDevice, vk::swapchainImageViews[i], nullptr);
-        // vkFreeCommandBuffers(vk::logialDevice, vk::graphicsPools[i], vk::swapLength, &vk::cmdBuffers[i]);
     }
 
-    vkDestroyPipeline(vk::logialDevice, vk::graphicsPipeline, nullptr);
-    vkDestroyPipelineLayout(vk::logialDevice, vk::graphicsLayout, nullptr);
+    vk::destroyPipelines();
     vkDestroyRenderPass(vk::logialDevice, vk::onscreenRenderPass, nullptr);
     vkDestroySwapchainKHR(vk::logialDevice, vk::swapchain, nullptr);
 
@@ -49,8 +48,7 @@ bool vk::recreateSwapchain()
     vk::createSwapchain();
     vk::createOnScreenRenderpass();
     vk::createFramebuffer();
-    vk::createGraphicsPipeline();
-    // vk::allocateCommandBuffers();
+    vk::createPipelines();
 
     return true;
 }

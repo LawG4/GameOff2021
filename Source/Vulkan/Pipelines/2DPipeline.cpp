@@ -1,6 +1,10 @@
 #include "Pipelines.h"
 
-void prepare2dCmdBuffer(VkCommandBuffer& cmd, uint32_t swapIndex)
+void PipelineInternals::create2DPipeline() {}
+
+void PipelineInternals::destroy2DPipeline() {}
+
+void PipelineInternals::prepare2DCmdBuffer(VkCommandBuffer& cmd, uint32_t swapIndex)
 {
     VkClearValue clear = {0.0094117f, 0.00078431f, 0.00392156f, 1.0f};
     VkRenderPassBeginInfo renderpass;

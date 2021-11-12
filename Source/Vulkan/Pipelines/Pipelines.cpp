@@ -1,5 +1,14 @@
 
 #include "Pipelines.h"
+
+void vk::createPipelines()
+{
+    PipelineInternals::Templates::initialiseTemplates();
+    PipelineInternals::create2DPipeline();
+}
+
+void vk::destroyPipelines() { PipelineInternals::destroy2DPipeline(); }
+
 void prepareCommandBuffer(uint32_t swapIndex)
 {
     // Reset the graphics pool at the current swap index as it's cheap
@@ -13,7 +22,7 @@ void prepareCommandBuffer(uint32_t swapIndex)
     vkBeginCommandBuffer(vk::cmdBuffers.at(swapIndex), &begin);
 
     // Record the 2D command buffer
-    prepare2dCmdBuffer(vk::cmdBuffers.at(swapIndex), swapIndex);
+    PipelineInternals::prepare2DCmdBuffer(vk::cmdBuffers.at(swapIndex), swapIndex);
 
     // We're done recording so reset the buffer
     vkEndCommandBuffer(vk::cmdBuffers.at(swapIndex));

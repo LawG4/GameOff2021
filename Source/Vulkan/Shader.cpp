@@ -9,9 +9,6 @@
 
 #include <fstream>
 
-VkShaderModule vk::vertModule;
-VkShaderModule vk::fragModule;
-
 /// <summary> Reads in a spirv shader at the specified file location </summary>
 /// <param name="filePath">File path of shader local to working directory</param>
 /// <param name="shaderSource">A reference to a vector that is having the shder source placed into</param>
@@ -57,21 +54,6 @@ bool createShaderModule(const char* filePath, VkShaderModule& shaderModule)
 
     if (vkCreateShaderModule(vk::logialDevice, &module, nullptr, &shaderModule) != VK_SUCCESS) {
         Log.error("Failed to create shader module {}", filePath);
-        return false;
-    }
-
-    return true;
-}
-
-bool vk::createShaderModules()
-{
-    // Create the vertex shader module
-    if (!createShaderModule("Shaders/TestShader.vert.spv", vk::vertModule)) {
-        return false;
-    }
-
-    // Create the fragment shader module
-    if (!createShaderModule("Shaders/TestShader.frag.spv", vk::fragModule)) {
         return false;
     }
 
