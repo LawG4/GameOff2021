@@ -1,10 +1,10 @@
 #pragma once
 #include "Vulkan.h"
 
-void prepareCommandBuffer(uint32_t swapIndex);
-
 namespace vk
 {
+
+void prepareCommandBuffer(uint32_t swapIndex);
 VkShaderModule createShaderModule(const char* filePath);
 
 void createPipelines();

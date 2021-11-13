@@ -13,7 +13,7 @@ void vk::destroyDescriptorSetLayouts() { PipelineInternals::destroyDescriptorSet
 
 void vk::destroyPipelines() { PipelineInternals::destroy2DPipeline(); }
 
-void prepareCommandBuffer(uint32_t swapIndex)
+void vk::prepareCommandBuffer(uint32_t swapIndex)
 {
     // Reset the graphics pool at the current swap index as it's cheap
     vkResetCommandPool(vk::logialDevice, vk::graphicsPools.at(swapIndex),
