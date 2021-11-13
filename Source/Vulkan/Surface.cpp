@@ -9,6 +9,7 @@
 #include "Window.h"
 
 #include <algorithm>
+#include "glm/gtc/matrix_transform.hpp"
 
 VkSurfaceKHR vk::surface;
 VkSwapchainKHR vk::swapchain;
@@ -20,6 +21,9 @@ std::vector<VkImage> vk::swapchainImages;
 std::vector<VkImageView> vk::swapchainImageViews;
 
 std::vector<VkFramebuffer> vk::swapchainFb;
+
+glm::mat4 ProjectionMatrices::perspective;
+glm::mat4 ProjectionMatrices::orthogonal;
 
 VkPresentModeKHR chooseSwapchainPresentMode();
 VkSurfaceFormatKHR chooseSwapchainFormat(std::vector<VkSurfaceFormatKHR>& formats);
@@ -156,6 +160,10 @@ bool vk::createSwapchain()
         }
     }
 
+    // Get the two matricies
+    float width = static_cast<float>(vk::swapchainExtent.width) * 0.01f;
+    float height = static_cast<float>(vk::swapchainExtent.height) * 0.01f;
+    ProjectionMatrices::orthogonal = glm::ortho(-0.5f * width, 0.5f * width, 0.5f * height, -0.5f * height);
     return true;
 }
 

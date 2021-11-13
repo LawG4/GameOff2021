@@ -144,11 +144,13 @@ void RenderObject2D::recordCmd(VkCommandBuffer& cmd, uint32_t swapIndex)
 
 void RenderObject2D::updateUbo(uint32_t swapIndex)
 {
-    Log.info("Update ubo");
-
     // Transform the information we have into a model view projection matrix
     glm::mat4 mvp = glm::identity<glm::mat4>();
 
+    mvp = glm::mat4(glm::quat(rot));
+    mvp = glm::scale(mvp, scale);
+    mvp = glm::translate(mvp, pos);
+    mvp = ProjectionMatrices::orthogonal * mvp;
     VkDeviceSize size = sizeof(glm::mat4);
     // Copy over to the ubo
     void* data;

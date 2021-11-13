@@ -19,4 +19,8 @@ RenderObject::~RenderObject() {}
 
 bool RenderObject::requiresUBOUpdate(uint32_t swapIndex) { return requiresUBOUpdateVector[swapIndex]; }
 
-void RenderObject::scheduleUBOUpdate() { requiresUBOUpdateVector.resize(vk::swapLength, true); }
+void RenderObject::scheduleUBOUpdate()
+{
+    requiresUBOUpdateVector.clear();
+    requiresUBOUpdateVector.resize(vk::swapLength, true);
+}

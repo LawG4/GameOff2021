@@ -14,6 +14,8 @@
 #include "Log.h"
 #include "VulkanObjects.h"
 
+#include "glm/glm.hpp"
+
 /// <summary> A struct to hold all of the information required to start drawing a display list in Vulkan. ie
 /// graphics pipelines </summary>
 typedef struct VulkanDisplayList_t {
@@ -25,6 +27,12 @@ bool initVulkan();
 
 /// <summary> Destorys all Vulkan objects </summary>
 void cleanupVulkan();
+
+namespace ProjectionMatrices
+{
+extern glm::mat4 perspective;
+extern glm::mat4 orthogonal;
+}  // namespace ProjectionMatrices
 
 namespace vk
 {

@@ -66,8 +66,8 @@ void PipelineInternals::Templates::initialiseTemplates()
     raster.rasterizerDiscardEnable = VK_FALSE;
     raster.polygonMode = VK_POLYGON_MODE_FILL;
     raster.lineWidth = 1.0;
-    raster.cullMode = VK_CULL_MODE_BACK_BIT;
-    raster.frontFace = VK_FRONT_FACE_CLOCKWISE;
+    raster.cullMode = VK_CULL_MODE_NONE;
+    raster.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
 
     // Tell the pipeline about multisampling
     memset(&multisample, 0, sizeof(VkPipelineMultisampleStateCreateInfo));
