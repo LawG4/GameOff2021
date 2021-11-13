@@ -122,6 +122,37 @@ void copyBufferWithFreshCmdBuffer(const VkBuffer& src, const VkBuffer& dst, VkDe
     vkFreeCommandBuffers(vk::logialDevice, vk::graphicsPools.at(0), 1, &cmd);
 }
 
+vk::BufferGroup vk::createVertexBufferGroup(VkDeviceSize size, void* data)
+{
+    // Create a vertex buffer that is not visible to the host so that it's faster to access, it also needs to
+    // be able to accept transfers
+    vk::BufferGroup nonVisible =
+      createBufferGroup(size, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+                        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
+    // Create the staging buffer that is CPU visible and can be used to send the transfer to our device local
+    // vertex buffer
+    vk::BufferGroup buff =
+      createBufferGroup(size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+                        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+    // Copy the user data to the CPU visible buffer
+    void* dst;
+    vkMapMemory(vk::logialDevice, buff.mem, 0, size, 0, &dst);
+    memcpy(dst, data, size);
+    vkUnmapMemory(vk::logialDevice, buff.mem);
+
+    // Copy the contents of the staging buffer over to the vertex buffer
+    copyBufferWithFreshCmdBuffer(buff.buffer, nonVisible.buffer, size);
+
+    // Free the staging buffer
+    vkDestroyBuffer(vk::logialDevice, buff.buffer, nullptr);
+    vkFreeMemory(vk::logialDevice, buff.mem, nullptr);
+
+    // return the non cpu visible buffer
+    return nonVisible;
+}
+
 void vk::addVertexBuffer(const char* bufferName, const std::vector<Vertex>& vertexBuffer)
 {
     // Get the size of the memory we need

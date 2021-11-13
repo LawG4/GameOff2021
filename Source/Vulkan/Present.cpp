@@ -93,11 +93,6 @@ bool vk::drawFrame()
     // Now it is most likely that we have to record the command buffer every single frame
     prepareCommandBuffer(imageIndex);
 
-    // Use the image index to update the uniform buffer for the command buffer about to be submitted
-    UniformBufferObject obj;
-    obj.modelMatrix = transform;
-    vk::updateUniformAtSwapIndex(vk::descGroup, imageIndex, obj);
-
     // Now that we have a frame ready, draw to it by submitting the command buffer
     VkSubmitInfo submit;
     memset(&submit, 0, sizeof(VkSubmitInfo));

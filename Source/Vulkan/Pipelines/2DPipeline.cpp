@@ -134,6 +134,28 @@ void RenderObject2D::recordCmd(VkCommandBuffer& cmd, uint32_t swapIndex) {}
 
 void RenderObject2D::updateUbo(uint32_t swapIndex) {}
 
+RenderObject2D::RenderObject2D(const std::vector<glm::vec3>& pos, const std::vector<glm::vec3>& col)
+{
+    // We need to ensure the moduel is of course active
+    isActive = true;
+
+    // Assume the user has ensured that they are the right size
+    std::vector<glm::vec3> vertexData(pos.size() * 2);
+
+    // Push the inputs into the order of the vertex data
+    for (uint32_t i = 0; i < pos.size(); i++) {
+        vertexData.push_back(pos[i]);
+        vertexData.push_back(col[i]);
+    }
+
+    vertexGroup = vk::createVertexBufferGroup(vertexData.size(), vertexData.data());
+    indexGroup.buffer = VK_NULL_HANDLE;
+    indexGroup.mem = VK_NULL_HANDLE;
+
+    // Add this object to the list of things to render
+    renderObjects.push_back(this);
+}
+
 void PipelineInternals::createDescriptorSetLayouts2D()
 {
     // Create the pool

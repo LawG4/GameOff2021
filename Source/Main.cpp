@@ -13,6 +13,8 @@
 #include "Keyboard_input.h"
 #include "Player_object.h"
 
+#include "Objects.h"
+
 #include <fstream>
 #include <iostream>
 
@@ -88,6 +90,11 @@ int main(int argc, char *argv[])
         cleanUp();
         return -1;
     }
+
+    // Create a 2D triangle object
+    const std::vector<glm::vec3> pos = {{0.0f, -0.5f, 0.0f}, {0.5f, 0.5f, 0.0f}, {-0.5f, 0.5f, 0.0f}};
+    const std::vector<glm::vec3> col = {{1.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 1.0f}};
+    RenderObject2D *Triangle = new RenderObject2D(pos, col);
 
     // Enter into the windowing loop
     while (!glfwWindowShouldClose(window)) {

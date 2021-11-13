@@ -31,10 +31,14 @@ extern std::vector<vk::DescriptorGroup> descriptorStorageMap;
 vk::BufferGroup createBufferGroup(VkDeviceSize size, VkBufferUsageFlags usage,
                                   VkMemoryPropertyFlags properties);
 
+vk::BufferGroup createVertexBufferGroup(VkDeviceSize size, void *data);
+
 /// <summary> Creates a vertex buffer with the initial contents </summary>
 /// <param name="bufferName"> The name for the buffer in the internal array</param>
 /// <param name="vertexBuffer"> An array of vertices</param>
 void addVertexBuffer(const char *bufferName, const std::vector<Vertex> &vertexBuffer);
+
+
 
 /// <summary> Destorys all of the buffers in the hash table </summary>
 void destroyBuffers();

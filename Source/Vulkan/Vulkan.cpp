@@ -69,12 +69,6 @@ bool initVulkan()
         Log.info("Created Vulkan command pool");
     }
 
-    // Create a vertex buffer for the onscreen triangle
-    const std::vector<Vertex> triangleBuffer = {{{0.0f, -0.5f, 0.0f}, {1.0f, 1.0f, 1.0f}},
-                                                {{0.5f, 0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}},
-                                                {{-0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}}};
-    vk::addVertexBuffer("VertexBuffer", triangleBuffer);
-
     if (!vk::createDescriptorPoolAndSets()) {
         Log.error("Could not create descriptor pools");
         return false;

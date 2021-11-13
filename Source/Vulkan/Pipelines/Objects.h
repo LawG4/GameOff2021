@@ -19,7 +19,8 @@ class RenderObject
 
     /// <summary>Marks all the bools in requiresUBOUpdateVecetor to true so they get updated </summary>
     void scheduleUBOUpdate();
-   private:
+
+   protected:
     std::vector<bool> requiresUBOUpdateVector;
 
     /// <summary>Vertex buffer group </summary>
@@ -35,6 +36,7 @@ class RenderObject
 class RenderObject2D : public RenderObject
 {
    public:
+    RenderObject2D(const std::vector<glm::vec3>& pos, const std::vector<glm::vec3>& col);
     void recordCmd(VkCommandBuffer& cmd, uint32_t swapIndex);
     void updateUbo(uint32_t swapIndex);
 };
