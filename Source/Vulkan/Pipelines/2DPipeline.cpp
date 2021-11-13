@@ -1,4 +1,7 @@
+#include "Objects.h"
 #include "Pipelines.h"
+
+std::vector<RenderObject2D*> renderObjects;
 
 void PipelineInternals::create2DPipeline() {}
 
@@ -22,5 +25,35 @@ void PipelineInternals::prepare2DCmdBuffer(VkCommandBuffer& cmd, uint32_t swapIn
     renderpass.framebuffer = vk::swapchainFb.at(swapIndex);
     vkCmdBeginRenderPass(cmd, &renderpass, VK_SUBPASS_CONTENTS_INLINE);
 
+    // Loop through each of the render objects
+    for (uint32_t i = 0; i < renderObjects.size(); i++) {
+        RenderObject2D* obj = renderObjects.at(i);
+
+        // If the pointer is null lets remove it from the list
+        if (!obj) {
+            renderObjects.erase(renderObjects.begin() + i);
+            i--;
+            continue;
+        }
+
+        // Now check if the object is active, if not skip it
+        if (!obj->isActive) {
+            continue;
+        }
+
+        // Perform a ubo update
+        if (obj->requiresUBOUpdate(swapIndex)) {
+            obj->recordCmd(cmd, swapIndex);
+        }
+
+        // Record the commands for this 2D object into the command buffer
+        obj->recordCmd(cmd, swapIndex);
+    }
+
+    // End the renderpass
     vkCmdEndRenderPass(cmd);
 }
+
+void RenderObject2D::recordCmd(VkCommandBuffer& cmd, uint32_t swapIndex) {}
+
+void RenderObject2D::updateUbo(uint32_t swapIndex) {}

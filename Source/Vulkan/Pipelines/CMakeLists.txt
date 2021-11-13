@@ -9,6 +9,7 @@ set(HEADERS
 set(SOURCES
 	Pipelines.cpp
 	PipelineTemplates.cpp
+	Objects.cpp
 	2DPipeline.cpp
 )
 
