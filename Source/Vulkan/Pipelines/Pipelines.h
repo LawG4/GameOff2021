@@ -9,6 +9,9 @@ VkShaderModule createShaderModule(const char* filePath);
 
 void createPipelines();
 void destroyPipelines();
+
+void createDescriptorSetLayouts();
+void destroyDescriptorSetLayouts();
 }  // namespace vk
 
 namespace PipelineInternals
@@ -17,6 +20,7 @@ namespace PipelineInternals
 // Commands for creating the pipelines
 
 void create2DPipeline();
+void createDescriptorSetLayouts2D();
 
 // Commands for preparing each command buffer
 
@@ -28,6 +32,7 @@ void prepare2DCmdBuffer(VkCommandBuffer& cmd, uint32_t swapIndex);
 // Commands for destroying each of the pipelines
 
 void destroy2DPipeline();
+void destroyDescriptorSetLayouts2D();
 
 namespace Templates
 {

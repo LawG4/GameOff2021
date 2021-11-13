@@ -81,7 +81,7 @@ bool initVulkan()
     } else {
         Log.info("Created Descriptor set and pool");
     }
-
+    vk::createDescriptorSetLayouts();
     vk::createPipelines();
 
     if (!vk::allocateCommandBuffers()) {
@@ -123,6 +123,7 @@ void cleanupVulkan()
     vkDestroyDescriptorPool(vk::logialDevice, vk::descriptorPool, nullptr);
 
     vk::destroyPipelines();
+    vk::destroyDescriptorSetLayouts();
 
     for (VkFramebuffer& fb : vk::swapchainFb) {
         vkDestroyFramebuffer(vk::logialDevice, fb, nullptr);
