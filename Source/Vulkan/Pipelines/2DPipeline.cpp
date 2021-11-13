@@ -4,7 +4,8 @@
 std::vector<RenderObject2D*> renderObjects;
 
 VkDescriptorPool descpool;
-VkDescriptorSetLayout setLayout;
+VkDescriptorSetLayout cameraSetLayout;
+VkDescriptorSetLayout objectSetLayout;
 
 VkShaderModule vertModule;
 VkShaderModule fragModule;
@@ -22,7 +23,7 @@ void PipelineInternals::create2DPipeline()
         info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
 
         // set 0 is layout per model transfor
-        info.pSetLayouts = &setLayout;
+        info.pSetLayouts = &cameraSetLayout;
         info.setLayoutCount = 1;
 
         vkCreatePipelineLayout(vk::logialDevice, &info, nullptr, &layout);
@@ -101,6 +102,9 @@ void PipelineInternals::prepare2DCmdBuffer(VkCommandBuffer& cmd, uint32_t swapIn
     renderpass.framebuffer = vk::swapchainFb.at(swapIndex);
     vkCmdBeginRenderPass(cmd, &renderpass, VK_SUBPASS_CONTENTS_INLINE);
 
+    // Bind to the 2D graphics pipeline
+    vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+
     // Loop through each of the render objects
     for (uint32_t i = 0; i < renderObjects.size(); i++) {
         RenderObject2D* obj = renderObjects.at(i);
@@ -119,7 +123,7 @@ void PipelineInternals::prepare2DCmdBuffer(VkCommandBuffer& cmd, uint32_t swapIn
 
         // Perform a ubo update
         if (obj->requiresUBOUpdate(swapIndex)) {
-            obj->recordCmd(cmd, swapIndex);
+            obj->updateUbo(swapIndex);
         }
 
         // Record the commands for this 2D object into the command buffer
@@ -130,9 +134,31 @@ void PipelineInternals::prepare2DCmdBuffer(VkCommandBuffer& cmd, uint32_t swapIn
     vkCmdEndRenderPass(cmd);
 }
 
-void RenderObject2D::recordCmd(VkCommandBuffer& cmd, uint32_t swapIndex) {}
+void RenderObject2D::recordCmd(VkCommandBuffer& cmd, uint32_t swapIndex)
+{
+    vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, layout, 0, 1, &sets[swapIndex], 0, nullptr);
+    VkDeviceSize offset = 0;
+    vkCmdBindVertexBuffers(cmd, 0, 1, &vertexGroup.buffer, &offset);
+    vkCmdDraw(cmd, 3, 1, 0, 0);
+}
 
-void RenderObject2D::updateUbo(uint32_t swapIndex) {}
+void RenderObject2D::updateUbo(uint32_t swapIndex)
+{
+    Log.info("Update ubo");
+
+    // Transform the information we have into a model view projection matrix
+    glm::mat4 mvp = glm::identity<glm::mat4>();
+
+    VkDeviceSize size = sizeof(glm::mat4);
+    // Copy over to the ubo
+    void* data;
+    vkMapMemory(vk::logialDevice, ubos[swapIndex].mem, 0, size, 0, &data);
+    memcpy(data, &mvp, size);
+    vkUnmapMemory(vk::logialDevice, ubos[swapIndex].mem);
+
+    // Set this frame as not needing another update until it changes again
+    requiresUBOUpdateVector[swapIndex] = false;
+}
 
 RenderObject2D::RenderObject2D(const std::vector<glm::vec3>& pos, const std::vector<glm::vec3>& col)
 {
@@ -144,13 +170,73 @@ RenderObject2D::RenderObject2D(const std::vector<glm::vec3>& pos, const std::vec
 
     // Push the inputs into the order of the vertex data
     for (uint32_t i = 0; i < pos.size(); i++) {
-        vertexData.push_back(pos[i]);
-        vertexData.push_back(col[i]);
+        vertexData[2 * i] = (pos[i]);
+        vertexData[2 * i + 1] = (col[i]);
     }
 
-    vertexGroup = vk::createVertexBufferGroup(vertexData.size(), vertexData.data());
+    vertexGroup = vk::createVertexBufferGroup(sizeof(glm::vec3) * vertexData.size(), vertexData.data());
     indexGroup.buffer = VK_NULL_HANDLE;
     indexGroup.mem = VK_NULL_HANDLE;
+
+    // We're absolutley going to need a ubo update when creating an object
+    scheduleUBOUpdate();
+
+    // Pobably not the most efficient, but I don't seen anything stopping me from giving each object it's own
+    // descriptor pool *dabs*
+    {
+        VkDescriptorPoolCreateInfo info{};
+        info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+        info.maxSets = 1 * vk::swapLength;
+        VkDescriptorPoolSize size{};
+        size.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        size.descriptorCount = 1 * vk::swapLength;
+        info.pPoolSizes = &size;
+        info.poolSizeCount = 1;
+
+        vkCreateDescriptorPool(vk::logialDevice, &info, nullptr, &pool);
+    }
+
+    // Allocate a descriptor set for the
+    {
+        VkDescriptorSetAllocateInfo info{};
+        info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+        info.descriptorPool = pool;
+        info.descriptorSetCount = vk::swapLength;
+
+        std::vector<VkDescriptorSetLayout> layouts(vk::swapLength, objectSetLayout);
+        info.descriptorSetCount = vk::swapLength;
+        info.pSetLayouts = layouts.data();
+
+        sets.resize(vk::swapLength);
+        vkAllocateDescriptorSets(vk::logialDevice, &info, sets.data());
+    }
+
+    ubos.resize(vk::swapLength);
+    for (uint32_t i = 0; i < vk::swapLength; i++) {
+        ubos[i] =
+          vk::createBufferGroup(sizeof(glm::mat4), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+                                VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+    }
+
+    // Associate the sets with the buffers
+    {
+        for (uint32_t i = 0; i < vk::swapLength; i++) {
+            VkWriteDescriptorSet writer{};
+            writer.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            writer.descriptorCount = 1;
+            writer.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+            writer.dstBinding = 0;
+            writer.dstSet = sets[i];
+
+            VkDescriptorBufferInfo buff{};
+            buff.buffer = ubos[i].buffer;
+            buff.offset = 0;
+            buff.range = VK_WHOLE_SIZE;
+            writer.pBufferInfo = &buff;
+
+            vkUpdateDescriptorSets(vk::logialDevice, 1, &writer, 0, nullptr);
+        }
+    }
 
     // Add this object to the list of things to render
     renderObjects.push_back(this);
@@ -187,12 +273,15 @@ void PipelineInternals::createDescriptorSetLayouts2D()
         info.bindingCount = 1;
         info.pBindings = &binding;
 
-        vkCreateDescriptorSetLayout(vk::logialDevice, &info, nullptr, &setLayout);
+        vkCreateDescriptorSetLayout(vk::logialDevice, &info, nullptr, &objectSetLayout);
+
+        // Camera buffer has the same layout
+        vkCreateDescriptorSetLayout(vk::logialDevice, &info, nullptr, &cameraSetLayout);
     }
 }
 
 void PipelineInternals::destroyDescriptorSetLayouts2D()
 {
-    vkDestroyDescriptorSetLayout(vk::logialDevice, setLayout, nullptr);
+    vkDestroyDescriptorSetLayout(vk::logialDevice, cameraSetLayout, nullptr);
     vkDestroyDescriptorPool(vk::logialDevice, descpool, nullptr);
 }

@@ -3,6 +3,8 @@
 #include "Memory.h"
 #include "Vulkan.h"
 
+#include "glm/gtc/matrix_transform.hpp"
+
 class RenderObject
 {
    public:
@@ -20,6 +22,9 @@ class RenderObject
     /// <summary>Marks all the bools in requiresUBOUpdateVecetor to true so they get updated </summary>
     void scheduleUBOUpdate();
 
+    glm::vec3 pos = glm::vec3(0, 0, 0);
+    glm::vec3 scale = glm::vec3(1, 1, 1);
+
    protected:
     std::vector<bool> requiresUBOUpdateVector;
 
@@ -31,6 +36,9 @@ class RenderObject
 
     /// <summary>List of all the uniform buffers </summary>
     std::vector<vk::BufferGroup> ubos;
+
+    VkDescriptorPool pool = VK_NULL_HANDLE;
+    std::vector<VkDescriptorSet> sets;
 };
 
 class RenderObject2D : public RenderObject
