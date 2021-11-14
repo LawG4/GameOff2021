@@ -285,5 +285,10 @@ void PipelineInternals::createDescriptorSetLayouts2D()
 void PipelineInternals::destroyDescriptorSetLayouts2D()
 {
     vkDestroyDescriptorSetLayout(vk::logialDevice, cameraSetLayout, nullptr);
+    vkDestroyDescriptorSetLayout(vk::logialDevice, objectSetLayout, nullptr);
     vkDestroyDescriptorPool(vk::logialDevice, descpool, nullptr);
+
+    for (RenderObject2D* obj : renderObjects) {
+        delete (obj);
+    }
 }
