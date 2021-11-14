@@ -2,7 +2,7 @@
 #include "Objects.h"
 #include "Vulkan.h"
 
-RenderObject::RenderObject()
+Sprite::Sprite()
 {
     // Require a UBO update
     requiresUBOUpdateVector.resize(vk::swapLength, true);
@@ -15,7 +15,7 @@ RenderObject::RenderObject()
     memset(&indexGroup, 0, sizeof(vk::BufferGroup));
 }
 
-RenderObject::~RenderObject()
+Sprite::~Sprite()
 {
     for (auto& ubo : ubos) {
         if (ubo.buffer != VK_NULL_HANDLE) {
@@ -31,9 +31,9 @@ RenderObject::~RenderObject()
     vkDestroyDescriptorPool(vk::logicalDevice, pool, nullptr);
 }
 
-bool RenderObject::requiresUBOUpdate(uint32_t swapIndex) { return requiresUBOUpdateVector[swapIndex]; }
+bool Sprite::requiresUBOUpdate(uint32_t swapIndex) { return requiresUBOUpdateVector[swapIndex]; }
 
-void RenderObject::scheduleUBOUpdate()
+void Sprite::scheduleUBOUpdate()
 {
     requiresUBOUpdateVector.clear();
     requiresUBOUpdateVector.resize(vk::swapLength, true);

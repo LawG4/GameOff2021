@@ -1,7 +1,7 @@
 #include "Objects.h"
 #include "Pipelines.h"
 
-std::vector<RenderObject2D*> renderObjects;
+std::vector<Sprite*> renderObjects;
 
 VkDescriptorPool descpool;
 VkDescriptorSetLayout cameraSetLayout;
@@ -107,7 +107,7 @@ void PipelineInternals::prepare2DCmdBuffer(VkCommandBuffer& cmd, uint32_t swapIn
 
     // Loop through each of the render objects
     for (uint32_t i = 0; i < renderObjects.size(); i++) {
-        RenderObject2D* obj = renderObjects.at(i);
+        Sprite* obj = renderObjects.at(i);
 
         // If the pointer is null lets remove it from the list
         if (!obj) {
@@ -134,7 +134,7 @@ void PipelineInternals::prepare2DCmdBuffer(VkCommandBuffer& cmd, uint32_t swapIn
     vkCmdEndRenderPass(cmd);
 }
 
-void RenderObject2D::recordCmd(VkCommandBuffer& cmd, uint32_t swapIndex)
+void Sprite::recordCmd(VkCommandBuffer& cmd, uint32_t swapIndex)
 {
     vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, layout, 0, 1, &sets[swapIndex], 0, nullptr);
     VkDeviceSize offset = 0;
@@ -142,7 +142,7 @@ void RenderObject2D::recordCmd(VkCommandBuffer& cmd, uint32_t swapIndex)
     vkCmdDraw(cmd, 3, 1, 0, 0);
 }
 
-void RenderObject2D::updateUbo(uint32_t swapIndex)
+void Sprite::updateUbo(uint32_t swapIndex)
 {
     // Transform the information we have into a model view projection matrix
     glm::mat4 mvp = glm::identity<glm::mat4>();
@@ -162,7 +162,7 @@ void RenderObject2D::updateUbo(uint32_t swapIndex)
     requiresUBOUpdateVector[swapIndex] = false;
 }
 
-RenderObject2D::RenderObject2D(const std::vector<glm::vec3>& pos, const std::vector<glm::vec3>& col)
+Sprite::Sprite(const std::vector<glm::vec3>& pos, const std::vector<glm::vec3>& col)
 {
     // We need to ensure the moduel is of course active
     isActive = true;
@@ -288,7 +288,7 @@ void PipelineInternals::destroyDescriptorSetLayouts2D()
     vkDestroyDescriptorSetLayout(vk::logicalDevice, objectSetLayout, nullptr);
     vkDestroyDescriptorPool(vk::logicalDevice, descpool, nullptr);
 
-    for (RenderObject2D* obj : renderObjects) {
+    for (Sprite* obj : renderObjects) {
         delete (obj);
     }
 }

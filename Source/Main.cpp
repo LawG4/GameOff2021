@@ -94,8 +94,8 @@ int main(int argc, char *argv[])
     // Create a 2D triangle object
     const std::vector<glm::vec3> pos = {{0.0f, -0.5f, 0.0f}, {0.5f, 0.5f, 0.0f}, {-0.5f, 0.5f, 0.0f}};
     const std::vector<glm::vec3> col = {{1.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 1.0f}};
-    RenderObject2D *Triangle = new RenderObject2D(pos, col);
-    RenderObject2D *Triangle2 = new RenderObject2D(pos, col);
+    Sprite *Triangle = new Sprite(pos, col);
+    Sprite *Triangle2 = new Sprite(pos, col);
     float time = 0;
 
     // Enter into the windowing loop
