@@ -8,6 +8,7 @@ set(COMPONENTS
 	Render
 	Interactions
 	Model
+	UI
 )
 
 foreach(directory ${COMPONENTS})
