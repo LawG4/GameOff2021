@@ -10,6 +10,7 @@
 #include "nlohmann/json.hpp"
 
 #include "Cursor_input.h"
+#include "EntryMenu.h"
 #include "Keyboard_input.h"
 #include "Player_object.h"
 
@@ -26,6 +27,9 @@ void cleanUp()
 
     // Destroy player object
     delete player_class;
+
+    // Destroy menu object
+    delete MainMenu;
 
     // If the window exists destroy it
     if (window) glfwDestroyWindow(window);
@@ -60,12 +64,17 @@ int main(int argc, char *argv[])
     uint32_t windowWidth = 720;
     uint32_t windowHeight = 400;
 
+    // Used to set up cursor coordinate array
     bool settingsOverride = userSetting["Override_Default_Settings"];
     if (settingsOverride) {
         Log.info("Json file detected that the user wants to override default settings");
         fullScreen = userSetting["Window_Settings"]["FullScreen"];
         windowWidth = userSetting["Window_Settings"]["Windowed_Width"];
         windowHeight = userSetting["Window_Settings"]["Windowed_Height"];
+
+        // Input window dimension data for use in creating cursor coordinates
+        windowdimen[0] = windowWidth;
+        windowdimen[1] = windowHeight;
     }
 
     // Create the window with the settings
@@ -99,12 +108,12 @@ int main(int argc, char *argv[])
     // RenderObject2D *Triangle2 = new RenderObject2D(pos, col);
     // float time = 0;
 
-    // Create a 2d square object
+    // Create a 2d square object (window size is vertex 3.5 x 2?)
     const std::vector<glm::vec3> pos = {{1.5f, -0.5f, 0.0f}, {1.5f, 0.5f, 0.0f}, {-1.5f, 0.5f, 0.0f}};
     const std::vector<glm::vec3> pos2 = {{-1.5f, 0.5f, 0.0f}, {-1.5f, -0.5f, 0.0f}, {1.5f, -0.5f, 0.0f}};
     const std::vector<glm::vec3> col = {{5.0f, 1.0f, 0.0f}, {5.0f, 1.0f, 0.0f}, {5.0f, 1.0f, 0.0f}};
 
-    RenderObject2D *Triangle = new RenderObject2D(pos, col);
+    // RenderObject2D *Triangle = new RenderObject2D(pos, col);
     RenderObject2D *Triangle2 = new RenderObject2D(pos2, col);
 
     // Key input data

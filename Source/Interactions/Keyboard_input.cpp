@@ -7,6 +7,7 @@
 
 #include "Keyboard_input.h"
 #include <iostream>
+#include "EntryMenu.h"
 #include "Player_object.h"
 #include "Window.h"
 
@@ -18,6 +19,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     }
     if (key == GLFW_KEY_W && action == GLFW_PRESS) {  // W
         Log.info("button W pressed");
+        MainMenu->click_button();
     }
     if (key == GLFW_KEY_A && action == GLFW_PRESS) {  // A
         Log.info("button A pressed");
