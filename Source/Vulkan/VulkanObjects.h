@@ -68,12 +68,7 @@ extern VkRenderPass onscreenRenderPass;
 extern VkDescriptorPool descriptorPool;
 extern vk::DescriptorGroup descGroup;
 
-extern VkShaderModule vertModule;
-extern VkShaderModule fragModule;
-extern VkPipeline graphicsPipeline;
-extern VkPipelineLayout graphicsLayout;
-
-extern VkCommandPool graphicsPool;
+extern std::vector<VkCommandPool> graphicsPools;
 extern std::vector<VkCommandBuffer> cmdBuffers;
 
 extern std::vector<VkSemaphore> readyForRendering;

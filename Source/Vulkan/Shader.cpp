@@ -5,12 +5,10 @@
 \Contributors  : Lawrence G,
  *********************************************************************************************************/
 
+#include "Pipelines.h"
 #include "Vulkan.h"
 
 #include <fstream>
-
-VkShaderModule vk::vertModule;
-VkShaderModule vk::fragModule;
 
 /// <summary> Reads in a spirv shader at the specified file location </summary>
 /// <param name="filePath">File path of shader local to working directory</param>
@@ -41,8 +39,10 @@ bool readSpirv(const char* filePath, std::vector<uint32_t>& shaderSource)
     return true;
 }
 
-bool createShaderModule(const char* filePath, VkShaderModule& shaderModule)
+VkShaderModule vk::createShaderModule(const char* filePath)
 {
+    VkShaderModule shaderModule;
+
     // Read in shader source
     std::vector<uint32_t> shaderSource;
     if (!readSpirv(filePath, shaderSource)) {
@@ -57,23 +57,7 @@ bool createShaderModule(const char* filePath, VkShaderModule& shaderModule)
 
     if (vkCreateShaderModule(vk::logialDevice, &module, nullptr, &shaderModule) != VK_SUCCESS) {
         Log.error("Failed to create shader module {}", filePath);
-        return false;
     }
 
-    return true;
-}
-
-bool vk::createShaderModules()
-{
-    // Create the vertex shader module
-    if (!createShaderModule("Shaders/TestShader.vert.spv", vk::vertModule)) {
-        return false;
-    }
-
-    // Create the fragment shader module
-    if (!createShaderModule("Shaders/TestShader.frag.spv", vk::fragModule)) {
-        return false;
-    }
-
-    return true;
+    return shaderModule;
 }

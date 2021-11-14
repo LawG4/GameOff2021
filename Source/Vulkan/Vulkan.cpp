@@ -6,6 +6,7 @@
  *********************************************************************************************************/
 #include "Vulkan.h"
 #include "Memory.h"
+#include "Pipelines.h"
 #include "Window.h"
 bool vulkanInitialised = false;
 
@@ -68,30 +69,14 @@ bool initVulkan()
         Log.info("Created Vulkan command pool");
     }
 
-    // Create a vertex buffer for the onscreen triangle
-    const std::vector<Vertex> triangleBuffer = {{{0.0f, -0.5f, 0.0f}, {1.0f, 1.0f, 1.0f}},
-                                                {{0.5f, 0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}},
-                                                {{-0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}}};
-    vk::addVertexBuffer("VertexBuffer", triangleBuffer);
-
     if (!vk::createDescriptorPoolAndSets()) {
         Log.error("Could not create descriptor pools");
         return false;
     } else {
         Log.info("Created Descriptor set and pool");
     }
-
-    if (!vk::createShaderModules()) {
-        Log.error("Could not create shader modules");
-        return false;
-    }
-
-    if (!vk::createGraphicsPipeline()) {
-        Log.error("Could not create the graphics pipeline");
-        return false;
-    } else {
-        Log.info("Created Vulkan graphics pipeline");
-    }
+    vk::createDescriptorSetLayouts();
+    vk::createPipelines();
 
     if (!vk::allocateCommandBuffers()) {
         Log.error("Could not allocate Vulkan command buffers");
@@ -125,17 +110,14 @@ void cleanupVulkan()
         vkDestroySemaphore(vk::logialDevice, vk::readyForRendering[i], nullptr);
         vkDestroySemaphore(vk::logialDevice, vk::finishedRendering[i], nullptr);
         vkDestroyFence(vk::logialDevice, vk::inFlightCMDFence[i], nullptr);
+
+        vkDestroyCommandPool(vk::logialDevice, vk::graphicsPools.at(i), nullptr);
     }
 
     vkDestroyDescriptorPool(vk::logialDevice, vk::descriptorPool, nullptr);
 
-    vkDestroyCommandPool(vk::logialDevice, vk::graphicsPool, nullptr);
-
-    vkDestroyPipeline(vk::logialDevice, vk::graphicsPipeline, nullptr);
-    vkDestroyPipelineLayout(vk::logialDevice, vk::graphicsLayout, nullptr);
-
-    vkDestroyShaderModule(vk::logialDevice, vk::vertModule, nullptr);
-    vkDestroyShaderModule(vk::logialDevice, vk::fragModule, nullptr);
+    vk::destroyPipelines();
+    vk::destroyDescriptorSetLayouts();
 
     for (VkFramebuffer& fb : vk::swapchainFb) {
         vkDestroyFramebuffer(vk::logialDevice, fb, nullptr);

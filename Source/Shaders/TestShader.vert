@@ -12,7 +12,7 @@ layout(set = 0, binding = 0) uniform ModelUbo
 
 void main() {
 
-    gl_Position = ubo.model * vec4(inPosition, 0.0);
+    gl_Position = ubo.model * vec4(inPosition, 1.0);
     gl_Position.z = 0.0;
     gl_Position.w = 1.0;
     fragColor = inColor;
