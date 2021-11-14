@@ -75,6 +75,10 @@ int main(int argc, char *argv[])
         // Input window dimension data for use in creating cursor coordinates
         windowdimen[0] = windowWidth;
         windowdimen[1] = windowHeight;
+
+        // Input vertex data
+        vertdimen[0] = 3.5f;
+        vertdimen[1] = 2.0f;
     }
 
     // Create the window with the settings
@@ -109,12 +113,12 @@ int main(int argc, char *argv[])
     // float time = 0;
 
     // Create a 2d square object (window size is vertex 3.5 x 2?)
-    const std::vector<glm::vec3> pos = {{1.5f, -0.5f, 0.0f}, {1.5f, 0.5f, 0.0f}, {-1.5f, 0.5f, 0.0f}};
-    const std::vector<glm::vec3> pos2 = {{-1.5f, 0.5f, 0.0f}, {-1.5f, -0.5f, 0.0f}, {1.5f, -0.5f, 0.0f}};
-    const std::vector<glm::vec3> col = {{5.0f, 1.0f, 0.0f}, {5.0f, 1.0f, 0.0f}, {5.0f, 1.0f, 0.0f}};
-
+    // const std::vector<glm::vec3> pos = {{1.5f, -0.5f, 0.0f}, {1.5f, 0.5f, 0.0f}, {-1.5f, 0.5f, 0.0f}};
+    // const std::vector<glm::vec3> pos2 = {{-1.5f, 0.5f, 0.0f}, {-1.5f, -0.5f, 0.0f}, {1.5f, -0.5f, 0.0f}};
+    // const std::vector<glm::vec3> col = {{5.0f, 1.0f, 0.0f}, {5.0f, 1.0f, 0.0f}, {5.0f, 1.0f, 0.0f}};
+    //
     // RenderObject2D *Triangle = new RenderObject2D(pos, col);
-    RenderObject2D *Triangle2 = new RenderObject2D(pos2, col);
+    // RenderObject2D *Triangle2 = new RenderObject2D(pos2, col);
 
     // Key input data
     glfwSetKeyCallback(window, key_callback);

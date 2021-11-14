@@ -6,14 +6,7 @@
  *********************************************************************************************************/
 
 #include "Cursor_input.h"
-
-// int xsize = windowdimen[0];
-
-// Function to move central position to top left
-int vertex_to_zero(int vertex, int max_vertex) { return vertex + max_vertex; }
-
-// Declare windowdimen (window dimension) array
-uint32_t windowdimen[2];
+#include "EntryMenu.h"
 
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
@@ -22,6 +15,12 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
     varAsString = varAsString + "  " + std::to_string((int)ypos);
 
     // Output to log
-    // Log.info(varAsString);
+    Log.info(varAsString);
     // Log.info(windowdimen[1]);
+
+    if (xpos < MainMenu->x_coordinate_range[0] ||
+        xpos > MainMenu->x_coordinate_range[1] && ypos < MainMenu->y_coordinate_range[0] ||
+        ypos > MainMenu->y_coordinate_range[1]) {
+        MainMenu->click_button();
+    }
 }

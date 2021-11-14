@@ -26,20 +26,33 @@
 #include <fstream>
 #include <iostream>
 
-// Create a 2d square object (window size is vertex 3.5 x 2?)
+// Function to move central position to top left
+int vertex_to_zero(int vertex, int max_vertex) { return (vertex + max_vertex) / 2; }
+
+// Create a 2d square object
 EntryMenu::EntryMenu()
 {
-    // const std::vector<glm::vec3> pos = {{1.5f, -0.5f, 0.0f}, {1.5f, 0.5f, 0.0f}, {-1.5f, 0.5f, 0.0f}};
-    std::vector<glm::vec3> pos2 = {{-1.5f, 0.5f, 0.0f}, {-1.5f, -0.5f, 0.0f}, {1.5f, -0.5f, 0.0f}};
-    // col = {{5.0f, 1.0f, 0.0f}, {5.0f, 1.0f, 0.0f}, {5.0f, 1.0f, 0.0f}};
+    // Create pixel scale to convert vertex coord to pixel position (to use with cursor data)
+
+    pixel_scale_X = windowdimen[0] / vertdimen[0];
+    pixel_scale_Y = windowdimen[1] / vertdimen[1];
+
+    // CREATE XY PIXEL COORDINATES FOR BOX FROM VERTICES
+
+    // CHANGE SO THAT RECTANGLES RENDERED BY NOT VISSIBLE
 }
 // Generate triangles
 void EntryMenu::click_button()
 {
-    // RenderObject2D *Triangle =new RenderObject2D({{1.5f, -0.5f, 0.0f}, {1.5f, 0.5f, 0.0f}, {-1.5f, 0.5f,
-    // 0.0f}}, {{-1.5f, 0.5f, 0.0f}, {-1.5f, -0.5f, 0.0f}, {1.5f, -0.5f, 0.0f}});
-    RenderObject2D *Triangle2 = new RenderObject2D(EntryMenu::pos, EntryMenu::col);
+    RenderObject2D *Triangle = new RenderObject2D(EntryMenu::pos, EntryMenu::col);
+    RenderObject2D *Triangle2 = new RenderObject2D(EntryMenu::pos2, EntryMenu::col);
 }
 
 // Build player class as GLOBAL
 EntryMenu *MainMenu = new EntryMenu;
+
+// Deffine windowdimen (window dimension) array
+uint32_t windowdimen[2];
+
+// Declare windowdimen (window dimension) array
+float vertdimen[2];
