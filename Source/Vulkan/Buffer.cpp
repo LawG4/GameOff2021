@@ -45,14 +45,14 @@ vk::BufferGroup vk::createBufferGroup(VkDeviceSize size, VkBufferUsageFlags usag
     buffer.usage = usage;
     buffer.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-    if (vkCreateBuffer(vk::logialDevice, &buffer, nullptr, &buff.buffer) != VK_SUCCESS) {
+    if (vkCreateBuffer(vk::logicalDevice, &buffer, nullptr, &buff.buffer) != VK_SUCCESS) {
         Log.error("Could not create vkBuffer");
         return buff;
     }
 
     // Get the memory properties of this buffer so we know what kind of memory we need to allocate
     VkMemoryRequirements requirements;
-    vkGetBufferMemoryRequirements(vk::logialDevice, buff.buffer, &requirements);
+    vkGetBufferMemoryRequirements(vk::logicalDevice, buff.buffer, &requirements);
 
     // Allocate the underlying memory
     VkMemoryAllocateInfo alloc;
@@ -61,13 +61,13 @@ vk::BufferGroup vk::createBufferGroup(VkDeviceSize size, VkBufferUsageFlags usag
     alloc.allocationSize = requirements.size;
     alloc.memoryTypeIndex = findMemoryIndex(requirements.memoryTypeBits, properties);
 
-    if (vkAllocateMemory(vk::logialDevice, &alloc, nullptr, &buff.mem) != VK_SUCCESS) {
+    if (vkAllocateMemory(vk::logicalDevice, &alloc, nullptr, &buff.mem) != VK_SUCCESS) {
         Log.error("Could not allocate vkMemory");
         return buff;
     }
 
     // Associate the buffer with its device memory
-    vkBindBufferMemory(vk::logialDevice, buff.buffer, buff.mem, 0);
+    vkBindBufferMemory(vk::logicalDevice, buff.buffer, buff.mem, 0);
     return buff;
 }
 
@@ -93,7 +93,7 @@ void copyBufferWithFreshCmdBuffer(const VkBuffer& src, const VkBuffer& dst, VkDe
     alloc.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
 
     VkCommandBuffer cmd;
-    vkAllocateCommandBuffers(vk::logialDevice, &alloc, &cmd);
+    vkAllocateCommandBuffers(vk::logicalDevice, &alloc, &cmd);
 
     // Start recording the command buffer
     VkCommandBufferBeginInfo begin;
@@ -119,7 +119,7 @@ void copyBufferWithFreshCmdBuffer(const VkBuffer& src, const VkBuffer& dst, VkDe
     vkQueueWaitIdle(vk::graphicsQueue);
 
     // Free the command buffer
-    vkFreeCommandBuffers(vk::logialDevice, vk::graphicsPools.at(0), 1, &cmd);
+    vkFreeCommandBuffers(vk::logicalDevice, vk::graphicsPools.at(0), 1, &cmd);
 }
 
 vk::BufferGroup vk::createVertexBufferGroup(VkDeviceSize size, void* data)
@@ -138,16 +138,16 @@ vk::BufferGroup vk::createVertexBufferGroup(VkDeviceSize size, void* data)
 
     // Copy the user data to the CPU visible buffer
     void* dst;
-    vkMapMemory(vk::logialDevice, buff.mem, 0, size, 0, &dst);
+    vkMapMemory(vk::logicalDevice, buff.mem, 0, size, 0, &dst);
     memcpy(dst, data, size);
-    vkUnmapMemory(vk::logialDevice, buff.mem);
+    vkUnmapMemory(vk::logicalDevice, buff.mem);
 
     // Copy the contents of the staging buffer over to the vertex buffer
     copyBufferWithFreshCmdBuffer(buff.buffer, nonVisible.buffer, size);
 
     // Free the staging buffer
-    vkDestroyBuffer(vk::logialDevice, buff.buffer, nullptr);
-    vkFreeMemory(vk::logialDevice, buff.mem, nullptr);
+    vkDestroyBuffer(vk::logicalDevice, buff.buffer, nullptr);
+    vkFreeMemory(vk::logicalDevice, buff.mem, nullptr);
 
     // return the non cpu visible buffer
     return nonVisible;
@@ -173,20 +173,20 @@ void vk::addVertexBuffer(const char* bufferName, const std::vector<Vertex>& vert
     // Now we write the contents of the vertices to the staging buffer
     // Start by mapping the memory on the GPU to a CPU visible section of memory
     void* data;
-    vkMapMemory(vk::logialDevice, buff.mem, 0, sizeof(Vertex) * vertexBuffer.size(), 0, &data);
+    vkMapMemory(vk::logicalDevice, buff.mem, 0, sizeof(Vertex) * vertexBuffer.size(), 0, &data);
 
     // mem copy the content of our vertex buffer into the mapped memory
     memcpy(data, vertexBuffer.data(), sizeof(Vertex) * vertexBuffer.size());
 
     // Free the device memory from the CPU
-    vkUnmapMemory(vk::logialDevice, buff.mem);
+    vkUnmapMemory(vk::logicalDevice, buff.mem);
 
     // Copy the contents of the staging buffer over to the vertex buffer
     copyBufferWithFreshCmdBuffer(buff.buffer, nonVisible.buffer, size);
 
     // Free the staging buffer
-    vkDestroyBuffer(vk::logialDevice, buff.buffer, nullptr);
-    vkFreeMemory(vk::logialDevice, buff.mem, nullptr);
+    vkDestroyBuffer(vk::logicalDevice, buff.buffer, nullptr);
+    vkFreeMemory(vk::logicalDevice, buff.mem, nullptr);
 
     // Finally add this to the internal buffer register
     bufferStorageMap.push_back(nonVisible);
@@ -196,11 +196,11 @@ void vk::destroyBuffers()
 {
     for (const vk::BufferGroup& buff : bufferStorageMap) {
         if (buff.buffer != VK_NULL_HANDLE) {
-            vkDestroyBuffer(vk::logialDevice, buff.buffer, nullptr);
+            vkDestroyBuffer(vk::logicalDevice, buff.buffer, nullptr);
         }
 
         if (buff.mem != VK_NULL_HANDLE) {
-            vkFreeMemory(vk::logialDevice, buff.mem, nullptr);
+            vkFreeMemory(vk::logicalDevice, buff.mem, nullptr);
         }
     }
 }

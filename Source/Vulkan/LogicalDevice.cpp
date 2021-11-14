@@ -9,7 +9,7 @@
 
 #include <set>
 
-VkDevice vk::logialDevice;
+VkDevice vk::logicalDevice;
 VkQueue vk::graphicsQueue;
 VkQueue vk::presentationQueue;
 
@@ -55,7 +55,7 @@ bool vk::createLogicalDevice()
     // attach device features to the device create info
     device.pEnabledFeatures = &selectDeviceFeatures();
 
-    if (vkCreateDevice(vk::physicalDevice, &device, nullptr, &vk::logialDevice) != VK_SUCCESS) {
+    if (vkCreateDevice(vk::physicalDevice, &device, nullptr, &vk::logicalDevice) != VK_SUCCESS) {
         Log.error("Failed to created logical device");
         return false;
     }
@@ -68,9 +68,9 @@ bool vk::createLogicalDevice()
 
 void fetchQueues()
 {
-    vkGetDeviceQueue(vk::logialDevice, vk::selectedQueueFamilies.graphicsFamily.value(), 0,
+    vkGetDeviceQueue(vk::logicalDevice, vk::selectedQueueFamilies.graphicsFamily.value(), 0,
                      &vk::graphicsQueue);
-    vkGetDeviceQueue(vk::logialDevice, vk::selectedQueueFamilies.presentFamily.value(), 0,
+    vkGetDeviceQueue(vk::logicalDevice, vk::selectedQueueFamilies.presentFamily.value(), 0,
                      &vk::presentationQueue);
 }
 

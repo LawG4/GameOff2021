@@ -48,7 +48,7 @@ extern VkDebugUtilsMessengerEXT messenger;
 
 extern VkPhysicalDevice physicalDevice;
 extern QueueFamilyIndices selectedQueueFamilies;
-extern VkDevice logialDevice;
+extern VkDevice logicalDevice;
 
 extern VkQueue graphicsQueue;
 extern VkQueue presentationQueue;

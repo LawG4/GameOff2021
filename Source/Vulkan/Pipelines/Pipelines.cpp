@@ -16,7 +16,7 @@ void vk::destroyPipelines() { PipelineInternals::destroy2DPipeline(); }
 void vk::prepareCommandBuffer(uint32_t swapIndex)
 {
     // Reset the graphics pool at the current swap index as it's cheap
-    vkResetCommandPool(vk::logialDevice, vk::graphicsPools.at(swapIndex),
+    vkResetCommandPool(vk::logicalDevice, vk::graphicsPools.at(swapIndex),
                        VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT);
 
     // Start recording the primary command buffer

@@ -43,7 +43,7 @@ void vk::addUniformBuffer()
     layout.bindingCount = 1;
     layout.pBindings = &binding;
 
-    if (vkCreateDescriptorSetLayout(vk::logialDevice, &layout, nullptr, &desc.layout) != VK_SUCCESS) {
+    if (vkCreateDescriptorSetLayout(vk::logicalDevice, &layout, nullptr, &desc.layout) != VK_SUCCESS) {
         Log.error("Could not make descriptor set layout");
     }
 
@@ -58,7 +58,7 @@ void vk::addUniformBuffer()
     alloc.descriptorSetCount = vk::swapLength;
     alloc.pSetLayouts = layouts.data();
 
-    if (vkAllocateDescriptorSets(vk::logialDevice, &alloc, desc.descSets.data()) != VK_SUCCESS) {
+    if (vkAllocateDescriptorSets(vk::logicalDevice, &alloc, desc.descSets.data()) != VK_SUCCESS) {
         Log.error("Couldn't allocate descriptor sets");
         return;
     }
@@ -81,7 +81,7 @@ void vk::addUniformBuffer()
         descriptorWriter.push_back(write);
     }
 
-    vkUpdateDescriptorSets(vk::logialDevice, descriptorWriter.size(), descriptorWriter.data(), 0, nullptr);
+    vkUpdateDescriptorSets(vk::logicalDevice, descriptorWriter.size(), descriptorWriter.data(), 0, nullptr);
 
     vk::descGroup = desc;
 }
@@ -102,7 +102,7 @@ bool vk::createDescriptorPoolAndSets()
     // Set the maximum number of descriptor sets in this pool
     pool.maxSets = vk::swapLength;
 
-    if (vkCreateDescriptorPool(vk::logialDevice, &pool, nullptr, &vk::descriptorPool) != VK_SUCCESS) {
+    if (vkCreateDescriptorPool(vk::logicalDevice, &pool, nullptr, &vk::descriptorPool) != VK_SUCCESS) {
         Log.error("Could not create the descriptor pool");
         return false;
     }
@@ -117,19 +117,19 @@ void vk::updateUniformAtSwapIndex(vk::DescriptorGroup desc, uint32_t swapIndex, 
 {
     // Map the memory for the current frame
     void* data;
-    vkMapMemory(vk::logialDevice, desc.buffers.at(swapIndex).mem, 0, sizeof(UniformBufferObject), 0, &data);
+    vkMapMemory(vk::logicalDevice, desc.buffers.at(swapIndex).mem, 0, sizeof(UniformBufferObject), 0, &data);
 
     memcpy(data, &obj, sizeof(UniformBufferObject));
 
-    vkUnmapMemory(vk::logialDevice, desc.buffers.at(swapIndex).mem);
+    vkUnmapMemory(vk::logicalDevice, desc.buffers.at(swapIndex).mem);
 }
 
 void vk::destroyDescriptorResources()
 {
     for (uint32_t i = 0; i < vk::swapLength; i++) {
-        vkDestroyBuffer(vk::logialDevice, vk::descGroup.buffers.at(i).buffer, nullptr);
-        vkFreeMemory(vk::logialDevice, vk::descGroup.buffers.at(i).mem, nullptr);
+        vkDestroyBuffer(vk::logicalDevice, vk::descGroup.buffers.at(i).buffer, nullptr);
+        vkFreeMemory(vk::logicalDevice, vk::descGroup.buffers.at(i).mem, nullptr);
     }
 
-    vkDestroyDescriptorSetLayout(vk::logialDevice, vk::descGroup.layout, nullptr);
+    vkDestroyDescriptorSetLayout(vk::logicalDevice, vk::descGroup.layout, nullptr);
 }

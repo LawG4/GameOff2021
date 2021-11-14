@@ -26,7 +26,7 @@ void PipelineInternals::create2DPipeline()
         info.pSetLayouts = &cameraSetLayout;
         info.setLayoutCount = 1;
 
-        vkCreatePipelineLayout(vk::logialDevice, &info, nullptr, &layout);
+        vkCreatePipelineLayout(vk::logicalDevice, &info, nullptr, &layout);
     }
 
     // Create the graphics pipeline using the internal templates, they were set for the 2d
@@ -62,25 +62,25 @@ void PipelineInternals::create2DPipeline()
         info.pMultisampleState = &PipelineInternals::Templates::multisample;
         info.pColorBlendState = &PipelineInternals::Templates::blend;
 
-        vkCreateGraphicsPipelines(vk::logialDevice, nullptr, 1, &info, nullptr, &pipeline);
+        vkCreateGraphicsPipelines(vk::logicalDevice, nullptr, 1, &info, nullptr, &pipeline);
     }
 }
 
 void PipelineInternals::destroy2DPipeline()
 {
     if (pipeline != VK_NULL_HANDLE) {
-        vkDestroyPipeline(vk::logialDevice, pipeline, nullptr);
+        vkDestroyPipeline(vk::logicalDevice, pipeline, nullptr);
     }
 
     if (layout != VK_NULL_HANDLE) {
-        vkDestroyPipelineLayout(vk::logialDevice, layout, nullptr);
+        vkDestroyPipelineLayout(vk::logicalDevice, layout, nullptr);
     }
 
     if (vertModule != VK_NULL_HANDLE) {
-        vkDestroyShaderModule(vk::logialDevice, vertModule, nullptr);
+        vkDestroyShaderModule(vk::logicalDevice, vertModule, nullptr);
     }
     if (fragModule != VK_NULL_HANDLE) {
-        vkDestroyShaderModule(vk::logialDevice, fragModule, nullptr);
+        vkDestroyShaderModule(vk::logicalDevice, fragModule, nullptr);
     }
 }
 
@@ -154,9 +154,9 @@ void RenderObject2D::updateUbo(uint32_t swapIndex)
     VkDeviceSize size = sizeof(glm::mat4);
     // Copy over to the ubo
     void* data;
-    vkMapMemory(vk::logialDevice, ubos[swapIndex].mem, 0, size, 0, &data);
+    vkMapMemory(vk::logicalDevice, ubos[swapIndex].mem, 0, size, 0, &data);
     memcpy(data, &mvp, size);
-    vkUnmapMemory(vk::logialDevice, ubos[swapIndex].mem);
+    vkUnmapMemory(vk::logicalDevice, ubos[swapIndex].mem);
 
     // Set this frame as not needing another update until it changes again
     requiresUBOUpdateVector[swapIndex] = false;
@@ -195,7 +195,7 @@ RenderObject2D::RenderObject2D(const std::vector<glm::vec3>& pos, const std::vec
         info.pPoolSizes = &size;
         info.poolSizeCount = 1;
 
-        vkCreateDescriptorPool(vk::logialDevice, &info, nullptr, &pool);
+        vkCreateDescriptorPool(vk::logicalDevice, &info, nullptr, &pool);
     }
 
     // Allocate a descriptor set for the
@@ -210,7 +210,7 @@ RenderObject2D::RenderObject2D(const std::vector<glm::vec3>& pos, const std::vec
         info.pSetLayouts = layouts.data();
 
         sets.resize(vk::swapLength);
-        vkAllocateDescriptorSets(vk::logialDevice, &info, sets.data());
+        vkAllocateDescriptorSets(vk::logicalDevice, &info, sets.data());
     }
 
     ubos.resize(vk::swapLength);
@@ -236,7 +236,7 @@ RenderObject2D::RenderObject2D(const std::vector<glm::vec3>& pos, const std::vec
             buff.range = VK_WHOLE_SIZE;
             writer.pBufferInfo = &buff;
 
-            vkUpdateDescriptorSets(vk::logialDevice, 1, &writer, 0, nullptr);
+            vkUpdateDescriptorSets(vk::logicalDevice, 1, &writer, 0, nullptr);
         }
     }
 
@@ -258,7 +258,7 @@ void PipelineInternals::createDescriptorSetLayouts2D()
         info.pPoolSizes = &size;
         info.poolSizeCount = 1;
 
-        vkCreateDescriptorPool(vk::logialDevice, &info, nullptr, &descpool);
+        vkCreateDescriptorPool(vk::logicalDevice, &info, nullptr, &descpool);
     }
 
     // create the layout for the per buffer bad boi
@@ -275,18 +275,18 @@ void PipelineInternals::createDescriptorSetLayouts2D()
         info.bindingCount = 1;
         info.pBindings = &binding;
 
-        vkCreateDescriptorSetLayout(vk::logialDevice, &info, nullptr, &objectSetLayout);
+        vkCreateDescriptorSetLayout(vk::logicalDevice, &info, nullptr, &objectSetLayout);
 
         // Camera buffer has the same layout
-        vkCreateDescriptorSetLayout(vk::logialDevice, &info, nullptr, &cameraSetLayout);
+        vkCreateDescriptorSetLayout(vk::logicalDevice, &info, nullptr, &cameraSetLayout);
     }
 }
 
 void PipelineInternals::destroyDescriptorSetLayouts2D()
 {
-    vkDestroyDescriptorSetLayout(vk::logialDevice, cameraSetLayout, nullptr);
-    vkDestroyDescriptorSetLayout(vk::logialDevice, objectSetLayout, nullptr);
-    vkDestroyDescriptorPool(vk::logialDevice, descpool, nullptr);
+    vkDestroyDescriptorSetLayout(vk::logicalDevice, cameraSetLayout, nullptr);
+    vkDestroyDescriptorSetLayout(vk::logicalDevice, objectSetLayout, nullptr);
+    vkDestroyDescriptorPool(vk::logicalDevice, descpool, nullptr);
 
     for (RenderObject2D* obj : renderObjects) {
         delete (obj);

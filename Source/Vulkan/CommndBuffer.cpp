@@ -24,7 +24,7 @@ bool vk::allocateCommandBuffers()
         buffer.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
         buffer.commandBufferCount = 1;
 
-        if (vkAllocateCommandBuffers(vk::logialDevice, &buffer, &vk::cmdBuffers.at(i)) != VK_SUCCESS) {
+        if (vkAllocateCommandBuffers(vk::logicalDevice, &buffer, &vk::cmdBuffers.at(i)) != VK_SUCCESS) {
             Log.error("Failed to allocated graphics command buffers");
             return false;
         }
@@ -43,7 +43,7 @@ bool vk::createCommandPools()
 
     graphicsPools.resize(vk::swapLength);
     for (uint32_t i = 0; i < vk::swapLength; i++) {
-        if (vkCreateCommandPool(vk::logialDevice, &pool, nullptr, &vk::graphicsPools.at(i)) != VK_SUCCESS) {
+        if (vkCreateCommandPool(vk::logicalDevice, &pool, nullptr, &vk::graphicsPools.at(i)) != VK_SUCCESS) {
             Log.error("Couldn't create command pool");
             return false;
         }

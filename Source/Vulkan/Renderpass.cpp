@@ -74,7 +74,7 @@ bool vk::createOnScreenRenderpass()
     renderpass.dependencyCount = 1;
     renderpass.pDependencies = &dependency;
 
-    if (vkCreateRenderPass(vk::logialDevice, &renderpass, nullptr, &vk::onscreenRenderPass) != VK_SUCCESS) {
+    if (vkCreateRenderPass(vk::logicalDevice, &renderpass, nullptr, &vk::onscreenRenderPass) != VK_SUCCESS) {
         Log.error("Could not create the onscreen renderpass");
         return false;
     }

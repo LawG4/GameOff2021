@@ -55,7 +55,7 @@ VkShaderModule vk::createShaderModule(const char* filePath)
     module.pCode = shaderSource.data();
     module.codeSize = shaderSource.size() * sizeof(uint32_t);
 
-    if (vkCreateShaderModule(vk::logialDevice, &module, nullptr, &shaderModule) != VK_SUCCESS) {
+    if (vkCreateShaderModule(vk::logicalDevice, &module, nullptr, &shaderModule) != VK_SUCCESS) {
         Log.error("Failed to create shader module {}", filePath);
     }
 

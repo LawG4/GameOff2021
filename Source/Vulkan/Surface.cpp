@@ -34,18 +34,18 @@ bool vk::recreateSwapchain()
     Log.info("Recreating Vulkan Swapchain");
 
     // Wait for device to finish any commands
-    vkDeviceWaitIdle(vk::logialDevice);
+    vkDeviceWaitIdle(vk::logicalDevice);
 
     // Destroy the resources
     for (uint32_t i = 0; i < vk::swapLength; i++) {
         // Per frame resources
-        vkDestroyFramebuffer(vk::logialDevice, vk::swapchainFb[i], nullptr);
-        vkDestroyImageView(vk::logialDevice, vk::swapchainImageViews[i], nullptr);
+        vkDestroyFramebuffer(vk::logicalDevice, vk::swapchainFb[i], nullptr);
+        vkDestroyImageView(vk::logicalDevice, vk::swapchainImageViews[i], nullptr);
     }
 
     vk::destroyPipelines();
-    vkDestroyRenderPass(vk::logialDevice, vk::onscreenRenderPass, nullptr);
-    vkDestroySwapchainKHR(vk::logialDevice, vk::swapchain, nullptr);
+    vkDestroyRenderPass(vk::logicalDevice, vk::onscreenRenderPass, nullptr);
+    vkDestroySwapchainKHR(vk::logicalDevice, vk::swapchain, nullptr);
 
     // recreate the lost resources
     vk::selectedSwapchainProperties.populate(vk::physicalDevice);
@@ -73,7 +73,7 @@ bool vk::createFramebuffer()
     for (uint32_t i = 0; i < vk::swapLength; i++) {
         framebuffer.pAttachments = &vk::swapchainImageViews.at(i);
 
-        if (vkCreateFramebuffer(vk::logialDevice, &framebuffer, nullptr, &vk::swapchainFb.at(i)) !=
+        if (vkCreateFramebuffer(vk::logicalDevice, &framebuffer, nullptr, &vk::swapchainFb.at(i)) !=
             VK_SUCCESS) {
             Log.error("Couldn't create framebuffer index {}", i);
             return true;
@@ -122,15 +122,15 @@ bool vk::createSwapchain()
     // We're not recreating a swapchain thankfully
     createInfo.oldSwapchain = VK_NULL_HANDLE;
 
-    if (vkCreateSwapchainKHR(vk::logialDevice, &createInfo, nullptr, &vk::swapchain) != VK_SUCCESS) {
+    if (vkCreateSwapchainKHR(vk::logicalDevice, &createInfo, nullptr, &vk::swapchain) != VK_SUCCESS) {
         Log.error("Could not create a swapchain");
         return false;
     }
 
     // Retrieve the Vulkan swapchain image
-    vkGetSwapchainImagesKHR(vk::logialDevice, vk::swapchain, &vk::swapLength, nullptr);
+    vkGetSwapchainImagesKHR(vk::logicalDevice, vk::swapchain, &vk::swapLength, nullptr);
     vk::swapchainImages.resize(vk::swapLength);
-    vkGetSwapchainImagesKHR(vk::logialDevice, vk::swapchain, &vk::swapLength, vk::swapchainImages.data());
+    vkGetSwapchainImagesKHR(vk::logicalDevice, vk::swapchain, &vk::swapLength, vk::swapchainImages.data());
 
     // Create a good template for creating the image views
     VkImageViewCreateInfo imageView;
@@ -153,7 +153,7 @@ bool vk::createSwapchain()
     for (uint32_t i = 0; i < vk::swapLength; i++) {
         imageView.image = vk::swapchainImages.at(i);
 
-        if (vkCreateImageView(vk::logialDevice, &imageView, nullptr, &vk::swapchainImageViews.at(i)) !=
+        if (vkCreateImageView(vk::logicalDevice, &imageView, nullptr, &vk::swapchainImageViews.at(i)) !=
             VK_SUCCESS) {
             Log.error("Could not retrieve swapchain image views");
             return false;

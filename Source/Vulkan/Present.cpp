@@ -36,15 +36,15 @@ bool vk::createSyncObjects()
     fence.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
     for (uint32_t i = 0; i < vk::swapLength; i++) {
-        if (vkCreateSemaphore(vk::logialDevice, &semaphore, nullptr, &vk::readyForRendering[i]) !=
+        if (vkCreateSemaphore(vk::logicalDevice, &semaphore, nullptr, &vk::readyForRendering[i]) !=
               VK_SUCCESS ||
-            vkCreateSemaphore(vk::logialDevice, &semaphore, nullptr, &vk::finishedRendering[i]) !=
+            vkCreateSemaphore(vk::logicalDevice, &semaphore, nullptr, &vk::finishedRendering[i]) !=
               VK_SUCCESS) {
             Log.error("Could not create semaphores");
             return false;
         }
 
-        if (vkCreateFence(vk::logialDevice, &fence, nullptr, &vk::inFlightCMDFence[i]) != VK_SUCCESS) {
+        if (vkCreateFence(vk::logicalDevice, &fence, nullptr, &vk::inFlightCMDFence[i]) != VK_SUCCESS) {
             Log.error("Couldn't create a fence");
             return false;
         }
@@ -56,14 +56,14 @@ bool vk::createSyncObjects()
 bool vk::drawFrame()
 {
     // Wait on the CPU side until the GPU work for the current frame has finished
-    vkWaitForFences(vk::logialDevice, 1, &vk::inFlightCMDFence[currentFrame], VK_TRUE,
+    vkWaitForFences(vk::logicalDevice, 1, &vk::inFlightCMDFence[currentFrame], VK_TRUE,
                     static_cast<uint64_t>(-1));
 
     uint32_t imageIndex = 0;
     VkResult result;
 
     // Request the next image in the swapchain
-    result = vkAcquireNextImageKHR(vk::logialDevice, vk::swapchain, static_cast<uint64_t>(-1),
+    result = vkAcquireNextImageKHR(vk::logicalDevice, vk::swapchain, static_cast<uint64_t>(-1),
                                    vk::readyForRendering[currentFrame], VK_NULL_HANDLE, &imageIndex);
 
     if (result == VK_ERROR_OUT_OF_DATE_KHR) {
@@ -79,7 +79,7 @@ bool vk::drawFrame()
     // The image we retrieved from the swapchain might be out of order, so we need to wait on the image to be
     // ready, so if we have a fence set then wait on it
     if (vk::inFlightImageFence[imageIndex] != VK_NULL_HANDLE) {
-        vkWaitForFences(vk::logialDevice, 1, &vk::inFlightImageFence[imageIndex], VK_TRUE,
+        vkWaitForFences(vk::logicalDevice, 1, &vk::inFlightImageFence[imageIndex], VK_TRUE,
                         static_cast<uint64_t>(-1));
     }
 
@@ -112,7 +112,7 @@ bool vk::drawFrame()
     submit.pCommandBuffers = &vk::cmdBuffers.at(imageIndex);
 
     // Reset the fence just before submitting the command buffer
-    vkResetFences(vk::logialDevice, 1, &vk::inFlightCMDFence[currentFrame]);
+    vkResetFences(vk::logicalDevice, 1, &vk::inFlightCMDFence[currentFrame]);
 
     // SubGPL-3.0 Licensethe command queue
     if (vkQueueSubmit(vk::graphicsQueue, 1, &submit, vk::inFlightCMDFence[currentFrame]) != VK_SUCCESS) {

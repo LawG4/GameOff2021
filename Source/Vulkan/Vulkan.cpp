@@ -101,39 +101,39 @@ void cleanupVulkan()
     if (!vulkanInitialised) return;
 
     // wait for the device to finish everything up
-    vkDeviceWaitIdle(vk::logialDevice);
+    vkDeviceWaitIdle(vk::logicalDevice);
 
     vk::destroyDescriptorResources();
     vk::destroyBuffers();
 
     for (uint32_t i = 0; i < vk::swapLength; i++) {
-        vkDestroySemaphore(vk::logialDevice, vk::readyForRendering[i], nullptr);
-        vkDestroySemaphore(vk::logialDevice, vk::finishedRendering[i], nullptr);
-        vkDestroyFence(vk::logialDevice, vk::inFlightCMDFence[i], nullptr);
+        vkDestroySemaphore(vk::logicalDevice, vk::readyForRendering[i], nullptr);
+        vkDestroySemaphore(vk::logicalDevice, vk::finishedRendering[i], nullptr);
+        vkDestroyFence(vk::logicalDevice, vk::inFlightCMDFence[i], nullptr);
 
-        vkDestroyCommandPool(vk::logialDevice, vk::graphicsPools.at(i), nullptr);
+        vkDestroyCommandPool(vk::logicalDevice, vk::graphicsPools.at(i), nullptr);
     }
 
-    vkDestroyDescriptorPool(vk::logialDevice, vk::descriptorPool, nullptr);
+    vkDestroyDescriptorPool(vk::logicalDevice, vk::descriptorPool, nullptr);
 
     vk::destroyPipelines();
     vk::destroyDescriptorSetLayouts();
 
     for (VkFramebuffer& fb : vk::swapchainFb) {
-        vkDestroyFramebuffer(vk::logialDevice, fb, nullptr);
+        vkDestroyFramebuffer(vk::logicalDevice, fb, nullptr);
     }
 
-    vkDestroyRenderPass(vk::logialDevice, vk::onscreenRenderPass, nullptr);
+    vkDestroyRenderPass(vk::logicalDevice, vk::onscreenRenderPass, nullptr);
 
     for (VkImageView& view : vk::swapchainImageViews) {
-        vkDestroyImageView(vk::logialDevice, view, nullptr);
+        vkDestroyImageView(vk::logicalDevice, view, nullptr);
     }
 
-    vkDestroySwapchainKHR(vk::logialDevice, vk::swapchain, nullptr);
+    vkDestroySwapchainKHR(vk::logicalDevice, vk::swapchain, nullptr);
 
     vkDestroySurfaceKHR(vk::instance, vk::surface, nullptr);
 
-    vkDestroyDevice(vk::logialDevice, nullptr);
+    vkDestroyDevice(vk::logicalDevice, nullptr);
 
     if (vk::validationLayersEnabled) {
         vk::deleteDebugMessenger();
