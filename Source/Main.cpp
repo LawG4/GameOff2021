@@ -98,15 +98,15 @@ int main(int argc, char *argv[])
     RenderObject2D *Triangle2 = new RenderObject2D(pos, col);
     float time = 0;
 
+    // Key input data
+    glfwSetKeyCallback(window, key_callback);
+
+    // Mouse input data
+    glfwSetCursorPosCallback(window, cursor_position_callback);
+
     // Enter into the windowing loop
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
-
-        // Key input data
-        glfwSetKeyCallback(window, key_callback);
-
-        // Mouse input data
-        glfwSetCursorPosCallback(window, cursor_position_callback);
 
         Triangle->rot += glm::vec3(0.0, 0.1, 0.0f);
         Triangle->scheduleUBOUpdate();
