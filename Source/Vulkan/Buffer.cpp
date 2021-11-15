@@ -15,7 +15,7 @@ std::vector<vk::BufferGroup> vk::bufferStorageMap;
 /// <param name="typeFilter">A bit mask of indexes which might be suitable(?)</param>
 /// <param name="properties">A bit mask of properties that we require the memory to have</param>
 /// <returns>The index of device memory which satisfies our needs</returns>
-uint32_t findMemoryIndex(uint32_t typeFilter, VkMemoryPropertyFlags properties)
+uint32_t vk::findMemoryIndex(uint32_t typeFilter, VkMemoryPropertyFlags properties)
 {
     // Loop through each type of memory supplied by the device
     for (uint32_t i = 0; i < vk::memory::memProperties.memoryTypeCount; i++) {

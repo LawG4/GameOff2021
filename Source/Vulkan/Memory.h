@@ -38,7 +38,11 @@ vk::BufferGroup createVertexBufferGroup(VkDeviceSize size, void *data);
 /// <param name="vertexBuffer"> An array of vertices</param>
 void addVertexBuffer(const char *bufferName, const std::vector<Vertex> &vertexBuffer);
 
-
+/// <summary>Finds the index of the GPU heap that has all the requirements to allocate some memory</summary>
+/// <param name="typeFilter">I actually have no idea</param>
+/// <param name="properties">Memory properties determined by vkGetMemoryRequirements</param>
+/// <returns>Appropriate heap index</returns>
+uint32_t findMemoryIndex(uint32_t typeFilter, VkMemoryPropertyFlags properties);
 
 /// <summary> Destorys all of the buffers in the hash table </summary>
 void destroyBuffers();
