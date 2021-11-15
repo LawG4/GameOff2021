@@ -11,6 +11,7 @@ set(SOURCES
 	PipelineTemplates.cpp
 	Objects.cpp
 	2DPipeline.cpp
+	SpriteSheet.cpp
 )
 
 target_sources(${PROJ_NAME} PRIVATE ${HEADERS} ${SOURCES})

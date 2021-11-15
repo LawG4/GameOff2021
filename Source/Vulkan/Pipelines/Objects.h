@@ -39,6 +39,10 @@ class SpriteSheet
     /// <summary>The sets that contain the image</summary>
     std::vector<VkDescriptorSet> sets;
 
+    VkImage texture;
+
+    VkDeviceMemory textureMemory;
+
     /// <summary>The sampler for reading the sprite sheet. You never know it could change per sprite
     /// sheet</summary>
     VkSampler sampler;
@@ -99,9 +103,17 @@ class RenderObject
    public:
     RenderObject(Sprite* sprite);
     ~RenderObject();
+
+    // Setters
     void setPosition(glm::vec3 position);
     void setRotation(glm::vec3 rotation);
     void setScale(glm::vec3 scale);
+
+    // Getters
+    glm::mat4 getMvp();
+    glm::vec3 getPosition();
+    glm::vec3 getRotation();
+    glm::vec3 getScale();
 
    private:
     Sprite* _sprite;
