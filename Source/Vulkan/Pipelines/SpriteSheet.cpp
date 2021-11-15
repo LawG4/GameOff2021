@@ -72,7 +72,7 @@ SpriteSheet::SpriteSheet(const char* TextureFileName)
         vkBindImageMemory(vk::logicalDevice, texture, textureMemory, 0);
     }
 
-    // Create and record a brand new command buffer to uplaod the image
+    // Create and record a brand new command buffer to upload the image
     {
         VkCommandBuffer cmd;
 
@@ -95,7 +95,7 @@ SpriteSheet::SpriteSheet(const char* TextureFileName)
         // use a pipeline barrier to transition the image to transfer_dst so it can be copied to
         // We'll reuse this create info later
         VkImageMemoryBarrier barrier{};
-        barrier.sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+        barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
         barrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         barrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
         barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
@@ -148,8 +148,14 @@ SpriteSheet::SpriteSheet(const char* TextureFileName)
             info.pCommandBuffers = &cmd;
 
             vkQueueSubmit(vk::graphicsQueue, 1, &info, 0);
+
+            vkQueueWaitIdle(vk::graphicsQueue);
         }
     }
+
+    // Free the staging buffer
+    vkDestroyBuffer(vk::logicalDevice, stagingGroup.buffer, nullptr);
+    vkFreeMemory(vk::logicalDevice, stagingGroup.mem, nullptr);
 }
 
 SpriteSheet::~SpriteSheet() {}
