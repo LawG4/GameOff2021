@@ -19,20 +19,20 @@ class EntryMenu
 
     float pixel_scale_X;
     float pixel_scale_Y;
-    double x_coordinate_range[2];
-    double y_coordinate_range[2];
+    int x_coordinate_range[2];
+    int y_coordinate_range[2];
 
     EntryMenu();
-    void click_button();
+    bool click_button();
 };
 
 extern EntryMenu* MainMenu;
-
-// Create cursor  class
-void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
 
 // Global windowdimen (window dimension) array to hold window dimension data
 extern uint32_t windowdimen[2];
 
 // Global vertdimen (vertex dimension) array to hold max vertex data
 extern float vertdimen[2];
+
+// Function to move central position to top left
+int vertex_to_zero(float vertex, float max_vertex);

@@ -10,5 +10,5 @@
 // GLFW inclusion before vk headers causes error with vk
 #include <GLFW/glfw3.h>
 
-// Function to move central position to top left
-int vertex_to_zero(int vertex, int max_vertex);
+// Create cursor  class
+void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
