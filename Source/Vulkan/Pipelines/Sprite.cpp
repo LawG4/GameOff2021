@@ -2,39 +2,45 @@
 #include "Sprites.h"
 #include "Vulkan.h"
 
-Sprite::Sprite()
+struct SpriteVertices {
+    glm::vec3 pos;
+    glm::vec2 tex;
+};
+
+const std::vector<glm::vec3> quadCoordinates = {
+  {-0.5f, -0.5f, 0.0f}, {0.5f, -0.5f, 0.0f}, {0.5f, 0.5f, 0.0f}, {-0.5f, 0.5f, 0.0f}};
+
+Sprite::Sprite(SpriteSheet* spriteSheet, const std::vector<glm::vec2>& texCoord)
 {
-    // Require a UBO update
-    requiresUBOUpdateVector.resize(vk::swapLength, true);
+    // Store the sprite sheet
+    _sheet = spriteSheet;
 
-    // Set is active to trie
-    isActive = true;
+    // Ensure that the tex coordinate has at least 4 entries
+    if (texCoord.size() < 4) {
+        Log.error("Texture coordinates not long enough");
+        return;
+    }
 
-    // Memset our internal vulkan structs
-    memset(&vertexGroup, 0, sizeof(vk::BufferGroup));
-    memset(&indexGroup, 0, sizeof(vk::BufferGroup));
+    // Fill the vertex buffer on the CPU side
+    std::vector<SpriteVertices> vertices(4);
+    for (uint32_t i = 0; i < 4; i++) {
+        vertices[i] = {quadCoordinates[i], texCoord[i]};
+    }
+
+    // Create the vertex buffer for this sprite
+    VkDeviceSize size = sizeof(SpriteVertices) * vertices.size();
+    _vertexGroup = vk::createVertexBufferGroup(size, vertices.data());
 }
 
 Sprite::~Sprite()
 {
-    for (auto& ubo : ubos) {
-        if (ubo.buffer != VK_NULL_HANDLE) {
-            vkDestroyBuffer(vk::logicalDevice, ubo.buffer, nullptr);
-            vkFreeMemory(vk::logicalDevice, ubo.mem, nullptr);
-        }
+    // Destory the vertex buffer
+    if (_vertexGroup.buffer != VK_NULL_HANDLE) {
+        vkDestroyBuffer(vk::logicalDevice, _vertexGroup.buffer, nullptr);
     }
-
-    // Free the vertex buffer
-    if (vertexGroup.buffer != VK_NULL_HANDLE) vkDestroyBuffer(vk::logicalDevice, vertexGroup.buffer, nullptr);
-    if (vertexGroup.mem != VK_NULL_HANDLE) vkFreeMemory(vk::logicalDevice, vertexGroup.mem, nullptr);
-
-    vkDestroyDescriptorPool(vk::logicalDevice, pool, nullptr);
+    if (_vertexGroup.mem != VK_NULL_HANDLE) {
+        vkFreeMemory(vk::logicalDevice, _vertexGroup.mem, nullptr);
+    }
 }
 
-bool Sprite::requiresUBOUpdate(uint32_t swapIndex) { return requiresUBOUpdateVector[swapIndex]; }
-
-void Sprite::scheduleUBOUpdate()
-{
-    requiresUBOUpdateVector.clear();
-    requiresUBOUpdateVector.resize(vk::swapLength, true);
-}
+void Sprite::render(const glm::mat4& mvp) {}

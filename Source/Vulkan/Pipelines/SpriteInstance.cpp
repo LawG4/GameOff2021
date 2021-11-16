@@ -1,6 +1,12 @@
 
 #include "Sprites.h"
 
+void SpriteInstance::render()
+{
+    // Call up to the sprite and render, while passing the mvp to translate it
+    _sprite->render(getMvp());
+}
+
 SpriteInstance::SpriteInstance(Sprite* sprite)
 {
     _sprite = sprite;
@@ -26,6 +32,27 @@ SpriteInstance::SpriteInstance(Sprite* sprite, glm::vec3 pos, glm::vec3 scale, g
 
 SpriteInstance::~SpriteInstance() {}
 
+glm::mat4 SpriteInstance::getMvp()
+{
+    if (_mvpOutdated) {
+        _mvp = calculateMVP();
+        _mvpOutdated = false;
+    }
+    return _mvp;
+}
+
+glm::mat4 SpriteInstance::calculateMVP()
+{
+    glm::mat4 mat = glm::identity<glm::mat4>();
+
+    mat = glm::mat4(glm::quat(_rot));
+    mat = glm::scale(mat, _scale);
+    mat = glm::translate(mat, _pos);
+    mat = ProjectionMatrices::orthogonal * mat;
+
+    return mat;
+}
+
 void SpriteInstance::setPosition(glm::vec3 position)
 {
     _mvpOutdated = true;
@@ -44,27 +71,6 @@ void SpriteInstance::setScale(glm::vec3 scale)
     _scale = scale;
 }
 
-glm::mat4 SpriteInstance::getMvp()
-{
-    if (_mvpOutdated) {
-        _mvp = calculateMVP();
-        _mvpOutdated = false;
-    }
-    return _mvp;
-}
-
 glm::vec3 SpriteInstance::getPosition() { return _pos; }
 glm::vec3 SpriteInstance::getRotation() { return _rot; }
 glm::vec3 SpriteInstance::getScale() { return _scale; }
-
-glm::mat4 SpriteInstance::calculateMVP()
-{
-    glm::mat4 mat = glm::identity<glm::mat4>();
-
-    mat = glm::mat4(glm::quat(_rot));
-    mat = glm::scale(mat, _scale);
-    mat = glm::translate(mat, _pos);
-    mat = ProjectionMatrices::orthogonal * mat;
-
-    return mat;
-}

@@ -25,9 +25,25 @@ void vk::prepareCommandBuffer(uint32_t swapIndex)
 
     vkBeginCommandBuffer(vk::cmdBuffers.at(swapIndex), &begin);
 
-    // Record the 2D command buffer
-    PipelineInternals::prepare2DCmdBuffer(vk::cmdBuffers.at(swapIndex), swapIndex);
+    // Renderpasses must be started in the primary command buffer not secondary ones
+    {
+        VkRenderPassBeginInfo info{};
+        info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+        info.framebuffer = vk::swapchainFb[swapIndex];
+        info.renderPass = onscreenRenderPass;
+        info.renderArea.extent = vk::swapchainExtent;
+        info.renderArea.offset = {0, 0};
 
-    // We're done recording so reset the buffer
+        VkClearValue clear = {0.0094117f, 0.00078431f, 0.00392156f, 1.0f};
+        info.pClearValues = &clear;
+        info.clearValueCount = 1;
+
+        vkCmdBeginRenderPass(vk::cmdBuffers[swapIndex], &info, VK_SUBPASS_CONTENTS_INLINE);
+    }
+
+    // End the onscreen renderpass
+    vkCmdEndRenderPass(vk::cmdBuffers[swapIndex]);
+
+    // We're done recording so end the buffer
     vkEndCommandBuffer(vk::cmdBuffers.at(swapIndex));
 }
