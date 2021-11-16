@@ -101,3 +101,9 @@ class SpriteInstance
 
     glm::mat4 calculateMVP();
 };
+
+namespace SpriteInternals
+{
+extern vk::BufferGroup quadIndexGroup;
+extern VkPipeline pipeline;
+}

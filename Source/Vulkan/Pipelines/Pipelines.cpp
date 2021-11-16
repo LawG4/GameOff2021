@@ -1,5 +1,6 @@
 
 #include "Pipelines.h"
+#include "Sprites.h"
 
 void vk::createPipelines()
 {
@@ -40,6 +41,9 @@ void vk::prepareCommandBuffer(uint32_t swapIndex)
 
         vkCmdBeginRenderPass(vk::cmdBuffers[swapIndex], &info, VK_SUBPASS_CONTENTS_INLINE);
     }
+
+    // Bind to our one and only graphics pipeline
+    vkCmdBindPipeline(vk::cmdBuffers[swapIndex], VK_PIPELINE_BIND_POINT_GRAPHICS, SpriteInternals::pipeline);
 
     // End the onscreen renderpass
     vkCmdEndRenderPass(vk::cmdBuffers[swapIndex]);

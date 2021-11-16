@@ -10,6 +10,10 @@ struct SpriteVertices {
 const std::vector<glm::vec3> quadCoordinates = {
   {-0.5f, -0.5f, 0.0f}, {0.5f, -0.5f, 0.0f}, {0.5f, 0.5f, 0.0f}, {-0.5f, 0.5f, 0.0f}};
 
+std::vector<uint16_t> indexArray = {0, 1, 2, 2, 3, 0};
+
+vk::BufferGroup SpriteInternals::quadIndexGroup = {VK_NULL_HANDLE, VK_NULL_HANDLE};
+
 Sprite::Sprite(SpriteSheet* spriteSheet, const std::vector<glm::vec2>& texCoord)
 {
     // Store the sprite sheet
@@ -30,6 +34,12 @@ Sprite::Sprite(SpriteSheet* spriteSheet, const std::vector<glm::vec2>& texCoord)
     // Create the vertex buffer for this sprite
     VkDeviceSize size = sizeof(SpriteVertices) * vertices.size();
     _vertexGroup = vk::createVertexBufferGroup(size, vertices.data());
+
+    // If the index buffer has not been defined then create it
+    if (SpriteInternals::quadIndexGroup.buffer == VK_NULL_HANDLE) {
+        SpriteInternals::quadIndexGroup =
+          vk::createVertexBufferGroup(sizeof(uint16_t) * indexArray.size(), indexArray.data());
+    }
 }
 
 Sprite::~Sprite()

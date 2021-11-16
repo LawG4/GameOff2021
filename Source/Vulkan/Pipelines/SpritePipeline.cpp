@@ -11,7 +11,7 @@ VkShaderModule vertModule;
 VkShaderModule fragModule;
 
 VkPipelineLayout layout;
-VkPipeline pipeline;
+VkPipeline SpriteInternals::pipeline;
 
 void PipelineInternals::create2DPipeline()
 {
@@ -62,14 +62,14 @@ void PipelineInternals::create2DPipeline()
         info.pMultisampleState = &PipelineInternals::Templates::multisample;
         info.pColorBlendState = &PipelineInternals::Templates::blend;
 
-        vkCreateGraphicsPipelines(vk::logicalDevice, nullptr, 1, &info, nullptr, &pipeline);
+        vkCreateGraphicsPipelines(vk::logicalDevice, nullptr, 1, &info, nullptr, &SpriteInternals::pipeline);
     }
 }
 
 void PipelineInternals::destroy2DPipeline()
 {
-    if (pipeline != VK_NULL_HANDLE) {
-        vkDestroyPipeline(vk::logicalDevice, pipeline, nullptr);
+    if (SpriteInternals::pipeline != VK_NULL_HANDLE) {
+        vkDestroyPipeline(vk::logicalDevice, SpriteInternals::pipeline, nullptr);
     }
 
     if (layout != VK_NULL_HANDLE) {
