@@ -156,6 +156,122 @@ SpriteSheet::SpriteSheet(const char* TextureFileName)
     // Free the staging buffer
     vkDestroyBuffer(vk::logicalDevice, stagingGroup.buffer, nullptr);
     vkFreeMemory(vk::logicalDevice, stagingGroup.mem, nullptr);
+
+    // Create an image view for this texture image
+    {
+        VkImageViewCreateInfo info{};
+        info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+        info.image = texture;
+        info.viewType = VK_IMAGE_VIEW_TYPE_2D;
+        info.format = VK_FORMAT_R8G8B8A8_SRGB;
+        info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        info.subresourceRange.baseMipLevel = 0;
+        info.subresourceRange.levelCount = 1;
+        info.subresourceRange.baseArrayLayer = 0;
+        info.subresourceRange.layerCount = 1;
+
+        if (vkCreateImageView(vk::logicalDevice, &info, nullptr, &textureView) != VK_SUCCESS) {
+            Log.error("Could not create image view");
+            return;
+        }
+    }
+
+    // Create a sampler for this object
+    {
+        VkSamplerCreateInfo info{};
+        info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+        info.magFilter = VK_FILTER_LINEAR;
+        info.minFilter = VK_FILTER_LINEAR;
+        info.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+        info.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+        info.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+
+        info.anisotropyEnable = VK_FALSE;
+        info.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
+        info.unnormalizedCoordinates = VK_FALSE;
+        info.compareEnable = VK_FALSE;
+
+        info.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+        info.mipLodBias = 0;
+        info.minLod = 0;
+        info.maxLod = 0;
+
+        if (vkCreateSampler(vk::logicalDevice, &info, nullptr, &sampler) != VK_SUCCESS) {
+            Log.error("Could not create samplers");
+            return;
+        }
+    }
+
+    // Create the desciptor pool
+    {
+        VkDescriptorPoolCreateInfo info{};
+        info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+        info.maxSets = 1 * vk::swapLength;
+
+        VkDescriptorPoolSize size{};
+        size.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        size.descriptorCount = 1 * vk::swapLength;
+        info.poolSizeCount = 1;
+        info.pPoolSizes = &size;
+
+        if (vkCreateDescriptorPool(vk::logicalDevice, &info, nullptr, &pool) != VK_SUCCESS) {
+            Log.error("Could not create descriptor pools");
+            return;
+        }
+    }
+
+    // Create descriptor set layout
+    {
+        VkDescriptorSetLayoutCreateInfo info{};
+        info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+        info.bindingCount = 1;
+
+        VkDescriptorSetLayoutBinding binding{};
+        binding.binding = 0;
+        binding.descriptorCount = 1;
+        binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+        info.bindingCount = 1;
+        info.pBindings = &binding;
+
+        vkCreateDescriptorSetLayout(vk::logicalDevice, &info, nullptr, &layout);
+
+        VkDescriptorSetAllocateInfo alloc{};
+        std::vector<VkDescriptorSetLayout> layouts(vk::swapLength, layout);
+        sets.resize(vk::swapLength);
+        alloc.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+        alloc.descriptorPool = pool;
+        alloc.descriptorSetCount = vk::swapLength;
+        alloc.pSetLayouts = layouts.data();
+        vkAllocateDescriptorSets(vk::logicalDevice, &alloc, sets.data());
+    }
+
+    // Update the descriptor sets so that it points to the image
+    for (uint32_t i = 0; i < vk::swapLength; i++) {
+        VkWriteDescriptorSet writer{};
+        writer.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+        writer.descriptorCount = 1;
+        writer.dstBinding = 0;
+        writer.dstSet = sets.at(i);
+        writer.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+
+        VkDescriptorImageInfo image{};
+        image.sampler = sampler;
+        image.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        image.imageView = textureView;
+        writer.pImageInfo = &image;
+
+        vkUpdateDescriptorSets(vk::logicalDevice, 1, &writer, 0, nullptr);
+    }
 }
 
-SpriteSheet::~SpriteSheet() {}
+SpriteSheet::~SpriteSheet()
+{
+    if (texture != VK_NULL_HANDLE) {
+        vkDestroyImage(vk::logicalDevice, texture, nullptr);
+    }
+
+    if (textureMemory != VK_NULL_HANDLE) {
+        vkFreeMemory(vk::logicalDevice, textureMemory, nullptr);
+    }
+}

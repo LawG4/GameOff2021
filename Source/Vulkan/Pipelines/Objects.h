@@ -31,21 +31,23 @@ class SpriteSheet
    private:
     /// <summary>We need one pool to allocate everything out of since it's easier to predict than managing a
     /// global one</summary>
-    VkDescriptorPool pool;
+    VkDescriptorPool pool = VK_NULL_HANDLE;
 
     /// <summary>The layout that we use to stamp together a set</summary>
-    VkDescriptorSetLayout layout;
+    VkDescriptorSetLayout layout = VK_NULL_HANDLE;
 
     /// <summary>The sets that contain the image</summary>
     std::vector<VkDescriptorSet> sets;
 
-    VkImage texture;
+    VkImage texture = VK_NULL_HANDLE;
 
-    VkDeviceMemory textureMemory;
+    VkDeviceMemory textureMemory = VK_NULL_HANDLE;
+
+    VkImageView textureView = VK_NULL_HANDLE;
 
     /// <summary>The sampler for reading the sprite sheet. You never know it could change per sprite
     /// sheet</summary>
-    VkSampler sampler;
+    VkSampler sampler = VK_NULL_HANDLE;
 };
 
 class Sprite

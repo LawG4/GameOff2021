@@ -91,6 +91,9 @@ int main(int argc, char *argv[])
         return -1;
     }
 
+    // Create a spritesheet
+    SpriteSheet *sheet = new SpriteSheet("Cum.png");
+
     // Create a 2D triangle object
     const std::vector<glm::vec3> pos = {{0.0f, -0.5f, 0.0f}, {0.5f, 0.5f, 0.0f}, {-0.5f, 0.5f, 0.0f}};
     const std::vector<glm::vec3> col = {{1.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 1.0f}};
@@ -118,5 +121,6 @@ int main(int argc, char *argv[])
         vk::drawFrame();
     }
 
+    delete (sheet);
     cleanUp();
 }
