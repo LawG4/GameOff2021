@@ -267,11 +267,27 @@ SpriteSheet::SpriteSheet(const char* TextureFileName)
 
 SpriteSheet::~SpriteSheet()
 {
+    if (textureView != VK_NULL_HANDLE) {
+        vkDestroyImageView(vk::logicalDevice, textureView, nullptr);
+    }
+
     if (texture != VK_NULL_HANDLE) {
         vkDestroyImage(vk::logicalDevice, texture, nullptr);
     }
 
     if (textureMemory != VK_NULL_HANDLE) {
         vkFreeMemory(vk::logicalDevice, textureMemory, nullptr);
+    }
+
+    if (sampler != VK_NULL_HANDLE) {
+        vkDestroySampler(vk::logicalDevice, sampler, nullptr);
+    }
+
+    if (layout != VK_NULL_HANDLE) {
+        vkDestroyDescriptorSetLayout(vk::logicalDevice, layout, nullptr);
+    }
+
+    if (pool != VK_NULL_HANDLE) {
+        vkDestroyDescriptorPool(vk::logicalDevice, pool, nullptr);
     }
 }
