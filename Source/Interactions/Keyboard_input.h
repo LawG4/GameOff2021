@@ -10,6 +10,7 @@
 #include "Vulkan.h"
 // GLFW inclusion before vk headers causes error with vk
 #include <GLFW/glfw3.h>
+#include "EntryMenu.h"
 #include "Player_object.h"
 
 // Keyboard input function

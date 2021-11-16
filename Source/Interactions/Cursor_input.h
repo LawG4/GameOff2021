@@ -9,6 +9,9 @@
 #include "Vulkan.h"
 // GLFW inclusion before vk headers causes error with vk
 #include <GLFW/glfw3.h>
+#include "EntryMenu.h"
 
 // Create cursor  class
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
+
+extern EntryMenu* MainMenu;

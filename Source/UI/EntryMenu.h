@@ -12,18 +12,17 @@
 class EntryMenu
 {
    public:
-    // Move deffinition out of constructor
-    const std::vector<glm::vec3> pos = {{1.5f, -0.5f, 0.0f}, {1.5f, 0.5f, 0.0f}, {-1.5f, 0.5f, 0.0f}};
-    const std::vector<glm::vec3> pos2 = {{-1.5f, 0.5f, 0.0f}, {-1.5f, -0.5f, 0.0f}, {1.5f, -0.5f, 0.0f}};
-    const std::vector<glm::vec3> col = {{5.0f, 1.0f, 0.0f}, {5.0f, 1.0f, 0.0f}, {5.0f, 1.0f, 0.0f}};
-
     float pixel_scale_X;
     float pixel_scale_Y;
-    int x_coordinate_range[2];
-    int y_coordinate_range[2];
+    float x_coordinate_range[2];
+    float y_coordinate_range[2];
+    RenderObject2D* Triangle;
+    RenderObject2D* Triangle2;
 
     EntryMenu();
+    void initialise_values();
     bool click_button();
+    void shadow_button();
 };
 
 extern EntryMenu* MainMenu;
@@ -35,4 +34,4 @@ extern uint32_t windowdimen[2];
 extern float vertdimen[2];
 
 // Function to move central position to top left
-int vertex_to_zero(float vertex, float max_vertex);
+float vertex_to_zero(float vertex, float max_vertex);

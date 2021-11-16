@@ -79,6 +79,9 @@ int main(int argc, char *argv[])
         // Input vertex data
         vertdimen[0] = 3.5f;
         vertdimen[1] = 2.0f;
+
+        // Load newly declared values into MainMenu
+        MainMenu->initialise_values();
     }
 
     // Create the window with the settings
@@ -106,8 +109,7 @@ int main(int argc, char *argv[])
 
     // Create a 2D triangle object
     // const std::vector<glm::vec3> pos = {{0.0f, -0.5f, 0.0f}, {0.5f, 0.5f, 0.0f}, {-0.5f, 0.5f, 0.0f}};
-    // const std::vector<glm::vec3> col = {{64.0f, 64.0f, 64.0f}, {64.0f, 64.0f, 64.0f},
-    // {64.0f, 64.0f, 64.0f}};
+    // const std::vector<glm::vec3> col = {{64.0f, 64.0f, 64.0f}, {64.0f, 64.0f, 64.0f},{64.0f, 64.0f, 64.0f}};
     // RenderObject2D *Triangle = new RenderObject2D(pos, col);
     // RenderObject2D *Triangle2 = new RenderObject2D(pos, col);
     // float time = 0;
