@@ -104,6 +104,7 @@ class SpriteInstance
 {
    public:
     SpriteInstance(Sprite* sprite);
+    SpriteInstance(Sprite* sprite, glm::vec3 pos, glm::vec3 scale, glm::vec3 rot);
     ~SpriteInstance();
 
     // Setters
@@ -117,6 +118,7 @@ class SpriteInstance
     glm::vec3 getRotation();
     glm::vec3 getScale();
 
+
    private:
     Sprite* _sprite;
     glm::mat4 _mvp;
@@ -124,4 +126,6 @@ class SpriteInstance
     glm::vec3 _pos;
     glm::vec3 _rot;
     glm::vec3 _scale;
+
+    glm::mat4 calculateMVP();
 };
