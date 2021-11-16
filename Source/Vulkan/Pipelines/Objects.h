@@ -100,11 +100,11 @@ class Sprite
     std::vector<VkDescriptorSet> sets;
 };
 
-class RenderObject
+class SpriteInstance
 {
    public:
-    RenderObject(Sprite* sprite);
-    ~RenderObject();
+    SpriteInstance(Sprite* sprite);
+    ~SpriteInstance();
 
     // Setters
     void setPosition(glm::vec3 position);

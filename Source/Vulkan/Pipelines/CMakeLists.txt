@@ -12,6 +12,7 @@ set(SOURCES
 	Objects.cpp
 	2DPipeline.cpp
 	SpriteSheet.cpp
+	SpriteInstance.cpp
 )
 
 target_sources(${PROJ_NAME} PRIVATE ${HEADERS} ${SOURCES})
