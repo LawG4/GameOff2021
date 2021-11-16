@@ -1,5 +1,5 @@
-#include "Objects.h"
 #include "Pipelines.h"
+#include "Sprites.h"
 
 std::vector<Sprite*> renderObjects;
 

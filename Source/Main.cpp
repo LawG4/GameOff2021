@@ -13,7 +13,7 @@
 #include "Keyboard_input.h"
 #include "Player_object.h"
 
-#include "Objects.h"
+#include "Sprites.h"
 
 #include <fstream>
 #include <iostream>

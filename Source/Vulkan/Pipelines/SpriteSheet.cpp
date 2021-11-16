@@ -1,6 +1,6 @@
 
 #include "Memory.h"
-#include "Objects.h"
+#include "Sprites.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"

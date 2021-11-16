@@ -1,5 +1,5 @@
 
-#include "Objects.h"
+#include "Sprites.h"
 
 SpriteInstance::SpriteInstance(Sprite* sprite) {}
 

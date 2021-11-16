@@ -3,14 +3,14 @@ cmake_minimum_required(VERSION 3.20)
 
 set(HEADERS
 	Pipelines.h
-	Objects.h
+	Sprites.h
 )
 
 set(SOURCES
 	Pipelines.cpp
 	PipelineTemplates.cpp
-	Objects.cpp
-	2DPipeline.cpp
+	Sprite.cpp
+	SpritePipeline.cpp
 	SpriteSheet.cpp
 	SpriteInstance.cpp
 )
