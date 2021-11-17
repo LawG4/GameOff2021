@@ -71,17 +71,6 @@ int main(int argc, char *argv[])
         fullScreen = userSetting["Window_Settings"]["FullScreen"];
         windowWidth = userSetting["Window_Settings"]["Windowed_Width"];
         windowHeight = userSetting["Window_Settings"]["Windowed_Height"];
-
-        // Input window dimension data for use in creating cursor coordinates
-        windowdimen[0] = windowWidth;
-        windowdimen[1] = windowHeight;
-
-        // Input vertex data
-        vertdimen[0] = 3.5f;
-        vertdimen[1] = 2.0f;
-
-        // Load newly declared values into MainMenu
-        MainMenu->initialise_values();
     }
 
     // Create the window with the settings
@@ -109,8 +98,8 @@ int main(int argc, char *argv[])
 
     // Create a 2D triangle object
     // const std::vector<glm::vec3> pos = {{0.0f, -0.5f, 0.0f}, {0.5f, 0.5f, 0.0f}, {-0.5f, 0.5f, 0.0f}};
-    // const std::vector<glm::vec3> col = {{64.0f, 64.0f, 64.0f}, {64.0f, 64.0f, 64.0f},{64.0f, 64.0f, 64.0f}};
-    // RenderObject2D *Triangle = new RenderObject2D(pos, col);
+    // const std::vector<glm::vec3> col = {{64.0f, 64.0f, 64.0f},
+    // {64.0f, 64.0f, 64.0f},{64.0f, 64.0f, 64.0f}}; RenderObject2D *Triangle = new RenderObject2D(pos, col);
     // RenderObject2D *Triangle2 = new RenderObject2D(pos, col);
     // float time = 0;
 
@@ -127,6 +116,13 @@ int main(int argc, char *argv[])
 
     // Mouse input data
     glfwSetCursorPosCallback(window, cursor_position_callback);
+
+    // Input vertex data
+    vertdimen[0] = 3.5f;
+    vertdimen[1] = 2.0f;
+
+    // Load newly declared values into MainMenu
+    MainMenu->load_menu(windowWidth, windowHeight);
 
     // Enter into the windowing loop
     while (!glfwWindowShouldClose(window)) {

@@ -18,17 +18,33 @@ class EntryMenu
     float y_coordinate_range[2];
     RenderObject2D* Triangle;
     RenderObject2D* Triangle2;
+    RenderObject2D* smallTriangle;
+    RenderObject2D* smallTriangle2;
+
+    // --Deffine vector names--
+    // Top rectangle (main shape and shadow)
+    std::vector<glm::vec3> start_largetop;
+    std::vector<glm::vec3> start_largebottom;
+    std::vector<glm::vec3> start_smalltop;
+    std::vector<glm::vec3> start_smallbottom;
+
+    // Bottom rectangle (main shape and shadow)
+    std::vector<glm::vec3> quit_largetop;
+    std::vector<glm::vec3> quit_largebottom;
+    std::vector<glm::vec3> quit_largetop;
+    std::vector<glm::vec3> quit_largebottom;
+
+    // --Colour--
+    std::vector<glm::vec3> colour;
 
     EntryMenu();
-    void initialise_values();
-    bool click_button();
-    void shadow_button();
+
+    void load_menu(uint32_t ww, uint32_t wh);
+    bool shadow_button();
+    bool return_to_normal();
 };
 
 extern EntryMenu* MainMenu;
-
-// Global windowdimen (window dimension) array to hold window dimension data
-extern uint32_t windowdimen[2];
 
 // Global vertdimen (vertex dimension) array to hold max vertex data
 extern float vertdimen[2];

@@ -8,7 +8,8 @@
 #include "Cursor_input.h"
 #include "EntryMenu.h"
 
-bool query_triangle = false;
+bool cursor_on_box = false;
+bool return_box_to_normal;
 
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
@@ -20,12 +21,17 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 
     if (((xpos > MainMenu->x_coordinate_range[0] && xpos < MainMenu->x_coordinate_range[1])) &&
         ((ypos > MainMenu->y_coordinate_range[0] && ypos < MainMenu->y_coordinate_range[1]))) {
-        if (!query_triangle) {
-            query_triangle = MainMenu->click_button();
+        if (!cursor_on_box) {
+            cursor_on_box = MainMenu->shadow_button();
+            return_box_to_normal = true;
+
             // Output to log
             // Log.error(varAsString);
-            MainMenu->shadow_button();
         }
     } else {
+        if (return_box_to_normal) {
+            return_box_to_normal = MainMenu->return_to_normal();
+            cursor_on_box = false;
+        }
     }
 }
