@@ -12,6 +12,7 @@
 class EntryMenu
 {
    public:
+    bool first_pass;
     float pixel_scale_X;
     float pixel_scale_Y;
     float x_coordinate_range[2];
@@ -31,8 +32,8 @@ class EntryMenu
     // Bottom rectangle (main shape and shadow)
     std::vector<glm::vec3> quit_largetop;
     std::vector<glm::vec3> quit_largebottom;
-    std::vector<glm::vec3> quit_largetop;
-    std::vector<glm::vec3> quit_largebottom;
+    std::vector<glm::vec3> quit_smalltop;
+    std::vector<glm::vec3> quit_smallbottom;
 
     // --Colour--
     std::vector<glm::vec3> colour;

@@ -24,9 +24,6 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
         if (!cursor_on_box) {
             cursor_on_box = MainMenu->shadow_button();
             return_box_to_normal = true;
-
-            // Output to log
-            // Log.error(varAsString);
         }
     } else {
         if (return_box_to_normal) {
@@ -35,3 +32,5 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
         }
     }
 }
+
+// void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);

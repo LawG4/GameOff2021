@@ -26,11 +26,20 @@ float vertex_to_zero(float vertex, float max_vertex) { return (vertex + max_vert
 // Constructor
 EntryMenu::EntryMenu()
 {
+    // to check if shadow button has already been rand
+    first_pass = true;
+
     // Actually deffine what each shapes vertex will be
     start_largetop = {{1.5f, -0.5f, 0.0f}, {1.5f, 0.5f, 0.0f}, {-1.5f, 0.5f, 0.0f}};
     start_largebottom = {{1.5f, -0.5f, 0.0f}, {-1.5f, -0.5f, 0.0f}, {-1.5f, 0.5f, 0.0f}};
     start_smalltop = {{1.46f, -0.46f, 0.0f}, {1.46f, 0.46f, 0.0f}, {-1.46f, 0.46f, 0.0f}};
     start_smallbottom = {{1.46f, -0.46f, 0.0f}, {-1.46f, -0.46f, 0.0f}, {-1.46f, 0.46f, 0.0f}};
+
+    // Not used quit menu space
+    quit_largetop = {{1.5f, -0.5f, 0.0f}, {1.5f, 0.5f, 0.0f}, {-1.5f, 0.5f, 0.0f}};
+    quit_largebottom = {{1.5f, -0.5f, 0.0f}, {-1.5f, -0.5f, 0.0f}, {-1.5f, 0.5f, 0.0f}};
+    quit_smalltop = {{1.46f, -0.46f, 0.0f}, {1.46f, 0.46f, 0.0f}, {-1.46f, 0.46f, 0.0f}};
+    quit_smallbottom = {{1.46f, -0.46f, 0.0f}, {-1.46f, -0.46f, 0.0f}, {-1.46f, 0.46f, 0.0f}};
 
     // Colour
     colour = {{5.0f, 1.0f, 0.0f}, {5.0f, 1.0f, 0.0f}, {5.0f, 1.0f, 0.0f}};
@@ -64,9 +73,14 @@ bool EntryMenu::shadow_button()
     Triangle->scheduleUBOUpdate();
     Triangle2->scheduleUBOUpdate();
 
-    // Create new mini triangles
-    smallTriangle = new RenderObject2D(start_smalltop, colour);
-    smallTriangle2 = new RenderObject2D(start_smallbottom, colour);
+    // If first time this func being rand, create new smaller traingles, afterwards just change isActive
+    if (first_pass) {
+        smallTriangle = new RenderObject2D(start_smalltop, colour);
+        smallTriangle2 = new RenderObject2D(start_smallbottom, colour);
+    } else {
+        smallTriangle->isActive = true;
+        smallTriangle2->isActive = true;
+    }
 
     return true;
 }
