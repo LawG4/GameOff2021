@@ -5,7 +5,6 @@
 \Contributors  : Lawrence G, Freddie M
  *********************************************************************************************************/
 #include "Log.h"
-#include "Render.h"
 #include "Window.h"
 #include "nlohmann/json.hpp"
 

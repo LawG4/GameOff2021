@@ -7,7 +7,6 @@
 
 #include "Window.h"
 #include "Log.h"
-#include "Render.h"
 
 GLFWwindow *window;
 
