@@ -5,8 +5,24 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+// All the sprite sheets share one command pool, so they can be reset independantly from the per frame buffers
+VkCommandPool SpriteInternals::sheetPool = VK_NULL_HANDLE;
+
 SpriteSheet::SpriteSheet(const char* TextureFileName)
 {
+    // Has the command pool been allocated
+    if (SpriteInternals::sheetPool == VK_NULL_HANDLE) {
+        VkCommandPoolCreateInfo info{};
+        info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+        info.queueFamilyIndex = vk::selectedQueueFamilies.graphicsFamily.value();
+
+        if (vkCreateCommandPool(vk::logicalDevice, &info, nullptr, &SpriteInternals::sheetPool) !=
+            VK_SUCCESS) {
+            Log.error("Could not allocate the command pool");
+            return;
+        }
+    }
+
     // First upload the texture to the GPU
     int width, height, channels;
     stbi_uc* pixels = stbi_load(TextureFileName, &width, &height, &channels, STBI_rgb_alpha);
@@ -263,6 +279,18 @@ SpriteSheet::SpriteSheet(const char* TextureFileName)
 
         vkUpdateDescriptorSets(vk::logicalDevice, 1, &writer, 0, nullptr);
     }
+
+    // Allocate space for the command buffer
+    {
+        VkCommandBufferAllocateInfo info{};
+        info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+        info.level = VK_COMMAND_BUFFER_LEVEL_SECONDARY;
+        info.commandBufferCount = 1;
+        info.commandPool = SpriteInternals::sheetPool;
+
+        vkAllocateCommandBuffers(vk::logicalDevice, &info, &cmd);
+        cmdRecording = false;
+    }
 }
 
 SpriteSheet::~SpriteSheet()
@@ -289,5 +317,9 @@ SpriteSheet::~SpriteSheet()
 
     if (pool != VK_NULL_HANDLE) {
         vkDestroyDescriptorPool(vk::logicalDevice, pool, nullptr);
+    }
+
+    if (SpriteInternals::sheetPool != VK_NULL_HANDLE) {
+        vkDestroyCommandPool(vk::logicalDevice, SpriteInternals::sheetPool, nullptr);
     }
 }

@@ -29,6 +29,13 @@ class SpriteSheet
     ~SpriteSheet();
 
    private:
+    /// <summary>A secondary command buffer so all things referencing this sprite sheet get drawn at
+    /// once</summary>
+    VkCommandBuffer cmd = VK_NULL_HANDLE;
+
+    /// <summary> Is the internal secondary cmd buffer recording</summary>
+    bool cmdRecording = false;
+
     /// <summary>We need one pool to allocate everything out of since it's easier to predict than managing a
     /// global one</summary>
     VkDescriptorPool pool = VK_NULL_HANDLE;
@@ -104,6 +111,7 @@ class SpriteInstance
 
 namespace SpriteInternals
 {
+extern VkCommandPool sheetPool;
 extern vk::BufferGroup quadIndexGroup;
 extern VkPipeline pipeline;
-}
+}  // namespace SpriteInternals
