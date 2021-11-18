@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
     }
 
     // Create a spritesheet
-    SpriteSheet *sheet = new SpriteSheet("Cum.png");
+    SpriteSheet *sheet = new SpriteSheet("Textures/TempHopper.png");
     SpriteInternals::activeSheets.push_back(sheet);
 
     // Create a 2D triangle object
