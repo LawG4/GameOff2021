@@ -15,7 +15,7 @@ std::vector<vk::BufferGroup> vk::bufferStorageMap;
 /// <param name="typeFilter">A bit mask of indexes which might be suitable(?)</param>
 /// <param name="properties">A bit mask of properties that we require the memory to have</param>
 /// <returns>The index of device memory which satisfies our needs</returns>
-uint32_t findMemoryIndex(uint32_t typeFilter, VkMemoryPropertyFlags properties)
+uint32_t vk::findMemoryIndex(uint32_t typeFilter, VkMemoryPropertyFlags properties)
 {
     // Loop through each type of memory supplied by the device
     for (uint32_t i = 0; i < vk::memory::memProperties.memoryTypeCount; i++) {
@@ -122,13 +122,12 @@ void copyBufferWithFreshCmdBuffer(const VkBuffer& src, const VkBuffer& dst, VkDe
     vkFreeCommandBuffers(vk::logicalDevice, vk::graphicsPools.at(0), 1, &cmd);
 }
 
-vk::BufferGroup vk::createVertexBufferGroup(VkDeviceSize size, void* data)
+vk::BufferGroup vk::createVertexBufferGroup(VkDeviceSize size, void* data, VkBufferUsageFlags usage)
 {
     // Create a vertex buffer that is not visible to the host so that it's faster to access, it also needs to
     // be able to accept transfers
     vk::BufferGroup nonVisible =
-      createBufferGroup(size, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-                        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+      createBufferGroup(size, usage | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
     // Create the staging buffer that is CPU visible and can be used to send the transfer to our device local
     // vertex buffer

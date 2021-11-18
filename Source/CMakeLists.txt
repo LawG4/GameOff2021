@@ -5,7 +5,6 @@ set(COMPONENTS
 	Vulkan
 	Shaders
 	Log
-	Render
 	Interactions
 	Model
 )

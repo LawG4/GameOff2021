@@ -5,7 +5,6 @@
 \Contributors  : Lawrence G, Freddie M
  *********************************************************************************************************/
 #include "Log.h"
-#include "Render.h"
 #include "Window.h"
 #include "nlohmann/json.hpp"
 
@@ -13,7 +12,7 @@
 #include "Keyboard_input.h"
 #include "Player_object.h"
 
-#include "Objects.h"
+#include "Sprites.h"
 
 #include <fstream>
 #include <iostream>
@@ -91,11 +90,15 @@ int main(int argc, char *argv[])
         return -1;
     }
 
+    // Create a spritesheet
+    SpriteSheet *sheet = new SpriteSheet("Textures/TempHopper.png");
+    SpriteInternals::activeSheets.push_back(sheet);
+
     // Create a 2D triangle object
-    const std::vector<glm::vec3> pos = {{0.0f, -0.5f, 0.0f}, {0.5f, 0.5f, 0.0f}, {-0.5f, 0.5f, 0.0f}};
-    const std::vector<glm::vec3> col = {{1.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 1.0f}};
-    RenderObject2D *Triangle = new RenderObject2D(pos, col);
-    RenderObject2D *Triangle2 = new RenderObject2D(pos, col);
+    const std::vector<glm::vec2> tex = {{0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}, {0.0f, 0.0f}};
+    Sprite *Triangle = new Sprite(sheet, tex);
+    SpriteInstance *instance = new SpriteInstance(Triangle);
+
     float time = 0;
 
     // Key input data
@@ -108,15 +111,18 @@ int main(int argc, char *argv[])
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
 
-        Triangle->rot += glm::vec3(0.0, 0.1, 0.0f);
-        Triangle->scheduleUBOUpdate();
+        // Key input data
+        glfwSetKeyCallback(window, key_callback);
 
-        Triangle2->pos = glm::vec3(3 * cos(time), 0, 0);
-        Triangle2->scheduleUBOUpdate();
-        time += 0.1f;
+        // Mouse input data
+        glfwSetCursorPosCallback(window, cursor_position_callback);
+
+        instance->render();
 
         vk::drawFrame();
     }
 
+    delete sheet;
+    delete Triangle;
     cleanUp();
 }

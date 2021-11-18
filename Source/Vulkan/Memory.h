@@ -31,14 +31,20 @@ extern std::vector<vk::DescriptorGroup> descriptorStorageMap;
 vk::BufferGroup createBufferGroup(VkDeviceSize size, VkBufferUsageFlags usage,
                                   VkMemoryPropertyFlags properties);
 
-vk::BufferGroup createVertexBufferGroup(VkDeviceSize size, void *data);
+vk::BufferGroup createVertexBufferGroup(VkDeviceSize size, void *data, VkBufferUsageFlags usage);
+vk::BufferGroup createVertexBufferGroup(VkDeviceSize size, void *data,
+                                        VkBufferUsageFlags usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT);
 
 /// <summary> Creates a vertex buffer with the initial contents </summary>
 /// <param name="bufferName"> The name for the buffer in the internal array</param>
 /// <param name="vertexBuffer"> An array of vertices</param>
 void addVertexBuffer(const char *bufferName, const std::vector<Vertex> &vertexBuffer);
 
-
+/// <summary>Finds the index of the GPU heap that has all the requirements to allocate some memory</summary>
+/// <param name="typeFilter">I actually have no idea</param>
+/// <param name="properties">Memory properties determined by vkGetMemoryRequirements</param>
+/// <returns>Appropriate heap index</returns>
+uint32_t findMemoryIndex(uint32_t typeFilter, VkMemoryPropertyFlags properties);
 
 /// <summary> Destorys all of the buffers in the hash table </summary>
 void destroyBuffers();

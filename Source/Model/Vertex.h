@@ -11,7 +11,7 @@
 // Define a struct that holds the vertex input description for elements in this program
 struct Vertex {
     glm::vec3 pos;
-    glm::vec3 color;
+    glm::vec2 texCoord;
 
     /// <summary> Vertex binding describes how to load the data from our vertices struct </summary>
     /// <returns> A vertex binding description for vertices of this type</returns>

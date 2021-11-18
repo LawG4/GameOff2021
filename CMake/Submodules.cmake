@@ -33,6 +33,9 @@ add_subdirectory(${PROJ_ROOT}/External/json)
 # Link to the project 
 target_link_libraries(${PROJ_NAME} nlohmann_json)
 
+#stb image parser, we only want the image parser so it's not a full submodule
+target_include_directories(${PROJ_NAME} PRIVATE ${PROJ_ROOT}/External/stb)
+
 # Vulkan 
 # We want to include Vulkan as a dynamically loaded module
 # This is because we want to use GLFW to init Vulkan headers 
