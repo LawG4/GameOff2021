@@ -101,6 +101,12 @@ int main(int argc, char *argv[])
 
     float time = 0;
 
+    // Key input data
+    glfwSetKeyCallback(window, key_callback);
+
+    // Mouse input data
+    glfwSetCursorPosCallback(window, cursor_position_callback);
+
     // Enter into the windowing loop
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
