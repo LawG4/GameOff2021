@@ -31,7 +31,9 @@ extern std::vector<vk::DescriptorGroup> descriptorStorageMap;
 vk::BufferGroup createBufferGroup(VkDeviceSize size, VkBufferUsageFlags usage,
                                   VkMemoryPropertyFlags properties);
 
-vk::BufferGroup createVertexBufferGroup(VkDeviceSize size, void *data);
+vk::BufferGroup createVertexBufferGroup(VkDeviceSize size, void *data, VkBufferUsageFlags usage);
+vk::BufferGroup createVertexBufferGroup(VkDeviceSize size, void *data,
+                                        VkBufferUsageFlags usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT);
 
 /// <summary> Creates a vertex buffer with the initial contents </summary>
 /// <param name="bufferName"> The name for the buffer in the internal array</param>

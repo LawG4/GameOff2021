@@ -32,8 +32,8 @@ std::vector<VkVertexInputAttributeDescription> Vertex::getAttributeDescriptions(
     // Color pos
     attributes[1].binding = 0;
     attributes[1].location = 1;
-    attributes[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-    attributes[1].offset = offsetof(Vertex, color);
+    attributes[1].format = VK_FORMAT_R32G32_SFLOAT;
+    attributes[1].offset = offsetof(Vertex, texCoord);
 
     return attributes;
 }

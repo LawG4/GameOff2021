@@ -19,6 +19,9 @@ Sprite::Sprite(SpriteSheet* spriteSheet, const std::vector<glm::vec2>& texCoord)
     // Store the sprite sheet
     _sheet = spriteSheet;
 
+    // Store a pointer to ourselves in the sprite sheet
+    spriteSheet->addSprite(this);
+
     // Ensure that the tex coordinate has at least 4 entries
     if (texCoord.size() < 4) {
         Log.error("Texture coordinates not long enough");
@@ -37,8 +40,8 @@ Sprite::Sprite(SpriteSheet* spriteSheet, const std::vector<glm::vec2>& texCoord)
 
     // If the index buffer has not been defined then create it
     if (SpriteInternals::quadIndexGroup.buffer == VK_NULL_HANDLE) {
-        SpriteInternals::quadIndexGroup =
-          vk::createVertexBufferGroup(sizeof(uint16_t) * indexArray.size(), indexArray.data());
+        SpriteInternals::quadIndexGroup = vk::createVertexBufferGroup(
+          sizeof(uint16_t) * indexArray.size(), indexArray.data(), VK_BUFFER_USAGE_INDEX_BUFFER_BIT);
     }
 }
 
@@ -53,4 +56,26 @@ Sprite::~Sprite()
     }
 }
 
-void Sprite::render(const glm::mat4& mvp) {}
+void Sprite::render(const glm::mat4& mvp)
+{
+    // Store this instance of a mvp matrix in the internal buffer
+    _instanceTransforms.push_back(mvp);
+}
+
+void Sprite::appendCommands(VkCommandBuffer& cmd, const VkPipelineLayout& layout)
+{
+    // We know that the parent sprite sheet has bound the texture descriptor set
+    for (const glm::mat4& mvp : _instanceTransforms) {
+        VkDeviceSize offset = 0;
+        vkCmdBindVertexBuffers(cmd, 0, 1, &_vertexGroup.buffer, &offset);
+
+        // Pass the mvp via push constant
+        vkCmdPushConstants(cmd, layout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(glm::mat4), &mvp);
+
+        // Draw 6 vertices that make up the quad
+        vkCmdDrawIndexed(cmd, 6, 1, 0, 0, 0);
+    }
+
+    // We've rendered every instance so destory the list
+    _instanceTransforms.clear();
+}

@@ -1,16 +1,15 @@
 #include "Pipelines.h"
 #include "Sprites.h"
 
-std::vector<Sprite*> renderObjects;
+std::vector<SpriteSheet*> SpriteInternals::activeSheets;
 
 VkDescriptorPool descpool;
-VkDescriptorSetLayout cameraSetLayout;
-VkDescriptorSetLayout objectSetLayout;
+VkDescriptorSetLayout SpriteInternals::textureSetLayout;
 
 VkShaderModule vertModule;
 VkShaderModule fragModule;
 
-VkPipelineLayout layout;
+VkPipelineLayout SpriteInternals::layout;
 VkPipeline SpriteInternals::pipeline;
 
 void PipelineInternals::create2DPipeline()
@@ -22,18 +21,26 @@ void PipelineInternals::create2DPipeline()
         VkPipelineLayoutCreateInfo info{};
         info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
 
-        // set 0 is layout per model transfor
-        info.pSetLayouts = &cameraSetLayout;
+        // Tell the pipeline layout to expect 1 push constant in the vertex stage
+        VkPushConstantRange range{};
+        range.offset = 0;
+        range.size = sizeof(glm::mat4);
+        range.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+        info.pPushConstantRanges = &range;
+        info.pushConstantRangeCount = 1;
+
+        // Tell the pipeline layout to expect 1 sampler in the fragment stage
+        info.pSetLayouts = &SpriteInternals::textureSetLayout;
         info.setLayoutCount = 1;
 
-        vkCreatePipelineLayout(vk::logicalDevice, &info, nullptr, &layout);
+        vkCreatePipelineLayout(vk::logicalDevice, &info, nullptr, &SpriteInternals::layout);
     }
 
     // Create the graphics pipeline using the internal templates, they were set for the 2d
     {
         VkGraphicsPipelineCreateInfo info{};
         info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-        info.layout = layout;
+        info.layout = SpriteInternals::layout;
 
         // attach the shaders
         vertModule = vk::createShaderModule("Shaders/TestShader.vert.spv");
@@ -72,8 +79,8 @@ void PipelineInternals::destroy2DPipeline()
         vkDestroyPipeline(vk::logicalDevice, SpriteInternals::pipeline, nullptr);
     }
 
-    if (layout != VK_NULL_HANDLE) {
-        vkDestroyPipelineLayout(vk::logicalDevice, layout, nullptr);
+    if (SpriteInternals::layout != VK_NULL_HANDLE) {
+        vkDestroyPipelineLayout(vk::logicalDevice, SpriteInternals::layout, nullptr);
     }
 
     if (vertModule != VK_NULL_HANDLE) {
@@ -81,6 +88,20 @@ void PipelineInternals::destroy2DPipeline()
     }
     if (fragModule != VK_NULL_HANDLE) {
         vkDestroyShaderModule(vk::logicalDevice, fragModule, nullptr);
+    }
+}
+
+void SpriteInternals::recordSpritePipeline(VkCommandBuffer& cmd, const uint32_t index)
+{
+    // Bind to the pipeline
+    vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, SpriteInternals::pipeline);
+
+    // Bind to the index buffer since they're all the same
+    vkCmdBindIndexBuffer(cmd, SpriteInternals::quadIndexGroup.buffer, 0, VK_INDEX_TYPE_UINT16);
+
+    // Go through each active sprite sheet
+    for (SpriteSheet* sheet : SpriteInternals::activeSheets) {
+        sheet->appendCommands(cmd, SpriteInternals::layout);
     }
 }
 
@@ -108,27 +129,19 @@ void PipelineInternals::createDescriptorSetLayouts2D()
 
         VkDescriptorSetLayoutBinding binding{};
         binding.binding = 0;
-        binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
-        binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+        binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
         binding.descriptorCount = 1;
 
         info.bindingCount = 1;
         info.pBindings = &binding;
 
-        vkCreateDescriptorSetLayout(vk::logicalDevice, &info, nullptr, &objectSetLayout);
-
-        // Camera buffer has the same layout
-        vkCreateDescriptorSetLayout(vk::logicalDevice, &info, nullptr, &cameraSetLayout);
+        vkCreateDescriptorSetLayout(vk::logicalDevice, &info, nullptr, &SpriteInternals::textureSetLayout);
     }
 }
 
 void PipelineInternals::destroyDescriptorSetLayouts2D()
 {
-    vkDestroyDescriptorSetLayout(vk::logicalDevice, cameraSetLayout, nullptr);
-    vkDestroyDescriptorSetLayout(vk::logicalDevice, objectSetLayout, nullptr);
+    vkDestroyDescriptorSetLayout(vk::logicalDevice, SpriteInternals::textureSetLayout, nullptr);
     vkDestroyDescriptorPool(vk::logicalDevice, descpool, nullptr);
-
-    for (Sprite* obj : renderObjects) {
-        delete (obj);
-    }
 }

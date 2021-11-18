@@ -279,17 +279,18 @@ SpriteSheet::SpriteSheet(const char* TextureFileName)
 
         vkUpdateDescriptorSets(vk::logicalDevice, 1, &writer, 0, nullptr);
     }
+}
 
-    // Allocate space for the command buffer
-    {
-        VkCommandBufferAllocateInfo info{};
-        info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-        info.level = VK_COMMAND_BUFFER_LEVEL_SECONDARY;
-        info.commandBufferCount = 1;
-        info.commandPool = SpriteInternals::sheetPool;
+void SpriteSheet::addSprite(Sprite* sprite) { sprites.push_back(sprite); }
 
-        vkAllocateCommandBuffers(vk::logicalDevice, &info, &cmd);
-        cmdRecording = false;
+void SpriteSheet::appendCommands(VkCommandBuffer& cmd, const VkPipelineLayout& layout)
+{
+    // Bind to the texture descriptor set for this sprite sheet
+    vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, layout, 0, 1, &sets.at(0), 0, nullptr);
+
+    // Loop through each sprite that belongs to this sprite sheet
+    for (Sprite* sprite : sprites) {
+        sprite->appendCommands(cmd, layout);
     }
 }
 

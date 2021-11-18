@@ -22,19 +22,24 @@
 ///
 /// </summary>
 
+extern class Sprite;
+
 class SpriteSheet
 {
    public:
     SpriteSheet(const char* TextureFileName);
     ~SpriteSheet();
 
-   private:
-    /// <summary>A secondary command buffer so all things referencing this sprite sheet get drawn at
-    /// once</summary>
-    VkCommandBuffer cmd = VK_NULL_HANDLE;
+    /// <summary>Appends the commands for this frame into the command buffer</summary>
+    /// <param name="cmd">Reference to the command buffer being recorded to</param>
+    void appendCommands(VkCommandBuffer& cmd, const VkPipelineLayout& layout);
 
-    /// <summary> Is the internal secondary cmd buffer recording</summary>
-    bool cmdRecording = false;
+    /// <summary>Adds a sprite into the internal sprite trakcing</summary>
+    /// <param name="sprite">Pointer to the new sprite being tracked</param>
+    void addSprite(Sprite* sprite);
+
+   private:
+    std::vector<Sprite*> sprites;
 
     /// <summary>We need one pool to allocate everything out of since it's easier to predict than managing a
     /// global one</summary>
@@ -69,9 +74,15 @@ class Sprite
 
     void render(const glm::mat4& mvp);
 
+    /// <summary>Appends the rendering commands for this sprite to the buffer</summary>
+    /// <param name="cmd">command buffer getting recorded to</param>
+    void appendCommands(VkCommandBuffer& cmd, const VkPipelineLayout& layout);
+
    private:
     /// <summary>Pointer to the sheet being used to draw this sprite</summary>
     SpriteSheet* _sheet;
+
+    std::vector<glm::mat4> _instanceTransforms;
 
     /// <summary>Vertex buffer group </summary>
     vk::BufferGroup _vertexGroup;
@@ -113,5 +124,11 @@ namespace SpriteInternals
 {
 extern VkCommandPool sheetPool;
 extern vk::BufferGroup quadIndexGroup;
+extern VkPipelineLayout layout;
 extern VkPipeline pipeline;
+extern VkDescriptorSetLayout textureSetLayout;
+
+extern std::vector<SpriteSheet*> activeSheets;
+
+void recordSpritePipeline(VkCommandBuffer& cmd, const uint32_t index);
 }  // namespace SpriteInternals
