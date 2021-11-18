@@ -58,3 +58,6 @@ add_custom_target(SPIRV_TARGET ALL DEPENDS ${SPV_SHADERS})
 
 # Make the main project depend on the spirv target
 add_dependencies(${PROJ_NAME} SPIRV_TARGET)
+
+# Add in the assets
+add_subdirectory(Assets)
