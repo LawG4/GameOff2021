@@ -116,6 +116,7 @@ int main(int argc, char *argv[])
         vk::drawFrame();
     }
 
-    delete (sheet);
+    delete sheet;
+    delete Triangle;
     cleanUp();
 }

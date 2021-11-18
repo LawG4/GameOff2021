@@ -298,6 +298,9 @@ void SpriteSheet::appendCommands(VkCommandBuffer& cmd, const VkPipelineLayout& l
 
 SpriteSheet::~SpriteSheet()
 {
+    // Wait for the device in use to finish
+    vkDeviceWaitIdle(vk::logicalDevice);
+
     if (textureView != VK_NULL_HANDLE) {
         vkDestroyImageView(vk::logicalDevice, textureView, nullptr);
     }

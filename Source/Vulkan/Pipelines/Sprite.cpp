@@ -47,6 +47,9 @@ Sprite::Sprite(SpriteSheet* spriteSheet, const std::vector<glm::vec2>& texCoord)
 
 Sprite::~Sprite()
 {
+    // Wait for the device
+    vkDeviceWaitIdle(vk::logicalDevice);
+
     // Destory the vertex buffer
     if (_vertexGroup.buffer != VK_NULL_HANDLE) {
         vkDestroyBuffer(vk::logicalDevice, _vertexGroup.buffer, nullptr);

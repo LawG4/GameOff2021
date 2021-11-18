@@ -67,8 +67,8 @@ class Sprite
    public:
     /// <summary>Creates a vertex buffer for the sprites to rendered with</summary>
     /// <param name="spriteSheet">Reference to the sprite sheet</param>
-    /// <param name="texCoord">4 element vector pointing out the texture coordinates starts at top left and
-    /// goes clockwise</param>
+    /// <param name="texCoord">4 element vector pointing out the texture coordinates starts at bottom left and
+    /// goes counter clockwise</param>
     Sprite(SpriteSheet* spriteSheet, const std::vector<glm::vec2>& texCoord);
     ~Sprite();
 
