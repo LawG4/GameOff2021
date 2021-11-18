@@ -92,12 +92,13 @@ int main(int argc, char *argv[])
 
     // Create a spritesheet
     SpriteSheet *sheet = new SpriteSheet("Cum.png");
+    SpriteInternals::activeSheets.push_back(sheet);
 
     // Create a 2D triangle object
-    const std::vector<glm::vec3> pos = {{0.0f, -0.5f, 0.0f}, {0.5f, 0.5f, 0.0f}, {-0.5f, 0.5f, 0.0f}};
-    const std::vector<glm::vec3> col = {{1.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 1.0f}};
-    Sprite *Triangle = new Sprite(pos, col);
-    Sprite *Triangle2 = new Sprite(pos, col);
+    const std::vector<glm::vec2> tex = {{0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}, {0.0f, 0.0f}};
+    Sprite *Triangle = new Sprite(sheet, tex);
+    SpriteInstance *instance = new SpriteInstance(Triangle);
+
     float time = 0;
 
     // Enter into the windowing loop
@@ -110,12 +111,7 @@ int main(int argc, char *argv[])
         // Mouse input data
         glfwSetCursorPosCallback(window, cursor_position_callback);
 
-        Triangle->rot += glm::vec3(0.0, 0.1, 0.0f);
-        Triangle->scheduleUBOUpdate();
-
-        Triangle2->pos = glm::vec3(3 * cos(time), 0, 0);
-        Triangle2->scheduleUBOUpdate();
-        time += 0.1f;
+        instance->render();
 
         vk::drawFrame();
     }
