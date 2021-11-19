@@ -5,18 +5,12 @@
 \Contributors  : Freddie M
  *********************************************************************************************************/
 
-#include "Log.h"
 #include "nlohmann/json.hpp"
 
 #include "Cursor_input.h"
 #include "EntryMenu.h"
 #include "Player_object.h"
 #include "collision.h"
-
-#include "Objects.h"
-
-#include <fstream>
-#include <iostream>
 
 // Constructor
 EntryMenu::EntryMenu()
@@ -56,7 +50,7 @@ void EntryMenu::load_menu(uint32_t ww, uint32_t wh)
 }
 
 // Update button size and colour for when hovered over
-bool EntryMenu::shadow_button()
+void EntryMenu::shadow_button()
 {
     // Unload big rectangle
     Triangle->isActive = false;
@@ -73,11 +67,9 @@ bool EntryMenu::shadow_button()
         smallTriangle->isActive = true;
         smallTriangle2->isActive = true;
     }
-
-    return true;
 }
 
-bool EntryMenu::return_to_normal()
+void EntryMenu::return_to_normal()
 {
     smallTriangle->isActive = false;
     smallTriangle2->isActive = false;
@@ -88,8 +80,6 @@ bool EntryMenu::return_to_normal()
     smallTriangle2->scheduleUBOUpdate();
     Triangle->scheduleUBOUpdate();
     Triangle2->scheduleUBOUpdate();
-
-    return false;
 }
 
 void EntryMenu::cursor_update(double xpos, double ypos)
