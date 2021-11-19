@@ -6,6 +6,11 @@ set(TEXTURE_LIST
 	rest.png
 	MenuStart.png
 	MenuStartDark.png
+	floor.png
+	network_box.png
+	server_control.png
+	server_front.png
+	server_rack_rear.png
 )
 
 # For each texture listed add a custom command that copies it to the binary directory
