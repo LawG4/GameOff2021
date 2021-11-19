@@ -9,8 +9,10 @@
 #include "nlohmann/json.hpp"
 
 #include "Cursor_input.h"
+#include "EntryMenu.h"
 #include "Keyboard_input.h"
 #include "Player_object.h"
+#include "collision.h"
 
 #include "Sprites.h"
 
@@ -25,6 +27,9 @@ void cleanUp()
 
     // Destroy player object
     delete player_class;
+
+    // Destroy menu object
+    delete MainMenu;
 
     // If the window exists destroy it
     if (window) glfwDestroyWindow(window);
@@ -59,6 +64,7 @@ int main(int argc, char *argv[])
     uint32_t windowWidth = 720;
     uint32_t windowHeight = 400;
 
+    // Used to set up cursor coordinate array
     bool settingsOverride = userSetting["Override_Default_Settings"];
     if (settingsOverride) {
         Log.info("Json file detected that the user wants to override default settings");
@@ -90,8 +96,8 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    // Create a spritesheet
-    SpriteSheet *sheet = new SpriteSheet("Textures/TempHopper.png");
+    /* Create a spritesheet
+    SpriteSheet *sheet = new SpriteSheet("Textures/MenuStart.png");
     SpriteInternals::activeSheets.push_back(sheet);
 
     // Create a 2D triangle object
@@ -99,30 +105,39 @@ int main(int argc, char *argv[])
     Sprite *Triangle = new Sprite(sheet, tex);
     SpriteInstance *instance = new SpriteInstance(Triangle);
 
-    float time = 0;
+    glm::vec3 new_pos = {1.0f, 0.5f, 0.0f};
+
+    */
+    // instance->setScale(new_pos);
 
     // Key input data
     glfwSetKeyCallback(window, key_callback);
 
-    // Mouse input data
+    // Mouse input positon data
     glfwSetCursorPosCallback(window, cursor_position_callback);
+
+    // Mouse input button click data
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
+
+    // Input vertex data
+    vertdimen[0] = 3.5f;
+    vertdimen[1] = 2.0f;
+
+    // Load newly declared values into MainMenu
+    MainMenu->load_menu(windowWidth, windowHeight);
+    collisions->intialise_object(windowWidth, windowHeight);
 
     // Enter into the windowing loop
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
 
-        // Key input data
-        glfwSetKeyCallback(window, key_callback);
-
-        // Mouse input data
-        glfwSetCursorPosCallback(window, cursor_position_callback);
-
-        instance->render();
+        if (MainMenu->IS_MENU_ACTIVE) {  // Check if menu is active, if it render its frames
+            MainMenu->instance->render();
+            if (MainMenu->Load_side_button) MainMenu->instance2->render();
+        }
 
         vk::drawFrame();
     }
 
-    delete sheet;
-    delete Triangle;
     cleanUp();
 }

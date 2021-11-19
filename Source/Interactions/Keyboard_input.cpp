@@ -7,6 +7,7 @@
 
 #include "Keyboard_input.h"
 #include <iostream>
+#include "EntryMenu.h"
 #include "Player_object.h"
 #include "Window.h"
 

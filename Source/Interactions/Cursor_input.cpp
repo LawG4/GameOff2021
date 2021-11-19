@@ -6,13 +6,16 @@
  *********************************************************************************************************/
 
 #include "Cursor_input.h"
+#include "EntryMenu.h"
+#include "Log.h"
+#include "collision.h"
 
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
-    // Convert double to nice looking string
-    std::string varAsString = std::to_string((int)xpos);
-    varAsString = varAsString + "  " + std::to_string((int)ypos);
+    MainMenu->cursor_update(xpos, ypos);
+}
 
-    // Output to log
-    Log.info(varAsString);
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+    MainMenu->cursor_click(button);
 }
