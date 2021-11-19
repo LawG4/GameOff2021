@@ -7,6 +7,7 @@ set(COMPONENTS
 	Log
 	Interactions
 	Model
+	UI
 )
 
 foreach(directory ${COMPONENTS})
