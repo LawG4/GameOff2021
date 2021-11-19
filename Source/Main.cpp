@@ -97,26 +97,14 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    // Create a 2D triangle object
-    // const std::vector<glm::vec3> pos = {{0.0f, -0.5f, 0.0f}, {0.5f, 0.5f, 0.0f}, {-0.5f, 0.5f, 0.0f}};
-    // const std::vector<glm::vec3> col = {{64.0f, 64.0f, 64.0f},
-    // {64.0f, 64.0f, 64.0f},{64.0f, 64.0f, 64.0f}}; RenderObject2D *Triangle = new RenderObject2D(pos, col);
-    // RenderObject2D *Triangle2 = new RenderObject2D(pos, col);
-    // float time = 0;
-
-    // Create a 2d square object (window size is vertex 3.5 x 2?)
-    // const std::vector<glm::vec3> pos = {{1.5f, -0.5f, 0.0f}, {1.5f, 0.5f, 0.0f}, {-1.5f, 0.5f, 0.0f}};
-    // const std::vector<glm::vec3> pos2 = {{-1.5f, 0.5f, 0.0f}, {-1.5f, -0.5f, 0.0f}, {1.5f, -0.5f, 0.0f}};
-    // const std::vector<glm::vec3> col = {{5.0f, 1.0f, 0.0f}, {5.0f, 1.0f, 0.0f}, {5.0f, 1.0f, 0.0f}};
-    //
-    // RenderObject2D *Triangle = new RenderObject2D(pos, col);
-    // RenderObject2D *Triangle2 = new RenderObject2D(pos2, col);
-
     // Key input data
     glfwSetKeyCallback(window, key_callback);
 
-    // Mouse input data
+    // Mouse input positon data
     glfwSetCursorPosCallback(window, cursor_position_callback);
+
+    // Mouse input button click data
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
 
     // Input vertex data
     vertdimen[0] = 3.5f;
@@ -129,13 +117,6 @@ int main(int argc, char *argv[])
     // Enter into the windowing loop
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
-
-        // Triangle->rot += glm::vec3(0.0, 0.1, 0.0f);
-        // Triangle->scheduleUBOUpdate();
-
-        // Triangle2->pos = glm::vec3(3 * cos(time), 0, 0);
-        // Triangle2->scheduleUBOUpdate();
-        // time += 0.1f;
 
         vk::drawFrame();
     }

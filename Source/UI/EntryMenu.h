@@ -20,6 +20,8 @@ class EntryMenu
     bool IS_MENU_ACTIVE;
     bool cursor_on_box;
     bool return_box_to_normal;
+    double xposition;
+    double yposition;
 
     // --Deffine vector names--
     // Top rectangle (main shape and shadow)
@@ -42,8 +44,10 @@ class EntryMenu
 
     // Render primary rectangle
     void load_menu(uint32_t ww, uint32_t wh);
-    // Ran each time cursor updated
+    // Ran each time cursor pos updated
     void cursor_update(double xpos, double ypos);
+    // Ran each time cursor button pressed
+    void cursor_click(int button);
     // Convert primary rectangle to mini ones
     void shadow_button();
     // Return mini rectangles to large ones

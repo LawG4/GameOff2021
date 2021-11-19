@@ -7,6 +7,7 @@
 
 #include "Cursor_input.h"
 #include "EntryMenu.h"
+#include "Log.h"
 #include "collision.h"
 
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
@@ -14,4 +15,7 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
     MainMenu->cursor_update(xpos, ypos);
 }
 
-// void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+    MainMenu->cursor_click(button);
+}

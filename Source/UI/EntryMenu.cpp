@@ -85,6 +85,9 @@ void EntryMenu::return_to_normal()
 void EntryMenu::cursor_update(double xpos, double ypos)
 {
     if (IS_MENU_ACTIVE) {
+        // update stored cursor location
+        xposition = xpos;
+        yposition = ypos;
         if (collisions->check_collision(-1.5f, 1.5f, -0.5f, 0.5f, xpos, ypos) && !cursor_on_box) {
             MainMenu->shadow_button();
             return_box_to_normal = true;
@@ -95,6 +98,16 @@ void EntryMenu::cursor_update(double xpos, double ypos)
                 ;
             }
         }
+    }
+}
+
+void EntryMenu::cursor_click(int button)
+{
+    // Left button
+    if (button == 1) {
+    }
+    // Right button
+    else if (button == 2) {
     }
 }
 
