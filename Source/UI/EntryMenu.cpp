@@ -6,29 +6,21 @@
  *********************************************************************************************************/
 
 #include "Log.h"
-#include "Render.h"
-#include "Window.h"
 #include "nlohmann/json.hpp"
 
 #include "Cursor_input.h"
 #include "EntryMenu.h"
-#include "Keyboard_input.h"
 #include "Player_object.h"
+#include "collision.h"
 
 #include "Objects.h"
 
 #include <fstream>
 #include <iostream>
 
-// Function to move central position to top left
-float vertex_to_zero(float vertex, float max_vertex) { return (vertex + max_vertex) / 2; }
-
 // Constructor
 EntryMenu::EntryMenu()
 {
-    // to check if shadow button has already been rand
-    first_pass = true;
-
     // Actually deffine what each shapes vertex will be
     start_largetop = {{1.5f, -0.5f, 0.0f}, {1.5f, 0.5f, 0.0f}, {-1.5f, 0.5f, 0.0f}};
     start_largebottom = {{1.5f, -0.5f, 0.0f}, {-1.5f, -0.5f, 0.0f}, {-1.5f, 0.5f, 0.0f}};
@@ -43,25 +35,24 @@ EntryMenu::EntryMenu()
 
     // Colour
     colour = {{5.0f, 1.0f, 0.0f}, {5.0f, 1.0f, 0.0f}, {5.0f, 1.0f, 0.0f}};
+
+    IS_MENU_ACTIVE = false;
+    cursor_on_box = false;
+    return_box_to_normal = false;
+
+    // to check if shadow button has already been ran
+    first_pass = true;
 }
 
 // Generate triangles
 void EntryMenu::load_menu(uint32_t ww, uint32_t wh)
 {
-    // Create pixel scale to convert vertex coord to pixel position (to use with cursor data)
-    EntryMenu::pixel_scale_X = ww / vertdimen[0];
-    EntryMenu::pixel_scale_Y = wh / vertdimen[1];
-
-    // Calc what pixel coordinates you want
-    EntryMenu::x_coordinate_range[0] = vertex_to_zero(-1.5f, 3.5f) * EntryMenu::pixel_scale_X;
-    EntryMenu::x_coordinate_range[1] = vertex_to_zero(1.5f, 3.5f) * EntryMenu::pixel_scale_X;
-
-    EntryMenu::y_coordinate_range[0] = vertex_to_zero(-0.5f, 2.0f) * EntryMenu::pixel_scale_Y;
-    EntryMenu::y_coordinate_range[1] = vertex_to_zero(0.5f, 2.0f) * EntryMenu::pixel_scale_Y;
-
     // Render shapes
     Triangle = new RenderObject2D(start_largetop, colour);
     Triangle2 = new RenderObject2D(start_largebottom, colour);
+
+    // change is menu active to true
+    IS_MENU_ACTIVE = true;
 }
 
 // Update button size and colour for when hovered over
@@ -77,6 +68,7 @@ bool EntryMenu::shadow_button()
     if (first_pass) {
         smallTriangle = new RenderObject2D(start_smalltop, colour);
         smallTriangle2 = new RenderObject2D(start_smallbottom, colour);
+        first_pass = false;
     } else {
         smallTriangle->isActive = true;
         smallTriangle2->isActive = true;
@@ -98,6 +90,22 @@ bool EntryMenu::return_to_normal()
     Triangle2->scheduleUBOUpdate();
 
     return false;
+}
+
+void EntryMenu::cursor_update(double xpos, double ypos)
+{
+    if (IS_MENU_ACTIVE) {
+        if (collisions->check_collision(-1.5f, 1.5f, -0.5f, 0.5f, xpos, ypos) && !cursor_on_box) {
+            MainMenu->shadow_button();
+            return_box_to_normal = true;
+        } else {
+            if (return_box_to_normal) {
+                MainMenu->return_to_normal();
+                cursor_on_box = false;
+                ;
+            }
+        }
+    }
 }
 
 // Declare windowdimen (window dimension) array

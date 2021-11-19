@@ -13,6 +13,7 @@
 #include "EntryMenu.h"
 #include "Keyboard_input.h"
 #include "Player_object.h"
+#include "collision.h"
 
 #include "Objects.h"
 
@@ -123,6 +124,7 @@ int main(int argc, char *argv[])
 
     // Load newly declared values into MainMenu
     MainMenu->load_menu(windowWidth, windowHeight);
+    collisions->intialise_object(windowWidth, windowHeight);
 
     // Enter into the windowing loop
     while (!glfwWindowShouldClose(window)) {

@@ -5,12 +5,14 @@ set(HEADERS
 	Keyboard_input.h
 	Cursor_input.h
 	Player_object.h
+	collision.h
 )
 
 set(SOURCES
 	Keyboard_input.cpp
 	Cursor_input.cpp
 	Player_object.cpp
+	collision.cpp
 )
 
 target_sources(${PROJ_NAME} PRIVATE ${HEADERS} ${SOURCES})
