@@ -15,34 +15,26 @@ class EntryMenu
 {
    public:
     bool first_pass;
-    // RenderObject2D* Triangle;
-    // RenderObject2D* Triangle2;
-    // RenderObject2D* smallTriangle;
-    // RenderObject2D* smallTriangle2;
+
     bool IS_MENU_ACTIVE;
+    bool Load_side_button;
     bool cursor_on_box;
     bool return_box_to_normal;
     double xposition;
     double yposition;
-
-    // --Deffine vector names--
-    // Top rectangle (main shape and shadow)
-    std::vector<glm::vec3> start_largetop;
-    std::vector<glm::vec3> start_largebottom;
-    std::vector<glm::vec3> start_smalltop;
-    std::vector<glm::vec3> start_smallbottom;
-
-    // Bottom rectangle (main shape and shadow)
-    std::vector<glm::vec3> quit_largetop;
-    std::vector<glm::vec3> quit_largebottom;
-    std::vector<glm::vec3> quit_smalltop;
-    std::vector<glm::vec3> quit_smallbottom;
+    SpriteInstance* instance;
+    SpriteSheet* start_front;
+    SpriteInstance* instance2;
+    SpriteSheet* start_back;
 
     // --Colour--
     std::vector<glm::vec3> colour;
 
     // Constructor
     EntryMenu();
+
+    // Destructor
+    ~EntryMenu();
 
     // Render primary rectangle
     void load_menu(uint32_t ww, uint32_t wh);

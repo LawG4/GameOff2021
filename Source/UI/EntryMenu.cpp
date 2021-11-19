@@ -16,18 +16,6 @@
 // Constructor
 EntryMenu::EntryMenu()
 {
-    // Actually deffine what each shapes vertex will be
-    start_largetop = {{1.5f, -0.5f, 0.0f}, {1.5f, 0.5f, 0.0f}, {-1.5f, 0.5f, 0.0f}};
-    start_largebottom = {{1.5f, -0.5f, 0.0f}, {-1.5f, -0.5f, 0.0f}, {-1.5f, 0.5f, 0.0f}};
-    start_smalltop = {{1.46f, -0.46f, 0.0f}, {1.46f, 0.46f, 0.0f}, {-1.46f, 0.46f, 0.0f}};
-    start_smallbottom = {{1.46f, -0.46f, 0.0f}, {-1.46f, -0.46f, 0.0f}, {-1.46f, 0.46f, 0.0f}};
-
-    // Not used quit menu space
-    quit_largetop = {{1.5f, -0.5f, 0.0f}, {1.5f, 0.5f, 0.0f}, {-1.5f, 0.5f, 0.0f}};
-    quit_largebottom = {{1.5f, -0.5f, 0.0f}, {-1.5f, -0.5f, 0.0f}, {-1.5f, 0.5f, 0.0f}};
-    quit_smalltop = {{1.46f, -0.46f, 0.0f}, {1.46f, 0.46f, 0.0f}, {-1.46f, 0.46f, 0.0f}};
-    quit_smallbottom = {{1.46f, -0.46f, 0.0f}, {-1.46f, -0.46f, 0.0f}, {-1.46f, 0.46f, 0.0f}};
-
     // Colour
     colour = {{5.0f, 1.0f, 0.0f}, {5.0f, 1.0f, 0.0f}, {5.0f, 1.0f, 0.0f}};
 
@@ -37,14 +25,30 @@ EntryMenu::EntryMenu()
 
     // to check if shadow button has already been ran
     first_pass = true;
+
+    Load_side_button = false;
+}
+
+// Destructor
+EntryMenu::~EntryMenu()
+{
+    // delete instance;
+    // delete start_front;
+    // delete instance2;
+    // delete start_back;
 }
 
 // Generate triangles
 void EntryMenu::load_menu(uint32_t ww, uint32_t wh)
 {
-    // Render shapes
-    // Triangle = new RenderObject2D(start_largetop, colour);
-    // Triangle2 = new RenderObject2D(start_largebottom, colour);
+    // Create a spritesheet
+    start_front = new SpriteSheet("Textures/MenuStart.png");
+    SpriteInternals::activeSheets.push_back(start_front);
+
+    // Create a 2D triangle object
+    const std::vector<glm::vec2> tex = {{0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}, {0.0f, 0.0f}};
+    Sprite *square = new Sprite(start_front, tex);
+    instance = new SpriteInstance(square);
 
     // change is menu active to true
     IS_MENU_ACTIVE = true;
@@ -53,23 +57,26 @@ void EntryMenu::load_menu(uint32_t ww, uint32_t wh)
 // Update button size and colour for when hovered over
 void EntryMenu::shadow_button()
 {
-    /*
-    // Unload big rectangle
-    Triangle->isActive = false;
-    Triangle2->isActive = false;
-    Triangle->scheduleUBOUpdate();
-    Triangle2->scheduleUBOUpdate();
-
-    // If first time this func being rand, create new smaller traingles, afterwards just change isActive
     if (first_pass) {
-        smallTriangle = new RenderObject2D(start_smalltop, colour);
-        smallTriangle2 = new RenderObject2D(start_smallbottom, colour);
+        Log.info("cursor in box");
+
+        // Create a new shadow spritesheet
+        SpriteSheet *start_back = new SpriteSheet("Textures/MenuStartDark.png");
+        SpriteInternals::activeSheets.push_back(start_back);
+
+        // Create a 2D triangle object
+        const std::vector<glm::vec2> tex2 = {{0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}, {0.0f, 0.0f}};
+        Sprite *square2 = new Sprite(start_back, tex2);
+        instance2 = new SpriteInstance(square2);
+
+        // Move to front
+        glm::vec3 front = {0.0f, 0.0f, 0.5f};
+        instance2->setPosition(front);
         first_pass = false;
+
+        Load_side_button = true;
     } else {
-        smallTriangle->isActive = true;
-        smallTriangle2->isActive = true;
     }
-    */
 }
 
 void EntryMenu::return_to_normal()
@@ -93,14 +100,13 @@ void EntryMenu::cursor_update(double xpos, double ypos)
         // update stored cursor location
         xposition = xpos;
         yposition = ypos;
-        if (collisions->check_collision(-1.5f, 1.5f, -0.5f, 0.5f, xpos, ypos) && !cursor_on_box) {
+        if (collisions->check_collision(-0.5f, 0.5f, -0.5f, 0.5f, xpos, ypos) && !cursor_on_box) {
             MainMenu->shadow_button();
             return_box_to_normal = true;
         } else {
             if (return_box_to_normal) {
                 MainMenu->return_to_normal();
                 cursor_on_box = false;
-                ;
             }
         }
     }

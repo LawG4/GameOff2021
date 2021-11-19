@@ -96,8 +96,8 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    // Create a spritesheet
-    SpriteSheet *sheet = new SpriteSheet("Textures/rest.png");
+    /* Create a spritesheet
+    SpriteSheet *sheet = new SpriteSheet("Textures/MenuStart.png");
     SpriteInternals::activeSheets.push_back(sheet);
 
     // Create a 2D triangle object
@@ -107,7 +107,8 @@ int main(int argc, char *argv[])
 
     glm::vec3 new_pos = {1.0f, 0.5f, 0.0f};
 
-    instance->setScale(new_pos);
+    */
+    // instance->setScale(new_pos);
 
     // Key input data
     glfwSetKeyCallback(window, key_callback);
@@ -123,19 +124,20 @@ int main(int argc, char *argv[])
     vertdimen[1] = 2.0f;
 
     // Load newly declared values into MainMenu
-    // MainMenu->load_menu(windowWidth, windowHeight);
+    MainMenu->load_menu(windowWidth, windowHeight);
     collisions->intialise_object(windowWidth, windowHeight);
 
     // Enter into the windowing loop
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
 
-        instance->render();
+        if (MainMenu->IS_MENU_ACTIVE) {  // Check if menu is active, if it render its frames
+            MainMenu->instance->render();
+            if (MainMenu->Load_side_button) MainMenu->instance2->render();
+        }
 
         vk::drawFrame();
     }
 
-    delete sheet;
-    delete Triangle;
     cleanUp();
 }

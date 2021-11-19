@@ -5,6 +5,7 @@ set(TEXTURE_LIST
 	TempHopper.png
 	rest.png
 	MenuStart.png
+	MenuStartDark.png
 )
 
 # For each texture listed add a custom command that copies it to the binary directory
