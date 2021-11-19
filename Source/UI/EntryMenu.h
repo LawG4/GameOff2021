@@ -6,17 +6,19 @@
  *********************************************************************************************************/
 #pragma once
 
-#include "Objects.h"
+#include "Sprites.h"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtx/quaternion.hpp"
 #include "nlohmann/json.hpp"
 
 class EntryMenu
 {
    public:
     bool first_pass;
-    RenderObject2D* Triangle;
-    RenderObject2D* Triangle2;
-    RenderObject2D* smallTriangle;
-    RenderObject2D* smallTriangle2;
+    // RenderObject2D* Triangle;
+    // RenderObject2D* Triangle2;
+    // RenderObject2D* smallTriangle;
+    // RenderObject2D* smallTriangle2;
     bool IS_MENU_ACTIVE;
     bool cursor_on_box;
     bool return_box_to_normal;

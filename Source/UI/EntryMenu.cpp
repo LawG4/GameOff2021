@@ -42,8 +42,8 @@ EntryMenu::EntryMenu()
 void EntryMenu::load_menu(uint32_t ww, uint32_t wh)
 {
     // Render shapes
-    Triangle = new RenderObject2D(start_largetop, colour);
-    Triangle2 = new RenderObject2D(start_largebottom, colour);
+    // Triangle = new RenderObject2D(start_largetop, colour);
+    // Triangle2 = new RenderObject2D(start_largebottom, colour);
 
     // change is menu active to true
     IS_MENU_ACTIVE = true;
@@ -52,6 +52,7 @@ void EntryMenu::load_menu(uint32_t ww, uint32_t wh)
 // Update button size and colour for when hovered over
 void EntryMenu::shadow_button()
 {
+    /*
     // Unload big rectangle
     Triangle->isActive = false;
     Triangle2->isActive = false;
@@ -67,10 +68,12 @@ void EntryMenu::shadow_button()
         smallTriangle->isActive = true;
         smallTriangle2->isActive = true;
     }
+    */
 }
 
 void EntryMenu::return_to_normal()
 {
+    /*
     smallTriangle->isActive = false;
     smallTriangle2->isActive = false;
     Triangle->isActive = true;
@@ -80,6 +83,7 @@ void EntryMenu::return_to_normal()
     smallTriangle2->scheduleUBOUpdate();
     Triangle->scheduleUBOUpdate();
     Triangle2->scheduleUBOUpdate();
+    */
 }
 
 void EntryMenu::cursor_update(double xpos, double ypos)

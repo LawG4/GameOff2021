@@ -96,17 +96,14 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-
     // Create a spritesheet
-    SpriteSheet *sheet = new SpriteSheet("Textures/TempHopper.png");
+    SpriteSheet *sheet = new SpriteSheet("Textures/rest.png");
     SpriteInternals::activeSheets.push_back(sheet);
 
     // Create a 2D triangle object
     const std::vector<glm::vec2> tex = {{0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}, {0.0f, 0.0f}};
     Sprite *Triangle = new Sprite(sheet, tex);
     SpriteInstance *instance = new SpriteInstance(Triangle);
-
-    float time = 0;
 
     // Key input data
     glfwSetKeyCallback(window, key_callback);
@@ -122,16 +119,15 @@ int main(int argc, char *argv[])
     vertdimen[1] = 2.0f;
 
     // Load newly declared values into MainMenu
-    //MainMenu->load_menu(windowWidth, windowHeight);
+    // MainMenu->load_menu(windowWidth, windowHeight);
     collisions->intialise_object(windowWidth, windowHeight);
 
     // Enter into the windowing loop
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
 
-
-
         instance->render();
+
         vk::drawFrame();
     }
 
