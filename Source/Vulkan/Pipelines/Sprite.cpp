@@ -8,7 +8,7 @@ struct SpriteVertices {
 };
 
 const std::vector<glm::vec3> quadCoordinates = {
-  {-0.5f, -0.5f, 0.0f}, {0.5f, -0.5f, 0.0f}, {0.5f, 0.5f, 0.0f}, {-0.5f, 0.5f, 0.0f}};
+  {-1.0f, -1.0f, 0.0f}, {1.0f, -1.0f, 0.0f}, {1.0f, 1.0f, 0.0f}, {-1.0f, 1.0f, 0.0f}};
 
 std::vector<uint16_t> indexArray = {0, 1, 2, 2, 3, 0};
 

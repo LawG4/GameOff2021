@@ -105,6 +105,10 @@ int main(int argc, char *argv[])
     Sprite *Triangle = new Sprite(sheet, tex);
     SpriteInstance *instance = new SpriteInstance(Triangle);
 
+    glm::vec3 new_pos = {1.0f, 0.5f, 0.0f};
+
+    instance->setScale(new_pos);
+
     // Key input data
     glfwSetKeyCallback(window, key_callback);
 

@@ -5,6 +5,7 @@
 \Contributors  : Freddie M
  *********************************************************************************************************/
 
+#include "Sprites.h"
 #include "nlohmann/json.hpp"
 
 #include "Cursor_input.h"

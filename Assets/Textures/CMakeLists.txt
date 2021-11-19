@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.20)
 set(TEXTURE_LIST
 	TempHopper.png
 	rest.png
+	MenuStart.png
 )
 
 # For each texture listed add a custom command that copies it to the binary directory
