@@ -101,6 +101,11 @@ void PipelineInternals::destroy2DPipeline()
 
 void SpriteInternals::recordSpritePipeline(VkCommandBuffer& cmd, const uint32_t index)
 {
+    // Don't render the sprite sheets if there are none active
+    if (SpriteInternals::activeSheets.size() == 0) {
+        return;
+    }
+
     // Bind to the pipeline
     vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, SpriteInternals::pipeline);
 
