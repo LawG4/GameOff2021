@@ -327,5 +327,6 @@ SpriteSheet::~SpriteSheet()
 
     if (SpriteInternals::sheetPool != VK_NULL_HANDLE) {
         vkDestroyCommandPool(vk::logicalDevice, SpriteInternals::sheetPool, nullptr);
+        SpriteInternals::sheetPool = VK_NULL_HANDLE;
     }
 }
