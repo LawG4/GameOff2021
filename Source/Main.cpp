@@ -22,14 +22,13 @@
 /// <summary> Destory everything </summary>
 void cleanUp()
 {
+    delete MainMenu;
+
     // First destroy Vulkan
     cleanupVulkan();
 
     // Destroy player object
     delete player_class;
-
-    // Destroy menu object
-    delete MainMenu;
 
     // If the window exists destroy it
     if (window) glfwDestroyWindow(window);
@@ -117,8 +116,8 @@ int main(int argc, char *argv[])
         glfwPollEvents();
 
         if (MainMenu->IS_MENU_ACTIVE) {  // Check if menu is active, if it render its frames
-            MainMenu->instance->render();
-            if (MainMenu->Load_side_button) MainMenu->instance2->render();
+            MainMenu->frontInstance->render();
+            if (MainMenu->Load_side_button) MainMenu->backInstance->render();
         }
 
         vk::drawFrame();

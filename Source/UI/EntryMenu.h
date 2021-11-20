@@ -2,13 +2,11 @@
 \File          : EntryMenu.h
 \Copyright     : GPL-3.0 License
 \Brief         : Creation of main menu
-\Contributors  : Freddie M
+\Contributors  : Freddie M, Lawrence
  *********************************************************************************************************/
 #pragma once
 
 #include "Sprites.h"
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtx/quaternion.hpp"
 #include "nlohmann/json.hpp"
 
 class EntryMenu
@@ -22,10 +20,15 @@ class EntryMenu
     bool return_box_to_normal;
     double xposition;
     double yposition;
-    SpriteInstance* instance;
-    SpriteSheet* start_front;
-    SpriteInstance* instance2;
-    SpriteSheet* start_back;
+
+    // Initialise memeber pointers to null
+    SpriteSheet* startFrontSheet = nullptr;
+    Sprite* startFront = nullptr;
+    SpriteInstance* frontInstance = nullptr;
+
+    SpriteSheet* startBackSheet = nullptr;
+    Sprite* startBack = nullptr;
+    SpriteInstance* backInstance = nullptr;
 
     // --Colour--
     std::vector<glm::vec3> colour;

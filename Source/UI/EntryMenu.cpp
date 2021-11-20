@@ -2,7 +2,7 @@
 \File          : EntryMenu.cpp
 \Copyright     : GPL-3.0 License
 \Brief         : Creation of main menu
-\Contributors  : Freddie M
+\Contributors  : Freddie M, Lawrence G
  *********************************************************************************************************/
 
 #include "Sprites.h"
@@ -32,23 +32,33 @@ EntryMenu::EntryMenu()
 // Destructor
 EntryMenu::~EntryMenu()
 {
-    // delete instance;
-    // delete start_front;
-    // delete instance2;
-    // delete start_back;
+    // delete the sprite instance
+    // Before we delete an object first we have to ensure that it's not null
+    if (frontInstance) delete frontInstance;
+    if (backInstance) delete backInstance;
+
+    // Now delete the sprites themselves
+    if (startFront) delete startFront;
+    if (startBack) delete startBack;
+
+    // Delete the sprite sheets
+    if (startFrontSheet) delete startFrontSheet;
+    if (startBackSheet) delete startBackSheet;
 }
 
 // Generate triangles
 void EntryMenu::load_menu(uint32_t ww, uint32_t wh)
 {
     // Create a spritesheet
-    start_front = new SpriteSheet("Textures/MenuStart.png");
-    SpriteInternals::activeSheets.push_back(start_front);
+    startFrontSheet = new SpriteSheet("Textures/MenuStart.png");
+    SpriteInternals::activeSheets.push_back(startFrontSheet);
 
-    // Create a 2D triangle object
+    // Create a sprite, pinpointing the texture coordinates of the sprite on the sprite sheets
     const std::vector<glm::vec2> tex = {{0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}, {0.0f, 0.0f}};
-    Sprite *square = new Sprite(start_front, tex);
-    instance = new SpriteInstance(square);
+    startFront = new Sprite(startFrontSheet, tex);
+
+    // Create an instance of the sprite
+    frontInstance = new SpriteInstance(startFront);
 
     // change is menu active to true
     IS_MENU_ACTIVE = true;
@@ -61,21 +71,22 @@ void EntryMenu::shadow_button()
         Log.info("cursor in box");
 
         // Create a new shadow spritesheet
-        SpriteSheet *start_back = new SpriteSheet("Textures/MenuStartDark.png");
-        SpriteInternals::activeSheets.push_back(start_back);
+        // Do these need to be seperate sheets? These could be one sheet
+        startBackSheet = new SpriteSheet("Textures/MenuStartDark.png");
+        SpriteInternals::activeSheets.push_back(startBackSheet);
 
-        // Create a 2D triangle object
+        // Create a A sprite from the sprite sheet
         const std::vector<glm::vec2> tex2 = {{0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}, {0.0f, 0.0f}};
-        Sprite *square2 = new Sprite(start_back, tex2);
-        instance2 = new SpriteInstance(square2);
+        startBack = new Sprite(startBackSheet, tex2);
+
+        // Create an instance of the new sprite
+        backInstance = new SpriteInstance(startBack);
 
         // Move to front
-        glm::vec3 front = {0.0f, 0.0f, 0.5f};
-        instance2->setPosition(front);
+        backInstance->setPosition(glm::vec3(0.0f, 0.0f, 0.5f));
         first_pass = false;
 
         Load_side_button = true;
-    } else {
     }
 }
 
