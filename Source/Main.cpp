@@ -95,21 +95,6 @@ int main(int argc, char *argv[])
         cleanUp();
         return -1;
     }
-
-    /* Create a spritesheet
-    SpriteSheet *sheet = new SpriteSheet("Textures/MenuStart.png");
-    SpriteInternals::activeSheets.push_back(sheet);
-
-    // Create a 2D triangle object
-    const std::vector<glm::vec2> tex = {{0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}, {0.0f, 0.0f}};
-    Sprite *Triangle = new Sprite(sheet, tex);
-    SpriteInstance *instance = new SpriteInstance(Triangle);
-
-    glm::vec3 new_pos = {1.0f, 0.5f, 0.0f};
-
-    */
-    // instance->setScale(new_pos);
-
     // Key input data
     glfwSetKeyCallback(window, key_callback);
 
