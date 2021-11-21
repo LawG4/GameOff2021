@@ -8,6 +8,7 @@ set(COMPONENTS
 	Interactions
 	Model
 	UI
+	Camera
 )
 
 foreach(directory ${COMPONENTS})
