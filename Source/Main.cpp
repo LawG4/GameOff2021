@@ -115,7 +115,12 @@ int main(int argc, char *argv[])
     MainMenu->load_menu(windowWidth, windowHeight);
     collisions->intialise_object(windowWidth, windowHeight);
 
+    // Paramater for swaying the camera back and forth
     float t = 0;
+
+    // A regular object that interacts with the camera
+    SpriteInstance worldObject(MainMenu->startFront);
+    worldObject.setPosition({0, -1, 0});
 
     // Enter into the windowing loop
     while (!glfwWindowShouldClose(window)) {
@@ -125,6 +130,7 @@ int main(int argc, char *argv[])
             MainMenu->frontInstance->render();
             if (MainMenu->Load_side_button) MainMenu->backInstance->render();
         }
+        worldObject.render();
 
         Camera::setPosition(glm::vec3(cos(t), 0, 0));
         t += 0.01f;
