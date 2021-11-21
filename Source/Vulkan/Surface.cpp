@@ -44,7 +44,7 @@ bool vk::recreateSwapchain()
         vkDestroyImageView(vk::logicalDevice, vk::swapchainImageViews[i], nullptr);
     }
 
-    vk::destroyPipelines();
+    vk::destroyPipelines(false);
     vkDestroyRenderPass(vk::logicalDevice, vk::onscreenRenderPass, nullptr);
     vkDestroySwapchainKHR(vk::logicalDevice, vk::swapchain, nullptr);
 

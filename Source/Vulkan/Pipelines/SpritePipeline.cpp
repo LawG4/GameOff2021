@@ -80,16 +80,17 @@ void PipelineInternals::create2DPipeline()
     }
 }
 
-void PipelineInternals::destroy2DPipeline()
+void PipelineInternals::destroy2DPipeline(bool destroyAllResources)
 {
-    // Destroy the index buffer used for 2D buffers
-    if (SpriteInternals::quadIndexGroup.buffer != VK_NULL_HANDLE) {
-        vkDestroyBuffer(vk::logicalDevice, SpriteInternals::quadIndexGroup.buffer, nullptr);
+    if (destroyAllResources) {
+        // Destroy the index buffer used for 2D buffers
+        if (SpriteInternals::quadIndexGroup.buffer != VK_NULL_HANDLE) {
+            vkDestroyBuffer(vk::logicalDevice, SpriteInternals::quadIndexGroup.buffer, nullptr);
+        }
+        if (SpriteInternals::quadIndexGroup.mem != VK_NULL_HANDLE) {
+            vkFreeMemory(vk::logicalDevice, SpriteInternals::quadIndexGroup.mem, nullptr);
+        }
     }
-    if (SpriteInternals::quadIndexGroup.mem != VK_NULL_HANDLE) {
-        vkFreeMemory(vk::logicalDevice, SpriteInternals::quadIndexGroup.mem, nullptr);
-    }
-
     if (SpriteInternals::pipeline != VK_NULL_HANDLE) {
         vkDestroyPipeline(vk::logicalDevice, SpriteInternals::pipeline, nullptr);
     }

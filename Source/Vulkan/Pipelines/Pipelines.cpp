@@ -18,7 +18,10 @@ void vk::createDescriptorSetLayouts() { PipelineInternals::createDescriptorSetLa
 
 void vk::destroyDescriptorSetLayouts() { PipelineInternals::destroyDescriptorSetLayouts2D(); }
 
-void vk::destroyPipelines() { PipelineInternals::destroy2DPipeline(); }
+void vk::destroyPipelines(bool destroyAllResources)
+{
+    PipelineInternals::destroy2DPipeline(destroyAllResources);
+}
 
 void vk::prepareCommandBuffer(uint32_t swapIndex)
 {
