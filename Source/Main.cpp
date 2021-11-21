@@ -8,6 +8,7 @@
 #include "Window.h"
 #include "nlohmann/json.hpp"
 
+#include "Camera.h"
 #include "Cursor_input.h"
 #include "EntryMenu.h"
 #include "Keyboard_input.h"
@@ -106,6 +107,9 @@ int main(int argc, char *argv[])
     // Input vertex data
     vertdimen[0] = 3.5f;
     vertdimen[1] = 2.0f;
+
+    // Set camera position to the centre
+    Camera::setPosition({0, 0, 0});
 
     // Load newly declared values into MainMenu
     MainMenu->load_menu(windowWidth, windowHeight);
