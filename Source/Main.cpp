@@ -108,16 +108,18 @@ int main(int argc, char *argv[])
     vertdimen[1] = 2.0f;
 
     // Load newly declared values into MainMenu
-    MainMenu->load_menu(windowWidth, windowHeight);
+    MainMenu->load_menu();
     collisions->intialise_object(windowWidth, windowHeight);
 
     // Enter into the windowing loop
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
 
+        if (MainMenu->Load_side_button) {  // Check if shadow sprite is ready to be rendered
+            MainMenu->backInstance->render();
+        }
         if (MainMenu->IS_MENU_ACTIVE) {  // Check if menu is active, if it render its frames
             MainMenu->frontInstance->render();
-            if (MainMenu->Load_side_button) MainMenu->backInstance->render();
         }
 
         vk::drawFrame();

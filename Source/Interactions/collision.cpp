@@ -40,5 +40,5 @@ bool collision_detection::check_collision(float x1_vertex, float x2_vertex, floa
     }
 }
 
-// Initialise MainMenu object
+// Initialise collisions object
 collision_detection *collisions = new collision_detection;

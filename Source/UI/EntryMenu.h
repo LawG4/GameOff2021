@@ -30,8 +30,13 @@ class EntryMenu
     Sprite* startBack = nullptr;
     SpriteInstance* backInstance = nullptr;
 
-    // --Colour--
-    std::vector<glm::vec3> colour;
+    // Intitialise locations for each box
+    glm::vec3 top_button_front = {0.0f, 1.0f, 0.5f};
+    glm::vec3 top_button_bottom = {0.0f, 1.0f, 0.0f};
+
+    // Intitialise locations for each box
+    glm::vec3 bottom_button_front = {0.0f, -1.0f, 0.5f};
+    glm::vec3 bottom_button_bottom = {0.0f, -1.0f, 0.0f};
 
     // Constructor
     EntryMenu();
@@ -40,7 +45,7 @@ class EntryMenu
     ~EntryMenu();
 
     // Render primary rectangle
-    void load_menu(uint32_t ww, uint32_t wh);
+    void load_menu();
     // Ran each time cursor pos updated
     void cursor_update(double xpos, double ypos);
     // Ran each time cursor button pressed

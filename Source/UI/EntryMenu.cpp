@@ -16,16 +16,16 @@
 // Constructor
 EntryMenu::EntryMenu()
 {
-    // Colour
-    colour = {{5.0f, 1.0f, 0.0f}, {5.0f, 1.0f, 0.0f}, {5.0f, 1.0f, 0.0f}};
-
+    // Variable to check if menu needs to be rendered
     IS_MENU_ACTIVE = false;
+    // Cursor variables
     cursor_on_box = false;
     return_box_to_normal = false;
 
     // to check if shadow button has already been ran
     first_pass = true;
 
+    // Janky fix for testing rendering queue
     Load_side_button = false;
 }
 
@@ -47,7 +47,7 @@ EntryMenu::~EntryMenu()
 }
 
 // Generate triangles
-void EntryMenu::load_menu(uint32_t ww, uint32_t wh)
+void EntryMenu::load_menu()
 {
     // Create a spritesheet
     startFrontSheet = new SpriteSheet("Textures/MenuStart.png");
@@ -60,6 +60,9 @@ void EntryMenu::load_menu(uint32_t ww, uint32_t wh)
     // Create an instance of the sprite
     frontInstance = new SpriteInstance(startFront);
 
+    // Move to front and to correct location on screen
+    frontInstance->setPosition(top_button_front);
+
     // change is menu active to true
     IS_MENU_ACTIVE = true;
 }
@@ -68,7 +71,7 @@ void EntryMenu::load_menu(uint32_t ww, uint32_t wh)
 void EntryMenu::shadow_button()
 {
     if (first_pass) {
-        Log.info("cursor in box");
+        // Log.info("cursor in box");
 
         // Create a new shadow spritesheet
         // Do these need to be seperate sheets? These could be one sheet
@@ -83,26 +86,21 @@ void EntryMenu::shadow_button()
         backInstance = new SpriteInstance(startBack);
 
         // Move to front
-        backInstance->setPosition(glm::vec3(0.0f, 0.0f, 0.5f));
+        backInstance->setPosition(top_button_front);
         first_pass = false;
 
         Load_side_button = true;
+    } else {
+        backInstance->setPosition(top_button_front);
+        frontInstance->setPosition(top_button_bottom);
     }
 }
 
 void EntryMenu::return_to_normal()
 {
-    /*
-    smallTriangle->isActive = false;
-    smallTriangle2->isActive = false;
-    Triangle->isActive = true;
-    Triangle2->isActive = true;
-
-    smallTriangle->scheduleUBOUpdate();
-    smallTriangle2->scheduleUBOUpdate();
-    Triangle->scheduleUBOUpdate();
-    Triangle2->scheduleUBOUpdate();
-    */
+    // Send current button sprite button to back
+    backInstance->setPosition(top_button_bottom);
+    frontInstance->setPosition(top_button_front);
 }
 
 void EntryMenu::cursor_update(double xpos, double ypos)
@@ -111,7 +109,7 @@ void EntryMenu::cursor_update(double xpos, double ypos)
         // update stored cursor location
         xposition = xpos;
         yposition = ypos;
-        if (collisions->check_collision(-0.5f, 0.5f, -0.5f, 0.5f, xpos, ypos) && !cursor_on_box) {
+        if (collisions->check_collision(-0.5f, 0.5f, -1.5f, -0.5f, xpos, ypos) && !cursor_on_box) {
             MainMenu->shadow_button();
             return_box_to_normal = true;
         } else {
