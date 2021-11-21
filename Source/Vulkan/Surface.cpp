@@ -4,6 +4,7 @@
 \Brief         : Handels surface and swapchain creation and recreation
 \Contributors  : Lawrence G,
  *********************************************************************************************************/
+#include "Camera.h"
 #include "Pipelines.h"
 #include "Vulkan.h"
 #include "Window.h"
@@ -160,10 +161,8 @@ bool vk::createSwapchain()
         }
     }
 
-    // Get the two matricies
-    float width = static_cast<float>(vk::swapchainExtent.width) * 0.01f;
-    float height = static_cast<float>(vk::swapchainExtent.height) * 0.01f;
-    ProjectionMatrices::orthogonal = glm::ortho(-0.5f * width, 0.5f * width, 0.5f * height, -0.5f * height);
+    // Send the swapchain size over to the camera buffer
+    Camera::setProjection(vk::swapchainExtent.width, vk::swapchainExtent.height);
     return true;
 }
 

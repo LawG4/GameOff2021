@@ -15,6 +15,11 @@ namespace Camera
 /// <returns>True if the camera has changed</returns>
 bool getHasCameraUpdated();
 
+/// <summary>Sets the internal projection matrix given the screen paramaters </summary>
+/// <param name="width">width of the swapchain</param>
+/// <param name="height">height of the swapchain</param>
+void setProjection(uint32_t width, uint32_t height);
+
 /// <summary>Gets the matrix that is responsible for flattening objects to the screen</summary>
 /// <returns>Returns the projection matrix</returns>
 glm::mat4 getProjectionMatrix();

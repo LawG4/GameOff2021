@@ -5,6 +5,7 @@
 \Contributors  : Lawrence G,
  *********************************************************************************************************/
 
+#include "Camera.h"
 #include "Sprites.h"
 
 void SpriteInstance::render()
@@ -40,7 +41,7 @@ SpriteInstance::~SpriteInstance() {}
 
 glm::mat4 SpriteInstance::getMvp()
 {
-    if (_mvpOutdated) {
+    if (_mvpOutdated || Camera::getHasCameraUpdated()) {
         _mvp = calculateMVP();
         _mvpOutdated = false;
     }
@@ -54,7 +55,7 @@ glm::mat4 SpriteInstance::calculateMVP()
     mat = glm::mat4(glm::quat(_rot));
     mat = glm::scale(mat, _scale);
     mat = glm::translate(mat, _pos);
-    mat = ProjectionMatrices::orthogonal * mat;
+    mat = Camera::getViewProjectionMatrix() * mat;
 
     return mat;
 }
