@@ -1,3 +1,10 @@
+/*!********************************************************************************************************
+\File          : Pipelines.h
+\Copyright     : GPL-3.0 License
+\Brief         : Provides utility for recording all the different pipelines
+\Contributors  : Lawrence G,
+ *********************************************************************************************************/
+
 #pragma once
 #include "Vulkan.h"
 

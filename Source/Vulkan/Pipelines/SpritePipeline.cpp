@@ -1,3 +1,10 @@
+/*!********************************************************************************************************
+\File          : SpritesPipeline.cpp
+\Copyright     : GPL-3.0 License
+\Brief         : The graphics pipeline utility for sprite rendering
+\Contributors  : Lawrence G,
+ *********************************************************************************************************/
+
 #include "Pipelines.h"
 #include "Sprites.h"
 

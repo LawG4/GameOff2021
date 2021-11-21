@@ -1,3 +1,9 @@
+/*!********************************************************************************************************
+\File          : SpriteInstance.cpp
+\Copyright     : GPL-3.0 License
+\Brief         : Provides rendering for copies of sprites
+\Contributors  : Lawrence G,
+ *********************************************************************************************************/
 
 #include "Sprites.h"
 

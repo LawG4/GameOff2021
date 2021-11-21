@@ -1,3 +1,9 @@
+/*!********************************************************************************************************
+\File          : SpriteSheet.cpp
+\Copyright     : GPL-3.0 License
+\Brief         : The utility for creating sprite sheets
+\Contributors  : Lawrence G,
+ *********************************************************************************************************/
 
 #include "Memory.h"
 #include "Sprites.h"

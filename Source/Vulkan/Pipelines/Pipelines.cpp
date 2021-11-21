@@ -1,3 +1,9 @@
+/*!********************************************************************************************************
+\File          : Pipelines.cpp
+\Copyright     : GPL-3.0 License
+\Brief         : Provides utility for recording all the different pipelines
+\Contributors  : Lawrence G,
+ *********************************************************************************************************/
 
 #include "Pipelines.h"
 #include "Sprites.h"
