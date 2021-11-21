@@ -123,11 +123,14 @@ class SpriteInstance
     glm::vec3 _rot;
     glm::vec3 _scale;
 
-    glm::mat4 calculateMVP();
+    virtual glm::mat4 calculateMVP();
 };
 
 class UiSpriteInstance : public SpriteInstance
 {
+   public:
+    UiSpriteInstance(Sprite* sprite);
+
    protected:
     glm::mat4 calculateMVP();
 };

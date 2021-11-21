@@ -58,7 +58,7 @@ void EntryMenu::load_menu(uint32_t ww, uint32_t wh)
     startFront = new Sprite(startFrontSheet, tex);
 
     // Create an instance of the sprite
-    frontInstance = new SpriteInstance(startFront);
+    frontInstance = new UiSpriteInstance(startFront);
 
     // change is menu active to true
     IS_MENU_ACTIVE = true;
@@ -80,7 +80,7 @@ void EntryMenu::shadow_button()
         startBack = new Sprite(startBackSheet, tex2);
 
         // Create an instance of the new sprite
-        backInstance = new SpriteInstance(startBack);
+        backInstance = new UiSpriteInstance(startBack);
 
         // Move to front
         backInstance->setPosition(glm::vec3(0.0f, 0.0f, 0.5f));

@@ -25,6 +25,8 @@ SpriteInstance::SpriteInstance(Sprite* sprite)
     _mvpOutdated = false;
 }
 
+UiSpriteInstance::UiSpriteInstance(Sprite* sprite) : SpriteInstance(sprite) {}
+
 SpriteInstance::SpriteInstance(Sprite* sprite, glm::vec3 pos, glm::vec3 scale, glm::vec3 rot)
 {
     _sprite = sprite;

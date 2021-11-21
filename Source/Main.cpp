@@ -115,6 +115,8 @@ int main(int argc, char *argv[])
     MainMenu->load_menu(windowWidth, windowHeight);
     collisions->intialise_object(windowWidth, windowHeight);
 
+    float t = 0;
+
     // Enter into the windowing loop
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
@@ -123,6 +125,9 @@ int main(int argc, char *argv[])
             MainMenu->frontInstance->render();
             if (MainMenu->Load_side_button) MainMenu->backInstance->render();
         }
+
+        Camera::setPosition(glm::vec3(cos(t), 0, 0));
+        t += 0.01f;
 
         vk::drawFrame();
     }
