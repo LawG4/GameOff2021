@@ -115,7 +115,7 @@ class SpriteInstance
     glm::vec3 getRotation();
     glm::vec3 getScale();
 
-   private:
+   protected:
     Sprite* _sprite;
     glm::mat4 _mvp;
     bool _mvpOutdated;
@@ -123,6 +123,12 @@ class SpriteInstance
     glm::vec3 _rot;
     glm::vec3 _scale;
 
+    glm::mat4 calculateMVP();
+};
+
+class UiSpriteInstance : public SpriteInstance
+{
+   protected:
     glm::mat4 calculateMVP();
 };
 

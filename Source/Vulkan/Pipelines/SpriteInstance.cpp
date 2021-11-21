@@ -60,6 +60,18 @@ glm::mat4 SpriteInstance::calculateMVP()
     return mat;
 }
 
+// Performs ths same calculation but does not take into account the camera
+glm::mat4 UiSpriteInstance::calculateMVP()
+{
+    glm::mat4 mat = glm::identity<glm::mat4>();
+    mat = glm::mat4(glm::quat(_rot));
+    mat = glm::scale(mat, _scale);
+    mat = glm::translate(mat, _pos);
+    mat = Camera::getProjectionMatrix() * mat;
+
+    return mat;
+}
+
 void SpriteInstance::setPosition(glm::vec3 position)
 {
     _mvpOutdated = true;
