@@ -24,11 +24,11 @@ class EntryMenu
     // Initialise memeber pointers to null
     SpriteSheet* startFrontSheet = nullptr;
     Sprite* startFront = nullptr;
-    SpriteInstance* frontInstance = nullptr;
+    UiSpriteInstance* frontInstance = nullptr;
 
     SpriteSheet* startBackSheet = nullptr;
     Sprite* startBack = nullptr;
-    SpriteInstance* backInstance = nullptr;
+    UiSpriteInstance* backInstance = nullptr;
 
     // --Colour--
     std::vector<glm::vec3> colour;

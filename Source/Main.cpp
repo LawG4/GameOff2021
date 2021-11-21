@@ -8,6 +8,7 @@
 #include "Window.h"
 #include "nlohmann/json.hpp"
 
+#include "Camera.h"
 #include "Cursor_input.h"
 #include "EntryMenu.h"
 #include "Keyboard_input.h"
@@ -107,9 +108,19 @@ int main(int argc, char *argv[])
     vertdimen[0] = 3.5f;
     vertdimen[1] = 2.0f;
 
+    // Set camera position to the centre
+    Camera::setPosition({0, 0, 0});
+
     // Load newly declared values into MainMenu
     MainMenu->load_menu(windowWidth, windowHeight);
     collisions->intialise_object(windowWidth, windowHeight);
+
+    // Paramater for swaying the camera back and forth
+    float t = 0;
+
+    // A regular object that interacts with the camera
+    SpriteInstance worldObject(MainMenu->startFront);
+    worldObject.setPosition({0, -1, 0});
 
     // Enter into the windowing loop
     while (!glfwWindowShouldClose(window)) {
@@ -119,6 +130,10 @@ int main(int argc, char *argv[])
             MainMenu->frontInstance->render();
             if (MainMenu->Load_side_button) MainMenu->backInstance->render();
         }
+        worldObject.render();
+
+        Camera::setPosition(glm::vec3(cos(t), 0, 0));
+        t += 0.01f;
 
         vk::drawFrame();
     }

@@ -1,3 +1,10 @@
+/*!********************************************************************************************************
+\File          : Pipelines.h
+\Copyright     : GPL-3.0 License
+\Brief         : Provides utility for recording all the different pipelines
+\Contributors  : Lawrence G,
+ *********************************************************************************************************/
+
 #pragma once
 #include "Vulkan.h"
 
@@ -8,7 +15,7 @@ void prepareCommandBuffer(uint32_t swapIndex);
 VkShaderModule createShaderModule(const char* filePath);
 
 void createPipelines();
-void destroyPipelines();
+void destroyPipelines(bool destroyAllResources);
 
 void createDescriptorSetLayouts();
 void destroyDescriptorSetLayouts();
@@ -31,7 +38,7 @@ void prepare2DCmdBuffer(VkCommandBuffer& cmd, uint32_t swapIndex);
 
 // Commands for destroying each of the pipelines
 
-void destroy2DPipeline();
+void destroy2DPipeline(bool destroyAllResources);
 void destroyDescriptorSetLayouts2D();
 
 namespace Templates

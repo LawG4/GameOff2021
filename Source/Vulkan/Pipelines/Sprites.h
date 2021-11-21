@@ -1,3 +1,9 @@
+/*!********************************************************************************************************
+\File          : Sprites.cpp
+\Copyright     : GPL-3.0 License
+\Brief         : Classes for the sprite rendering
+\Contributors  : Lawrence G,
+ *********************************************************************************************************/
 
 #pragma once
 #include "Memory.h"
@@ -22,7 +28,7 @@
 ///
 /// </summary>
 
-extern class Sprite;
+class Sprite;
 
 class SpriteSheet
 {
@@ -109,7 +115,7 @@ class SpriteInstance
     glm::vec3 getRotation();
     glm::vec3 getScale();
 
-   private:
+   protected:
     Sprite* _sprite;
     glm::mat4 _mvp;
     bool _mvpOutdated;
@@ -117,6 +123,15 @@ class SpriteInstance
     glm::vec3 _rot;
     glm::vec3 _scale;
 
+    virtual glm::mat4 calculateMVP();
+};
+
+class UiSpriteInstance : public SpriteInstance
+{
+   public:
+    UiSpriteInstance(Sprite* sprite);
+
+   protected:
     glm::mat4 calculateMVP();
 };
 

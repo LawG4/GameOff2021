@@ -1,3 +1,9 @@
+/*!********************************************************************************************************
+\File          : Pipelines.cpp
+\Copyright     : GPL-3.0 License
+\Brief         : Provides utility for recording all the different pipelines
+\Contributors  : Lawrence G,
+ *********************************************************************************************************/
 
 #include "Pipelines.h"
 #include "Sprites.h"
@@ -12,7 +18,10 @@ void vk::createDescriptorSetLayouts() { PipelineInternals::createDescriptorSetLa
 
 void vk::destroyDescriptorSetLayouts() { PipelineInternals::destroyDescriptorSetLayouts2D(); }
 
-void vk::destroyPipelines() { PipelineInternals::destroy2DPipeline(); }
+void vk::destroyPipelines(bool destroyAllResources)
+{
+    PipelineInternals::destroy2DPipeline(destroyAllResources);
+}
 
 void vk::prepareCommandBuffer(uint32_t swapIndex)
 {
