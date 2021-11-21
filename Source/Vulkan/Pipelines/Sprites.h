@@ -28,7 +28,7 @@
 ///
 /// </summary>
 
-extern class Sprite;
+class Sprite;
 
 class SpriteSheet
 {
