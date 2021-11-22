@@ -1,3 +1,9 @@
+/*!********************************************************************************************************
+\File          : PipelineTemplates.cpp
+\Copyright     : GPL-3.0 License
+\Brief         : Provides filled in templates for the graphic pipelines
+\Contributors  : Lawrence G,
+ *********************************************************************************************************/
 
 #include "Pipelines.h"
 #include "Vertex.h"

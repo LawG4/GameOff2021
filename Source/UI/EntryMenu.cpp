@@ -58,7 +58,7 @@ void EntryMenu::load_menu()
     startFront = new Sprite(startFrontSheet, tex);
 
     // Create an instance of the sprite
-    frontInstance = new SpriteInstance(startFront);
+    frontInstance = new UiSpriteInstance(startFront);
 
     // Move to front and to correct location on screen
     frontInstance->setPosition(top_button_front);
@@ -83,7 +83,7 @@ void EntryMenu::shadow_button()
         startBack = new Sprite(startBackSheet, tex2);
 
         // Create an instance of the new sprite
-        backInstance = new SpriteInstance(startBack);
+        backInstance = new UiSpriteInstance(startBack);
 
         // Move to front
         backInstance->setPosition(top_button_front);

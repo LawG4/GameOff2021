@@ -24,11 +24,11 @@ class EntryMenu
     // Initialise memeber pointers to null
     SpriteSheet* startFrontSheet = nullptr;
     Sprite* startFront = nullptr;
-    SpriteInstance* frontInstance = nullptr;
+    UiSpriteInstance* frontInstance = nullptr;
 
     SpriteSheet* startBackSheet = nullptr;
     Sprite* startBack = nullptr;
-    SpriteInstance* backInstance = nullptr;
+    UiSpriteInstance* backInstance = nullptr;
 
     // Intitialise locations for each box
     glm::vec3 top_button_front = {0.0f, 1.0f, 0.5f};

@@ -116,7 +116,7 @@ void cleanupVulkan()
 
     vkDestroyDescriptorPool(vk::logicalDevice, vk::descriptorPool, nullptr);
 
-    vk::destroyPipelines();
+    vk::destroyPipelines(true);
     vk::destroyDescriptorSetLayouts();
 
     for (VkFramebuffer& fb : vk::swapchainFb) {

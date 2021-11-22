@@ -1,3 +1,9 @@
+/*!********************************************************************************************************
+\File          : Sprites.cpp
+\Copyright     : GPL-3.0 License
+\Brief         : Classes for the sprite rendering
+\Contributors  : Lawrence G,
+ *********************************************************************************************************/
 
 #include "Sprites.h"
 #include "Vulkan.h"
