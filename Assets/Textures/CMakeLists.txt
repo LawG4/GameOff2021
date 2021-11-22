@@ -11,6 +11,8 @@ set(TEXTURE_LIST
 	server_control.png
 	server_front.png
 	server_rack_rear.png
+	TestButton.png
+	TestButton2.png
 )
 
 # For each texture listed add a custom command that copies it to the binary directory

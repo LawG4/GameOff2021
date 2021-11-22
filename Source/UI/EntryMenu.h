@@ -13,6 +13,7 @@ class EntryMenu
 {
    public:
     bool first_pass;
+    bool close_window = false;
 
     bool IS_MENU_ACTIVE;
     bool Load_side_button;
@@ -31,12 +32,12 @@ class EntryMenu
     UiSpriteInstance* backInstance = nullptr;
 
     // Intitialise locations for each box
-    glm::vec3 top_button_front = {0.0f, 1.0f, 0.5f};
-    glm::vec3 top_button_bottom = {0.0f, 1.0f, 0.0f};
+    glm::vec3 top_button_front = {0.0f, 0.5f, 0.5f};
+    glm::vec3 top_button_bottom = {0.0f, 0.5f, 0.0f};
 
     // Intitialise locations for each box
-    glm::vec3 bottom_button_front = {0.0f, -1.0f, 0.5f};
-    glm::vec3 bottom_button_bottom = {0.0f, -1.0f, 0.0f};
+    glm::vec3 bottom_button_front = {0.0f, -0.5f, 0.5f};
+    glm::vec3 bottom_button_bottom = {0.0f, -0.5f, 0.0f};
 
     // Constructor
     EntryMenu();

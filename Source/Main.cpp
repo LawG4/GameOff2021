@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
 
     // A regular object that interacts with the camera
     SpriteInstance worldObject(MainMenu->startFront);
-    worldObject.setPosition({0, -1, 0});
+    worldObject.setPosition({0, 0, 0});
 
     // Enter into the windowing loop
     while (!glfwWindowShouldClose(window)) {
@@ -129,13 +129,20 @@ int main(int argc, char *argv[])
         if (MainMenu->Load_side_button) {  // Check if shadow sprite is ready to be rendered
             MainMenu->backInstance->render();
         }
-        if (MainMenu->IS_MENU_ACTIVE) {  // Check if menu is active, if it render its frames
+        if (MainMenu->IS_MENU_ACTIVE) {  // Check if menu is active, if it, render its frames
+            // MainMenu->frontInstance->setPosition({0, 0, 0});
             MainMenu->frontInstance->render();
         }
-        worldObject.render();
 
-        Camera::setPosition(glm::vec3(cos(t), 0, 0));
+        // worldObject.render();
+
+        // Camera::setPosition(glm::vec3(cos(t), 0, 0));
+        Camera::setPosition(glm::vec3(0, 1, 0));
         t += 0.01f;
+
+        if (MainMenu->close_window == true) {
+            glfwSetWindowShouldClose(window, true);
+        }
 
         vk::drawFrame();
     }

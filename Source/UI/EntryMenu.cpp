@@ -50,7 +50,7 @@ EntryMenu::~EntryMenu()
 void EntryMenu::load_menu()
 {
     // Create a spritesheet
-    startFrontSheet = new SpriteSheet("Textures/MenuStart.png");
+    startFrontSheet = new SpriteSheet("Textures/TestButton2.png");
     SpriteInternals::activeSheets.push_back(startFrontSheet);
 
     // Create a sprite, pinpointing the texture coordinates of the sprite on the sprite sheets
@@ -60,8 +60,9 @@ void EntryMenu::load_menu()
     // Create an instance of the sprite
     frontInstance = new UiSpriteInstance(startFront);
 
-    // Move to front and to correct location on screen
+    // Move to correct location on screen and increase size
     frontInstance->setPosition(top_button_front);
+    frontInstance->setScale(glm::vec3(2, 0.5, 0));
 
     // change is menu active to true
     IS_MENU_ACTIVE = true;
@@ -75,7 +76,7 @@ void EntryMenu::shadow_button()
 
         // Create a new shadow spritesheet
         // Do these need to be seperate sheets? These could be one sheet
-        startBackSheet = new SpriteSheet("Textures/MenuStartDark.png");
+        startBackSheet = new SpriteSheet("Textures/TestButton.png");
         SpriteInternals::activeSheets.push_back(startBackSheet);
 
         // Create a A sprite from the sprite sheet
@@ -87,6 +88,7 @@ void EntryMenu::shadow_button()
 
         // Move to front
         backInstance->setPosition(top_button_front);
+        backInstance->setScale(glm::vec3(2, 0.5, 0));
         first_pass = false;
 
         Load_side_button = true;
@@ -109,7 +111,7 @@ void EntryMenu::cursor_update(double xpos, double ypos)
         // update stored cursor location
         xposition = xpos;
         yposition = ypos;
-        if (collisions->check_collision(-0.5f, 0.5f, -1.5f, -0.5f, xpos, ypos) && !cursor_on_box) {
+        if (collisions->check_collision(-2.0f, 2.0f, -1.0f, -0.0f, xpos, ypos) && !cursor_on_box) {
             MainMenu->shadow_button();
             return_box_to_normal = true;
         } else {
@@ -125,6 +127,10 @@ void EntryMenu::cursor_click(int button)
 {
     // Left button
     if (button == 1) {
+        if (collisions->check_collision(-2.0f, 2.0f, -1.0f, -0.0f, xposition, yposition)) {
+            close_window = true;
+        }
+
     }
     // Right button
     else if (button == 2) {
