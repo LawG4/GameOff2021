@@ -18,13 +18,18 @@ bool vk::createOnScreenRenderpass()
 
     // So that the subpass knows the layouts of its render targets we supply it with a reference, in this case
     // the onscreen attachment is colour attachment at index 0 and we want to draw to it
-    VkAttachmentReference reference;
-    memset(&reference, 0, sizeof(VkAttachmentReference));
-    reference.attachment = 0;
-    reference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+    VkAttachmentReference attachRef{};
+    attachRef.attachment = 0;
+    attachRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+    // The depth attachment is at index 1
+    VkAttachmentReference depthRef{};
+    depthRef.attachment = 1;
+    depthRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
+    // Attach the references to the subpass description
+    subpass.pColorAttachments = &attachRef;
     subpass.colorAttachmentCount = 1;
-    subpass.pColorAttachments = &reference;
+    subpass.pDepthStencilAttachment = &depthRef;
 
     // Renderpasses are also responsible for transitioning images from layouts, and also what to do when the
     // image is loaded and stored. in this case we want to tell the renderpass how to transition the onscreen
@@ -47,28 +52,49 @@ bool vk::createOnScreenRenderpass()
     attachmentDesc.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
     attachmentDesc.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
-    // Finally hand this all over to the renderpass
-    VkRenderPassCreateInfo renderpass;
-    memset(&renderpass, 0, sizeof(VkRenderPassCreateInfo));
+    // Make an attachment description for the depthbuffer
+    VkAttachmentDescription depthDesc{};
+    depthDesc.format = VK_FORMAT_D32_SFLOAT;
+    depthDesc.samples = VK_SAMPLE_COUNT_1_BIT;
+    depthDesc.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    depthDesc.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    depthDesc.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    depthDesc.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    depthDesc.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    depthDesc.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+    // Attach the attachment descriptions over to the renderpass
+    VkRenderPassCreateInfo renderpass{};
     renderpass.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-    renderpass.attachmentCount = 1;
-    renderpass.pAttachments = &attachmentDesc;
+
+    VkAttachmentDescription attachments[2] = {attachmentDesc, depthDesc};
+    renderpass.attachmentCount = 2;
+    renderpass.pAttachments = attachments;
+
     renderpass.subpassCount = 1;
     renderpass.pSubpasses = &subpass;
 
-    // Tell the render pass that the colour attachment has an external dependency
-    // ie turning from presentation back into renderable
-    VkSubpassDependency dependency;
-    memset(&dependency, 0, sizeof(VkSubpassDependency));
+    // Tell the render pass that the colour attachments have an external dependency
+    // This is a dependency that comes from outside the subpasses : ie turning from presentation back into
+    // renderable.
+    // We're waiting on colour attachment and the depth attachment
+    VkSubpassDependency dependency{};
+
     // Dependency is coming from outside the renderpass
     dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
     dependency.dstSubpass = 0;
-    // We're transitioing the attachment from present to writable
+
+    // We're transitioing the colour attachment from present to writable. The depth buffer from depth testing
+    // to depth writing.
     dependency.srcAccessMask = 0;
-    dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+    dependency.dstAccessMask =
+      VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+
     // We want this transition to happen after the attachment has been displayed and before it gets written to
-    dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-    dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    dependency.srcStageMask =
+      VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
+    dependency.dstStageMask =
+      VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
 
     // Attach to render pass
     renderpass.dependencyCount = 1;
