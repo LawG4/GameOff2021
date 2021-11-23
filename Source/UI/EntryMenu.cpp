@@ -164,7 +164,7 @@ void EntryMenu::cursor_update(double xpos, double ypos)
 
 void EntryMenu::cursor_click(int button)
 {
-    // Left button
+    // Check if left cursor click happens over quit rectangle
     if (button == 0) {
         if (collisions->check_collision(-2.0f, 2.0f, 0.20f, 1.2f, xposition, yposition)) {
             close_window = true;
