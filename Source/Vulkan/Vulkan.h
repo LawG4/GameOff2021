@@ -23,12 +23,6 @@ bool initVulkan();
 /// <summary> Destorys all Vulkan objects </summary>
 void cleanupVulkan();
 
-namespace ProjectionMatrices
-{
-extern glm::mat4 perspective;
-extern glm::mat4 orthogonal;
-}  // namespace ProjectionMatrices
-
 namespace vk
 {
 /// <summary> The instance extensions that the user would like to enable and are supported</summary>
@@ -87,6 +81,9 @@ bool recreateSwapchain();
 /// <summary> Retrieves the onscreen renderpass </summary>
 /// <returns>True if successful</returns>
 bool createOnScreenRenderpass();
+
+/// <summary>Destorys the depth attachments </summary>
+void destroyDepthAttachments();
 
 /// <summary>Creates a framebuffer from the swapchain image views </summary>
 /// <returns>True if successful</returns>
