@@ -142,17 +142,18 @@ bool vk::createFramebuffer()
 
     createDepthAttachments();
 
-    VkFramebufferCreateInfo framebuffer;
-    memset(&framebuffer, 0, sizeof(VkFramebufferCreateInfo));
+    VkFramebufferCreateInfo framebuffer{};
     framebuffer.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-    framebuffer.attachmentCount = 1;
+    framebuffer.attachmentCount = 2;
     framebuffer.renderPass = vk::onscreenRenderPass;
     framebuffer.width = vk::swapchainExtent.width;
     framebuffer.height = vk::swapchainExtent.height;
     framebuffer.layers = 1;
 
     for (uint32_t i = 0; i < vk::swapLength; i++) {
-        framebuffer.pAttachments = &vk::swapchainImageViews.at(i);
+        // add all the attachments for the framebuffer in the correct order
+        VkImageView attachments[2] = {vk::swapchainImageViews[i], depthViews[i]};
+        framebuffer.pAttachments = attachments;
 
         if (vkCreateFramebuffer(vk::logicalDevice, &framebuffer, nullptr, &vk::swapchainFb.at(i)) !=
             VK_SUCCESS) {
