@@ -64,6 +64,10 @@ int main(int argc, char *argv[])
     uint32_t windowWidth = 720;
     uint32_t windowHeight = 400;
 
+    // Input vertex data
+    vertdimen[0] = 3.5f;
+    vertdimen[1] = 2.0f;
+
     // Used to set up cursor coordinate array
     bool settingsOverride = userSetting["Override_Default_Settings"];
     if (settingsOverride) {
