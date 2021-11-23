@@ -18,7 +18,7 @@ SpriteInstance::SpriteInstance(Sprite* sprite)
 {
     _sprite = sprite;
     _pos = glm::vec3(0, 0, 0);
-    _scale = glm::vec3(1.0, 1.0, 0.0);
+    _scale = glm::vec3(1.0, 1.0, 1.0);
     _rot = glm::vec3(0.0, 0.0, 0.0);
 
     _mvp = calculateMVP();
@@ -54,9 +54,9 @@ glm::mat4 SpriteInstance::calculateMVP()
 {
     glm::mat4 mat = glm::identity<glm::mat4>();
 
-    mat = glm::mat4(glm::quat(_rot));
-    mat = glm::scale(mat, _scale);
-    mat = glm::translate(mat, _pos);
+    mat = glm::mat4(glm::quat(_rot)) * mat;
+    mat = glm::scale(mat, _scale) * mat;
+    mat = glm::translate(mat, _pos) * mat;
     mat = Camera::getViewProjectionMatrix() * mat;
 
     return mat;
@@ -74,10 +74,14 @@ glm::mat4 UiSpriteInstance::calculateMVP()
     return mat;
 }
 
+/// <summary>Sets the position of this instance in the world space</summary>
+/// <param name="position">Z component is depth into the scene, must be between 0 and 1, lower number means
+/// closer to the camera</param>
 void SpriteInstance::setPosition(glm::vec3 position)
 {
     _mvpOutdated = true;
-    _pos = position;
+    // For some reason the z component needs to be inverted?
+    _pos = position * glm::vec3(1.0, 1.0, -1.0);
 }
 
 void SpriteInstance::setRotation(glm::vec3 rotation)
