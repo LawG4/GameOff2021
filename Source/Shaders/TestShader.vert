@@ -15,8 +15,6 @@ void main() {
     // Pass the vertex coordinates onto the fragment shader
     vTexCoord = inTexCoord;
 
-    gl_Position = ubo.model * vec4(inPosition, 1.0);
-    gl_Position.z = 0.0;
-    gl_Position.w = 1.0;
-    
+    // Pass on the vertex position over to the rasterizer
+    gl_Position = ubo.model * vec4(inPosition, 1.0);    
 }
