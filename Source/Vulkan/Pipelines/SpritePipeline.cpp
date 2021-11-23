@@ -76,6 +76,15 @@ void PipelineInternals::create2DPipeline()
         info.pMultisampleState = &PipelineInternals::Templates::multisample;
         info.pColorBlendState = &PipelineInternals::Templates::blend;
 
+        VkPipelineDepthStencilStateCreateInfo depthState{};
+        depthState.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+        depthState.stencilTestEnable = VK_FALSE;
+        depthState.depthTestEnable = VK_TRUE;
+        depthState.depthWriteEnable = VK_TRUE;
+        depthState.depthCompareOp = VK_COMPARE_OP_LESS;
+
+        info.pDepthStencilState = &depthState;
+
         vkCreateGraphicsPipelines(vk::logicalDevice, nullptr, 1, &info, nullptr, &SpriteInternals::pipeline);
     }
 }

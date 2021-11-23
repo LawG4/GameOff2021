@@ -59,7 +59,10 @@ void Camera::setPosition(glm::vec3 position)
 {
     // From the new position, set the new view matrix. Also tell the intenral structure that the view matrix
     // will need updating
+
+    // viewMatrix = glm::lookAt(position, (position + glm::vec3(0, 0, 1)), {0, 1, 0});
     viewMatrix = glm::translate(glm::identity<glm::mat4>(), -position);
+
     hasViewUpdated = true;
 
     // store the camera position

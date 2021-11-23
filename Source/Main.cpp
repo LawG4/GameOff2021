@@ -104,12 +104,18 @@ int main(int argc, char *argv[])
     // Mouse input button click data
     glfwSetMouseButtonCallback(window, mouse_button_callback);
 
-    // Input vertex data
-    vertdimen[0] = 3.5f;
-    vertdimen[1] = 2.0f;
-
     // Set camera position to the centre
     Camera::setPosition({0, 0, 0});
+
+    // Now load in another sprite sheet with transparency
+    SpriteSheet *grassHopper = new SpriteSheet("Textures/TempHopper.png");
+    SpriteInternals::activeSheets.push_back(grassHopper);
+    Sprite *hopper = new Sprite(grassHopper, {{0.0, 1.0}, {1.0, 1.0}, {1.0, 0.0}, {0.0, 0.0}});
+
+    SpriteInstance frontHopper = SpriteInstance(hopper);
+    frontHopper.setPosition({0.4, -1, 0.1});
+    SpriteInstance backHopper = SpriteInstance(hopper);
+    backHopper.setPosition({0.0, -1, 0.3});
 
     // Load newly declared values into MainMenu
     MainMenu->load_menu();
@@ -117,10 +123,6 @@ int main(int argc, char *argv[])
 
     // Paramater for swaying the camera back and forth
     float t = 0;
-
-    // A regular object that interacts with the camera
-    // SpriteInstance worldObject(MainMenu->startFront);
-    // worldObject.setPosition({0, 0, 0});
 
     // Enter into the windowing loop
     while (!glfwWindowShouldClose(window)) {
@@ -143,11 +145,8 @@ int main(int argc, char *argv[])
             }
         }
 
-        // worldObject.render();
-
-        // Camera::setPosition(glm::vec3(cos(t), 0, 0));
-        Camera::setPosition(glm::vec3(0, 1, 0));
-        t += 0.01f;
+        frontHopper.render();
+        backHopper.render();
 
         if (MainMenu->close_window == true) {
             glfwSetWindowShouldClose(window, true);
@@ -155,6 +154,10 @@ int main(int argc, char *argv[])
 
         vk::drawFrame();
     }
+
+    // Cleanup the grasshopper with transparency
+    delete hopper;
+    delete grassHopper;
 
     cleanUp();
 }

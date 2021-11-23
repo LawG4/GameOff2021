@@ -5,6 +5,7 @@
 \Contributors  : Lawrence G,
  *********************************************************************************************************/
 #include "Camera.h"
+#include "Memory.h"
 #include "Pipelines.h"
 #include "Vulkan.h"
 #include "Window.h"
@@ -23,12 +24,13 @@ std::vector<VkImageView> vk::swapchainImageViews;
 
 std::vector<VkFramebuffer> vk::swapchainFb;
 
-glm::mat4 ProjectionMatrices::perspective;
-glm::mat4 ProjectionMatrices::orthogonal;
-
 VkPresentModeKHR chooseSwapchainPresentMode();
 VkSurfaceFormatKHR chooseSwapchainFormat(std::vector<VkSurfaceFormatKHR>& formats);
 VkExtent2D chooseSwapchainExtent(VkSurfaceCapabilitiesKHR& capabilities);
+
+std::vector<VkImage> depthImages;
+std::vector<VkDeviceMemory> depthMemorys;
+std::vector<VkImageView> depthViews;
 
 bool vk::recreateSwapchain()
 {
@@ -43,6 +45,7 @@ bool vk::recreateSwapchain()
         vkDestroyFramebuffer(vk::logicalDevice, vk::swapchainFb[i], nullptr);
         vkDestroyImageView(vk::logicalDevice, vk::swapchainImageViews[i], nullptr);
     }
+    vk::destroyDepthAttachments();
 
     vk::destroyPipelines(false);
     vkDestroyRenderPass(vk::logicalDevice, vk::onscreenRenderPass, nullptr);
@@ -58,21 +61,99 @@ bool vk::recreateSwapchain()
     return true;
 }
 
+void createDepthAttachments()
+{
+    depthImages.resize(vk::swapLength);
+    depthViews.resize(vk::swapLength);
+    depthMemorys.resize(vk::swapLength);
+
+    // Just assume that depth 32 is always supported
+    VkFormat depthFormat = VK_FORMAT_D32_SFLOAT;
+
+    VkFormatProperties properties{};
+    vkGetPhysicalDeviceFormatProperties(vk::physicalDevice, depthFormat, &properties);
+
+    // Create the underlying depth images
+    {
+        VkImageCreateInfo info{};
+        info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+        info.format = depthFormat;
+        info.samples = VK_SAMPLE_COUNT_1_BIT;
+
+        info.imageType = VK_IMAGE_TYPE_2D;
+        info.extent.width = vk::swapchainExtent.width;
+        info.extent.height = vk::swapchainExtent.height;
+        info.extent.depth = 1;
+
+        info.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        info.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+        info.mipLevels = 1;
+        info.arrayLayers = 1;
+
+        for (uint32_t i = 0; i < vk::swapLength; i++) {
+            vkCreateImage(vk::logicalDevice, &info, nullptr, &depthImages[i]);
+
+            // attach some memory to this image
+            VkMemoryAllocateInfo info{};
+            info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+
+            VkMemoryRequirements req;
+            vkGetImageMemoryRequirements(vk::logicalDevice, depthImages[i], &req);
+            info.allocationSize = req.size;
+            info.memoryTypeIndex =
+              vk::findMemoryIndex(req.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
+            vkAllocateMemory(vk::logicalDevice, &info, nullptr, &depthMemorys[i]);
+            vkBindImageMemory(vk::logicalDevice, depthImages[i], depthMemorys[i], 0);
+        }
+    }
+
+    // Create the image view
+    {
+        VkImageViewCreateInfo info{};
+        info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+        info.format = depthFormat;
+        info.viewType = VK_IMAGE_VIEW_TYPE_2D;
+
+        info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+        info.subresourceRange.layerCount = 1;
+        info.subresourceRange.levelCount = 1;
+
+        for (uint32_t i = 0; i < vk::swapLength; i++) {
+            info.image = depthImages[i];
+
+            vkCreateImageView(vk::logicalDevice, &info, nullptr, &depthViews[i]);
+        }
+    }
+}
+
+void vk::destroyDepthAttachments()
+{
+    for (uint32_t i = 0; i < vk::swapLength; i++) {
+        vkDestroyImageView(vk::logicalDevice, depthViews[i], nullptr);
+        vkFreeMemory(vk::logicalDevice, depthMemorys[i], nullptr);
+        vkDestroyImage(vk::logicalDevice, depthImages[i], nullptr);
+    }
+}
+
 bool vk::createFramebuffer()
 {
     vk::swapchainFb.resize(vk::swapLength);
 
-    VkFramebufferCreateInfo framebuffer;
-    memset(&framebuffer, 0, sizeof(VkFramebufferCreateInfo));
+    createDepthAttachments();
+
+    VkFramebufferCreateInfo framebuffer{};
     framebuffer.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-    framebuffer.attachmentCount = 1;
+    framebuffer.attachmentCount = 2;
     framebuffer.renderPass = vk::onscreenRenderPass;
     framebuffer.width = vk::swapchainExtent.width;
     framebuffer.height = vk::swapchainExtent.height;
     framebuffer.layers = 1;
 
     for (uint32_t i = 0; i < vk::swapLength; i++) {
-        framebuffer.pAttachments = &vk::swapchainImageViews.at(i);
+        // add all the attachments for the framebuffer in the correct order
+        VkImageView attachments[2] = {vk::swapchainImageViews[i], depthViews[i]};
+        framebuffer.pAttachments = attachments;
 
         if (vkCreateFramebuffer(vk::logicalDevice, &framebuffer, nullptr, &vk::swapchainFb.at(i)) !=
             VK_SUCCESS) {

@@ -124,7 +124,7 @@ void cleanupVulkan()
     }
 
     vkDestroyRenderPass(vk::logicalDevice, vk::onscreenRenderPass, nullptr);
-
+    vk::destroyDepthAttachments();
     for (VkImageView& view : vk::swapchainImageViews) {
         vkDestroyImageView(vk::logicalDevice, view, nullptr);
     }
