@@ -43,10 +43,10 @@ SpriteInstance::~SpriteInstance() {}
 
 glm::mat4 SpriteInstance::getMvp()
 {
-    if (_mvpOutdated || Camera::getHasCameraUpdated()) {
-        _mvp = calculateMVP();
-        _mvpOutdated = false;
-    }
+    // if (_mvpOutdated || Camera::getHasCameraUpdated()) {
+    _mvp = calculateMVP();
+    _mvpOutdated = false;
+    //}
     return _mvp;
 }
 
