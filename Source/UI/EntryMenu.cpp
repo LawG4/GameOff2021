@@ -16,17 +16,19 @@
 // Constructor
 EntryMenu::EntryMenu()
 {
-    // Colour
-    colour = {{5.0f, 1.0f, 0.0f}, {5.0f, 1.0f, 0.0f}, {5.0f, 1.0f, 0.0f}};
-
+    // Variable to check if menu needs to be rendered
     IS_MENU_ACTIVE = false;
+    // Cursor variables
     cursor_on_box = false;
     return_box_to_normal = false;
 
     // to check if shadow button has already been ran
-    first_pass = true;
+    first_pass_start = true;
+    first_pass_quit = true;
 
-    Load_side_button = false;
+    // set logic for button shadow rendering
+    render_start_shadow = false;
+    render_quit_shadow = false;
 }
 
 // Destructor
@@ -34,31 +36,44 @@ EntryMenu::~EntryMenu()
 {
     // delete the sprite instance
     // Before we delete an object first we have to ensure that it's not null
-    if (frontInstance) delete frontInstance;
-    if (backInstance) delete backInstance;
+    if (normal_start_button_instance) delete normal_start_button_instance;
+    if (depp_start_button_instance) delete depp_start_button_instance;
+
+    if (normal_quit_button_instance) delete normal_quit_button_instance;
+    if (depp_quit_button_instance) delete depp_quit_button_instance;
 
     // Now delete the sprites themselves
-    if (startFront) delete startFront;
-    if (startBack) delete startBack;
+    if (normal_start_button) delete normal_start_button;
+    if (depp_start_button) delete depp_start_button;
+
+    if (normal_quit_button) delete normal_quit_button;
+    if (depp_quit_button) delete depp_quit_button;
 
     // Delete the sprite sheets
-    if (startFrontSheet) delete startFrontSheet;
-    if (startBackSheet) delete startBackSheet;
+    if (button_sprites) delete button_sprites;
 }
 
 // Generate triangles
-void EntryMenu::load_menu(uint32_t ww, uint32_t wh)
+void EntryMenu::load_menu()
 {
     // Create a spritesheet
-    startFrontSheet = new SpriteSheet("Textures/MenuStart.png");
-    SpriteInternals::activeSheets.push_back(startFrontSheet);
+    button_sprites = new SpriteSheet("Textures/Button_sprite.png");
+    SpriteInternals::activeSheets.push_back(button_sprites);
 
-    // Create a sprite, pinpointing the texture coordinates of the sprite on the sprite sheets
-    const std::vector<glm::vec2> tex = {{0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}, {0.0f, 0.0f}};
-    startFront = new Sprite(startFrontSheet, tex);
+    // Create sprite's, pinpointing the texture coordinates of the sprite on the sprite sheets
+    normal_start_button = new Sprite(button_sprites, NS_tex);
+    normal_quit_button = new Sprite(button_sprites, NQ_tex);
 
-    // Create an instance of the sprite
-    frontInstance = new UiSpriteInstance(startFront);
+    // Create an instance of the sprites
+    normal_start_button_instance = new UiSpriteInstance(normal_start_button);
+    normal_quit_button_instance = new UiSpriteInstance(normal_quit_button);
+
+    // Move to correct location on screen and increase size
+    normal_start_button_instance->setPosition(top_button_front);
+    normal_start_button_instance->setScale(glm::vec3(2, 0.5, 0));
+
+    normal_quit_button_instance->setPosition(bottom_button_front);
+    normal_quit_button_instance->setScale(glm::vec3(2, 0.5, 0));
 
     // change is menu active to true
     IS_MENU_ACTIVE = true;
@@ -67,42 +82,56 @@ void EntryMenu::load_menu(uint32_t ww, uint32_t wh)
 // Update button size and colour for when hovered over
 void EntryMenu::shadow_button()
 {
-    if (first_pass) {
-        Log.info("cursor in box");
+    if (start_button) {
+        if (first_pass_start) {
+            // Create a A sprite from the sprite sheet
+            depp_start_button = new Sprite(button_sprites, DS_tex);
 
-        // Create a new shadow spritesheet
-        // Do these need to be seperate sheets? These could be one sheet
-        startBackSheet = new SpriteSheet("Textures/MenuStartDark.png");
-        SpriteInternals::activeSheets.push_back(startBackSheet);
+            // Create an instance of the new sprite
+            depp_start_button_instance = new UiSpriteInstance(depp_start_button);
 
-        // Create a A sprite from the sprite sheet
-        const std::vector<glm::vec2> tex2 = {{0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}, {0.0f, 0.0f}};
-        startBack = new Sprite(startBackSheet, tex2);
+            // Move to front
+            depp_start_button_instance->setPosition(top_button_front);
+            depp_start_button_instance->setScale(glm::vec3(2, 0.5, 0));
 
-        // Create an instance of the new sprite
-        backInstance = new UiSpriteInstance(startBack);
+            first_pass_start = false;
 
-        // Move to front
-        backInstance->setPosition(glm::vec3(0.0f, 0.0f, 0.5f));
-        first_pass = false;
+            render_start_shadow = true;
+        } else {
+            depp_start_button_instance->setPosition(top_button_front);
+            render_start_shadow = true;
+        }
+    } else {
+        if (first_pass_quit) {
+            // Create a A sprite from the sprite sheet
+            depp_quit_button = new Sprite(button_sprites, DQ_tex);
 
-        Load_side_button = true;
+            // Create an instance of the new sprite
+            depp_quit_button_instance = new UiSpriteInstance(depp_quit_button);
+
+            // Move to front
+            depp_quit_button_instance->setPosition(bottom_button_front);
+            depp_quit_button_instance->setScale(glm::vec3(2, 0.5, 0));
+
+            first_pass_quit = false;
+
+            render_quit_shadow = true;
+
+        } else {
+            depp_quit_button_instance->setPosition(bottom_button_front);
+            render_quit_shadow = true;
+        }
     }
 }
 
 void EntryMenu::return_to_normal()
 {
-    /*
-    smallTriangle->isActive = false;
-    smallTriangle2->isActive = false;
-    Triangle->isActive = true;
-    Triangle2->isActive = true;
-
-    smallTriangle->scheduleUBOUpdate();
-    smallTriangle2->scheduleUBOUpdate();
-    Triangle->scheduleUBOUpdate();
-    Triangle2->scheduleUBOUpdate();
-    */
+    // Turn render if statements in main windowing loop to false
+    if (start_button) {
+        render_start_shadow = false;
+    } else {
+        render_quit_shadow = false;
+    }
 }
 
 void EntryMenu::cursor_update(double xpos, double ypos)
@@ -111,10 +140,20 @@ void EntryMenu::cursor_update(double xpos, double ypos)
         // update stored cursor location
         xposition = xpos;
         yposition = ypos;
-        if (collisions->check_collision(-0.5f, 0.5f, -0.5f, 0.5f, xpos, ypos) && !cursor_on_box) {
+        // Check collisions for start game box
+        if (collisions->check_collision(-2.0f, 2.0f, -1.20f, -0.20f, xpos, ypos) && !cursor_on_box) {
+            start_button = true;
             MainMenu->shadow_button();
             return_box_to_normal = true;
-        } else {
+        }
+        // Check collisions for quit game box
+        else if (collisions->check_collision(-2.0f, 2.0f, 0.20f, 1.2f, xpos, ypos) && !cursor_on_box) {
+            start_button = false;
+            MainMenu->shadow_button();
+            return_box_to_normal = true;
+        }
+        // If cursor on none then return everything to normal
+        else {
             if (return_box_to_normal) {
                 MainMenu->return_to_normal();
                 cursor_on_box = false;
@@ -126,10 +165,14 @@ void EntryMenu::cursor_update(double xpos, double ypos)
 void EntryMenu::cursor_click(int button)
 {
     // Left button
-    if (button == 1) {
+    if (button == 0) {
+        if (collisions->check_collision(-2.0f, 2.0f, 0.20f, 1.2f, xposition, yposition)) {
+            close_window = true;
+        }
+
     }
     // Right button
-    else if (button == 2) {
+    else if (button == 1) {
     }
 }
 

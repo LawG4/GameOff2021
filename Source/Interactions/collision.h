@@ -15,6 +15,8 @@ class collision_detection
    public:
     // methods
     void intialise_object(uint32_t ww, uint32_t wh);
+
+    // check_collision(Left X, Right X, Top Y, Bottom Y)
     bool check_collision(float x1_vertex, float x2_vertex, float y1_vertex, float y2_vertex, double xpos,
                          double ypos);
 

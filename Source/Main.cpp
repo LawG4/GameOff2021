@@ -111,33 +111,46 @@ int main(int argc, char *argv[])
     SpriteSheet *grassHopper = new SpriteSheet("Textures/TempHopper.png");
     SpriteInternals::activeSheets.push_back(grassHopper);
     Sprite *hopper = new Sprite(grassHopper, {{0.0, 1.0}, {1.0, 1.0}, {1.0, 0.0}, {0.0, 0.0}});
-    SpriteInstance hopperInstance = SpriteInstance(hopper);
-    hopperInstance.setPosition({0, -1, 0.1});
+
+    SpriteInstance frontHopper = SpriteInstance(hopper);
+    frontHopper.setPosition({0.4, -1, 0.1});
+    SpriteInstance backHopper = SpriteInstance(hopper);
+    backHopper.setPosition({0.0, -1, 0.3});
 
     // Load newly declared values into MainMenu
-    MainMenu->load_menu(windowWidth, windowHeight);
+    MainMenu->load_menu();
     collisions->intialise_object(windowWidth, windowHeight);
 
     // Paramater for swaying the camera back and forth
     float t = 0;
 
-    // A regular object that interacts with the camera
-    SpriteInstance worldObject(MainMenu->startFront);
-    worldObject.setPosition({0, -1, 0.2});
-
     // Enter into the windowing loop
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
 
-        if (MainMenu->IS_MENU_ACTIVE) {  // Check if menu is active, if it render its frames
-            MainMenu->frontInstance->render();
-            if (MainMenu->Load_side_button) MainMenu->backInstance->render();
-        }
-        hopperInstance.render();
-        worldObject.render();
+        if (MainMenu->IS_MENU_ACTIVE) {
+            // Check if menu is active, if it, render buttons
 
-        Camera::setPosition(glm::vec3(cos(t), 0, 0));
-        t += 0.01f;
+            // Start buttons
+            if (MainMenu->render_start_shadow) {
+                MainMenu->depp_start_button_instance->render();
+            } else {
+                MainMenu->normal_start_button_instance->render();
+            }
+            // Quit buttons
+            if (MainMenu->render_quit_shadow) {
+                MainMenu->depp_quit_button_instance->render();
+            } else {
+                MainMenu->normal_quit_button_instance->render();
+            }
+        }
+
+        frontHopper.render();
+        backHopper.render();
+
+        if (MainMenu->close_window == true) {
+            glfwSetWindowShouldClose(window, true);
+        }
 
         vk::drawFrame();
     }
