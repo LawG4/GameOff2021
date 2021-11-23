@@ -44,9 +44,9 @@ void vk::prepareCommandBuffer(uint32_t swapIndex)
         info.renderArea.extent = vk::swapchainExtent;
         info.renderArea.offset = {0, 0};
 
-        VkClearValue clear = {0.0094117f, 0.00078431f, 0.00392156f, 1.0f};
-        info.pClearValues = &clear;
-        info.clearValueCount = 1;
+        VkClearValue clear[2] = {{0.0094117f, 0.00078431f, 0.00392156f, 1.0f}, {1.0f, 0.0f}};
+        info.pClearValues = clear;
+        info.clearValueCount = 2;
 
         vkCmdBeginRenderPass(vk::cmdBuffers[swapIndex], &info, VK_SUBPASS_CONTENTS_INLINE);
     }
