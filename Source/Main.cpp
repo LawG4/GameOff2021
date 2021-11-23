@@ -119,19 +119,28 @@ int main(int argc, char *argv[])
     float t = 0;
 
     // A regular object that interacts with the camera
-    SpriteInstance worldObject(MainMenu->startFront);
-    worldObject.setPosition({0, 0, 0});
+    // SpriteInstance worldObject(MainMenu->startFront);
+    // worldObject.setPosition({0, 0, 0});
 
     // Enter into the windowing loop
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
 
-        if (MainMenu->Load_side_button) {  // Check if shadow sprite is ready to be rendered
-            MainMenu->backInstance->render();
-        }
-        if (MainMenu->IS_MENU_ACTIVE) {  // Check if menu is active, if it, render its frames
-            // MainMenu->frontInstance->setPosition({0, 0, 0});
-            MainMenu->frontInstance->render();
+        if (MainMenu->IS_MENU_ACTIVE) {
+            // Check if menu is active, if it, render buttons
+
+            // Start buttons
+            if (MainMenu->render_start_shadow) {
+                MainMenu->depp_start_button_instance->render();
+            } else {
+                MainMenu->normal_start_button_instance->render();
+            }
+            // Quit buttons
+            if (MainMenu->render_quit_shadow) {
+                MainMenu->depp_quit_button_instance->render();
+            } else {
+                MainMenu->normal_quit_button_instance->render();
+            }
         }
 
         // worldObject.render();
