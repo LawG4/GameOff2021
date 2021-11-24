@@ -175,14 +175,12 @@ void EntryMenu::cursor_click(int button)
         // If quit box on main menu clicked on
         if (collisions->check_collision(-2.0f, 2.0f, 0.20f, 1.2f, xposition, yposition) && !pause_menu) {
             close_window = true;
-            Log.error("exit pressed");
         }
 
         // Check if Start game box has been clicked, change IS_MENU_ACTIVE to false to stop rendering this
         // menu and intialise GameObject
         else if (collisions->check_collision(-2.0f, 2.0f, -1.20f, -0.20f, xposition, yposition) &&
                  !pause_menu) {
-            Log.error("start pressed");
             GameObject->Initialise();
             IS_MENU_ACTIVE = false;
         }
@@ -190,10 +188,17 @@ void EntryMenu::cursor_click(int button)
         // If pause menu open and quit button clicked return to main menu
         else if (collisions->check_collision(-2.0f, 2.0f, 0.20f, 1.2f, xposition, yposition) && pause_menu) {
             IS_MENU_ACTIVE = false;
+            return_to_normal();
             MainMenu->IS_MENU_ACTIVE = true;
             MainMenu->return_to_normal();
             GameObject->start_game = false;
-            Log.error("Return to menu pressed");
+        }
+
+        // If resume button clicked
+        else if (collisions->check_collision(-2.0f, 2.0f, -1.20f, -0.20f, xposition, yposition) &&
+                 pause_menu) {
+            GameObject->Initialise();
+            IS_MENU_ACTIVE = false;
         }
 
     }
