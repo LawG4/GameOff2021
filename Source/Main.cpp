@@ -16,6 +16,7 @@
 #include "collision.h"
 
 #include "Sprites.h"
+#include "Timer.h"
 
 #include <fstream>
 #include <iostream>
@@ -130,6 +131,10 @@ int main(int argc, char *argv[])
 
     // Enter into the windowing loop
     while (!glfwWindowShouldClose(window)) {
+        // Start this frames clock, so we can know how long it took
+        Time::startFrameTime();
+
+        // Poll GLFW for user events so they can be processed
         glfwPollEvents();
 
         if (MainMenu->IS_MENU_ACTIVE) {
@@ -149,14 +154,16 @@ int main(int argc, char *argv[])
             }
         }
 
-        frontHopper.render();
-        backHopper.render();
-
+        // If the user has asked the window to close through the Ui then schedule window destruction
         if (MainMenu->close_window == true) {
             glfwSetWindowShouldClose(window, true);
         }
 
+        // Use Vulkan to render the frame
         vk::drawFrame();
+
+        // Frame has finished so end the clock so we know how long it took
+        Time::EndFrameTime();
     }
 
     // Cleanup the grasshopper with transparency
