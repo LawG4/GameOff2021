@@ -13,9 +13,16 @@
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
     MainMenu->cursor_update(xpos, ypos);
+    PauseMenu->cursor_update(xpos, ypos);
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
-    MainMenu->cursor_click(button);
+    if (action == GLFW_PRESS) {
+        if (MainMenu->IS_MENU_ACTIVE) {
+            MainMenu->cursor_click(button);
+        } else if (PauseMenu->IS_MENU_ACTIVE) {
+            PauseMenu->cursor_click(button);
+        }
+    }
 }

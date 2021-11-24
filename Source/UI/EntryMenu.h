@@ -1,7 +1,7 @@
 /*!********************************************************************************************************
 \File          : EntryMenu.h
 \Copyright     : GPL-3.0 License
-\Brief         : Creation of main menu
+\Brief         : Creation of entry menu when game starts and when game is paused
 \Contributors  : Freddie M, Lawrence
  *********************************************************************************************************/
 #pragma once
@@ -14,8 +14,8 @@ class EntryMenu
    public:
     bool first_pass_start;
     bool first_pass_quit;
-    bool close_window = false;
     bool start_button;
+    bool pause_menu;
 
     bool render_start_shadow;
     bool render_quit_shadow;
@@ -63,19 +63,24 @@ class EntryMenu
     // Destructor
     ~EntryMenu();
 
-    // Render primary rectangle
-    void load_menu();
+    // Enter 1 for main menu, 2 for pause initialisation
+    void load_menu(int menuType);
     // Ran each time cursor pos updated
     void cursor_update(double xpos, double ypos);
     // Ran each time cursor button pressed
     void cursor_click(int button);
-    // Convert primary rectangle to mini ones
+    // Convert render dark version of buttons
     void shadow_button();
-    // Return mini rectangles to large ones
+    // Return to normal shade button
     void return_to_normal();
 };
 
 extern EntryMenu* MainMenu;
 
+extern EntryMenu* PauseMenu;
+
 // Global vertdimen (vertex dimension) array to hold max vertex data
 extern float vertdimen[2];
+
+// Global variable to close menu
+extern bool close_window;
