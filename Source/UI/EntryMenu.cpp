@@ -1,7 +1,7 @@
 /*!********************************************************************************************************
 \File          : EntryMenu.cpp
 \Copyright     : GPL-3.0 License
-\Brief         : Creation of main menu
+\Brief         : Creation of entry menu when game starts and when game is paused
 \Contributors  : Freddie M, Lawrence G
  *********************************************************************************************************/
 
@@ -54,10 +54,19 @@ EntryMenu::~EntryMenu()
 }
 
 // Generate triangles
-void EntryMenu::load_menu()
+void EntryMenu::load_menu(int menuType)
 {
     // Create a spritesheet
-    button_sprites = new SpriteSheet("Textures/Button_sprite.png");
+    // 1 for Nornmal menu texture buttons
+    if (menuType == 1) {
+        button_sprites = new SpriteSheet("Textures/Button_sprite.png");
+        pause_menu = false;
+    }
+    // 2 for pause menu button textures
+    else if (menuType == 2) {
+        button_sprites = new SpriteSheet("Textures/Button_sprite.png");
+        pause_menu = true;
+    }
     SpriteInternals::activeSheets.push_back(button_sprites);
 
     // Create sprite's, pinpointing the texture coordinates of the sprite on the sprite sheets
@@ -169,6 +178,9 @@ void EntryMenu::cursor_click(int button)
         if (collisions->check_collision(-2.0f, 2.0f, 0.20f, 1.2f, xposition, yposition)) {
             close_window = true;
         }
+        if (collisions->check_collision(-2.0f, 2.0f, -1.20f, -0.20f, xposition, yposition)) {
+            start_game = true;
+        }
 
     }
     // Right button
@@ -181,3 +193,6 @@ float vertdimen[2];
 
 // Initialise MainMenu object
 EntryMenu *MainMenu = new EntryMenu;
+
+// Initialise PauseMenu object
+EntryMenu *PauseMenu = new EntryMenu;

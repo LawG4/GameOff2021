@@ -121,8 +121,9 @@ int main(int argc, char *argv[])
     SpriteInstance backHopper = SpriteInstance(hopper);
     backHopper.setPosition({0.0, -1, 0.3});
 
-    // Load newly declared values into MainMenu
-    MainMenu->load_menu();
+    // Load newly declared values into MainMenu, enter 1 for main menu, 2 for pause
+    MainMenu->load_menu(1);
+    PauseMenu->load_menu(2);
     collisions->intialise_object(windowWidth, windowHeight);
 
     // Paramater for swaying the camera back and forth
@@ -152,7 +153,8 @@ int main(int argc, char *argv[])
         frontHopper.render();
         backHopper.render();
 
-        if (MainMenu->close_window == true) {
+        // Global variable to check if game should close
+        if (close_window == true) {
             glfwSetWindowShouldClose(window, true);
         }
 
