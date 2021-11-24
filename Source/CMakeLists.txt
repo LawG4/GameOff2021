@@ -9,6 +9,7 @@ set(COMPONENTS
 	Model
 	UI
 	Camera
+	Timing
 )
 
 foreach(directory ${COMPONENTS})
