@@ -25,6 +25,8 @@
 /// <summary> Destory everything </summary>
 void cleanUp()
 {
+    Gameplay::cleanup();
+
     delete MainMenu;
     delete PauseMenu;
 
