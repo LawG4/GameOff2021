@@ -114,16 +114,6 @@ int main(int argc, char *argv[])
     // Set camera position to the centre
     Camera::setPosition({0, 0, 0});
 
-    // Now load in another sprite sheet with transparency
-    SpriteSheet *grassHopper = new SpriteSheet("Textures/TempHopper.png");
-    SpriteInternals::activeSheets.push_back(grassHopper);
-    Sprite *hopper = new Sprite(grassHopper, {{0.0, 1.0}, {1.0, 1.0}, {1.0, 0.0}, {0.0, 0.0}});
-
-    SpriteInstance frontHopper = SpriteInstance(hopper);
-    frontHopper.setPosition({0.4, -1, 0.1});
-    SpriteInstance backHopper = SpriteInstance(hopper);
-    backHopper.setPosition({0.0, -1, 0.3});
-
     // Load MainMenu, enter 1 for main menu, 2 for pause
     MainMenu->load_menu(1);
     PauseMenu->load_menu(2);
@@ -131,9 +121,6 @@ int main(int argc, char *argv[])
 
     // Run MainMenu first
     MainMenu->IS_MENU_ACTIVE = true;
-
-    // Paramater for swaying the camera back and forth
-    float t = 0;
 
     // Enter into the windowing loop
     while (!glfwWindowShouldClose(window)) {
@@ -173,12 +160,6 @@ int main(int argc, char *argv[])
                 PauseMenu->normal_quit_button_instance->render();
             }
         }
-        // If GameObject variable start_game true
-        if (GameObject->start_game) {
-            frontHopper.render();
-            backHopper.render();
-        }
-
 
         // If the user has asked the window to close through the Ui then schedule window destruction
         if (close_window == true) {
@@ -191,8 +172,9 @@ int main(int argc, char *argv[])
             Gameplay::playFrame(Time::getDetlaTime());
         } else {
             // Check the main menu to see if the initalisation has been clicked
-            if (MainMenu->start_button) {
+            if (GameObject->start_game) {
                 Log.info("Starting Game");
+                Gameplay::initialise();
             }
         }
 
@@ -202,10 +184,6 @@ int main(int argc, char *argv[])
         // Frame has finished so end the clock so we know how long it took
         Time::EndFrameTime();
     }
-
-    // Cleanup the grasshopper with transparency
-    delete hopper;
-    delete grassHopper;
 
     cleanUp();
 }
