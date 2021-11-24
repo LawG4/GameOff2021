@@ -14,7 +14,6 @@ class EntryMenu
    public:
     bool first_pass_start;
     bool first_pass_quit;
-    bool close_window = false;
     bool start_button;
     bool pause_menu;
 
@@ -84,4 +83,4 @@ extern EntryMenu* PauseMenu;
 extern float vertdimen[2];
 
 // Global variable to close menu
-bool close_window = false;
+extern bool close_window;

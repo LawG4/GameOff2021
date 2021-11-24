@@ -11,8 +11,8 @@
 #include "Camera.h"
 #include "Cursor_input.h"
 #include "EntryMenu.h"
+#include "Game_object.h"
 #include "Keyboard_input.h"
-#include "Player_object.h"
 #include "collision.h"
 
 #include "Sprites.h"
@@ -24,6 +24,7 @@
 void cleanUp()
 {
     delete MainMenu;
+    delete PauseMenu;
 
     // First destroy Vulkan
     cleanupVulkan();
@@ -121,10 +122,13 @@ int main(int argc, char *argv[])
     SpriteInstance backHopper = SpriteInstance(hopper);
     backHopper.setPosition({0.0, -1, 0.3});
 
-    // Load newly declared values into MainMenu, enter 1 for main menu, 2 for pause
+    // Load MainMenu, enter 1 for main menu, 2 for pause
     MainMenu->load_menu(1);
     PauseMenu->load_menu(2);
     collisions->intialise_object(windowWidth, windowHeight);
+
+    // Run MainMenu first
+    MainMenu->IS_MENU_ACTIVE = true;
 
     // Paramater for swaying the camera back and forth
     float t = 0;
@@ -133,9 +137,8 @@ int main(int argc, char *argv[])
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
 
+        // Check if menu is active, if it, render buttons
         if (MainMenu->IS_MENU_ACTIVE) {
-            // Check if menu is active, if it, render buttons
-
             // Start buttons
             if (MainMenu->render_start_shadow) {
                 MainMenu->depp_start_button_instance->render();
@@ -149,9 +152,26 @@ int main(int argc, char *argv[])
                 MainMenu->normal_quit_button_instance->render();
             }
         }
-
-        frontHopper.render();
-        backHopper.render();
+        // Same block of if's as above but for pause screen
+        if (PauseMenu->IS_MENU_ACTIVE) {
+            // Start buttons
+            if (PauseMenu->render_start_shadow) {
+                PauseMenu->depp_start_button_instance->render();
+            } else {
+                PauseMenu->normal_start_button_instance->render();
+            }
+            // Quit buttons
+            if (PauseMenu->render_quit_shadow) {
+                PauseMenu->depp_quit_button_instance->render();
+            } else {
+                PauseMenu->normal_quit_button_instance->render();
+            }
+        }
+        // If GameObject variable start_game true
+        if (GameObject->start_game) {
+            frontHopper.render();
+            backHopper.render();
+        }
 
         // Global variable to check if game should close
         if (close_window == true) {

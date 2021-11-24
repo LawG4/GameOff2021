@@ -14,6 +14,7 @@ set(TEXTURE_LIST
 	TestButton.png
 	TestButton2.png
 	Button_Sprite.png
+	Pause_Button_Sprite.png
 )
 
 # For each texture listed add a custom command that copies it to the binary directory

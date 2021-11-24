@@ -11,7 +11,7 @@
 // GLFW inclusion before vk headers causes error with vk
 #include <GLFW/glfw3.h>
 #include "EntryMenu.h"
-#include "Player_object.h"
+#include "Game_object.h"
 
 // Keyboard input function
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
