@@ -1,7 +1,7 @@
 /*!********************************************************************************************************
-\File          : Player_object.h
+\File          : Game_object.h
 \Copyright     : GPL-3.0 License
-\Brief         : Define player object
+\Brief         : Define player object and game object
 \Contributors  : Freddie M,
  *********************************************************************************************************/
 #pragma once
@@ -19,3 +19,18 @@ class player
 };
 
 extern player* player_class;
+
+// Game object loaded when game starts
+class Game_object
+{
+   public:
+    // Methods
+    Game_object();
+    ~Game_object();
+    void Initialise();
+
+    // Variables
+    bool start_game;
+};
+
+extern Game_object* GameObject;

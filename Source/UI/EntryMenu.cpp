@@ -1,7 +1,7 @@
 /*!********************************************************************************************************
 \File          : EntryMenu.cpp
 \Copyright     : GPL-3.0 License
-\Brief         : Creation of main menu
+\Brief         : Creation of entry menu when game starts and when game is paused
 \Contributors  : Freddie M, Lawrence G
  *********************************************************************************************************/
 
@@ -10,7 +10,7 @@
 
 #include "Cursor_input.h"
 #include "EntryMenu.h"
-#include "Player_object.h"
+#include "Game_object.h"
 #include "collision.h"
 
 // Constructor
@@ -54,10 +54,19 @@ EntryMenu::~EntryMenu()
 }
 
 // Generate triangles
-void EntryMenu::load_menu()
+void EntryMenu::load_menu(int menuType)
 {
     // Create a spritesheet
-    button_sprites = new SpriteSheet("Textures/Button_sprite.png");
+    // 1 for Nornmal menu texture buttons
+    if (menuType == 1) {
+        button_sprites = new SpriteSheet("Textures/Button_sprite.png");
+        pause_menu = false;
+    }
+    // 2 for pause menu button textures
+    else if (menuType == 2) {
+        button_sprites = new SpriteSheet("Textures/Pause_Button_sprite.png");
+        pause_menu = true;
+    }
     SpriteInternals::activeSheets.push_back(button_sprites);
 
     // Create sprite's, pinpointing the texture coordinates of the sprite on the sprite sheets
@@ -74,9 +83,6 @@ void EntryMenu::load_menu()
 
     normal_quit_button_instance->setPosition(bottom_button_front);
     normal_quit_button_instance->setScale(glm::vec3(2, 0.5, 0));
-
-    // change is menu active to true
-    IS_MENU_ACTIVE = true;
 }
 
 // Update button size and colour for when hovered over
@@ -143,19 +149,19 @@ void EntryMenu::cursor_update(double xpos, double ypos)
         // Check collisions for start game box
         if (collisions->check_collision(-2.0f, 2.0f, -1.20f, -0.20f, xpos, ypos) && !cursor_on_box) {
             start_button = true;
-            MainMenu->shadow_button();
+            shadow_button();
             return_box_to_normal = true;
         }
         // Check collisions for quit game box
         else if (collisions->check_collision(-2.0f, 2.0f, 0.20f, 1.2f, xpos, ypos) && !cursor_on_box) {
             start_button = false;
-            MainMenu->shadow_button();
+            shadow_button();
             return_box_to_normal = true;
         }
         // If cursor on none then return everything to normal
         else {
             if (return_box_to_normal) {
-                MainMenu->return_to_normal();
+                return_to_normal();
                 cursor_on_box = false;
             }
         }
@@ -164,10 +170,35 @@ void EntryMenu::cursor_update(double xpos, double ypos)
 
 void EntryMenu::cursor_click(int button)
 {
-    // Check if left cursor click happens over quit rectangle
+    // Check collisions for when click happens
     if (button == 0) {
-        if (collisions->check_collision(-2.0f, 2.0f, 0.20f, 1.2f, xposition, yposition)) {
+        // If quit box on main menu clicked on
+        if (collisions->check_collision(-2.0f, 2.0f, 0.20f, 1.2f, xposition, yposition) && !pause_menu) {
             close_window = true;
+        }
+
+        // Check if Start game box has been clicked, change IS_MENU_ACTIVE to false to stop rendering this
+        // menu and intialise GameObject
+        else if (collisions->check_collision(-2.0f, 2.0f, -1.20f, -0.20f, xposition, yposition) &&
+                 !pause_menu) {
+            GameObject->Initialise();
+            IS_MENU_ACTIVE = false;
+        }
+
+        // If pause menu open and quit button clicked return to main menu
+        else if (collisions->check_collision(-2.0f, 2.0f, 0.20f, 1.2f, xposition, yposition) && pause_menu) {
+            IS_MENU_ACTIVE = false;
+            return_to_normal();
+            MainMenu->IS_MENU_ACTIVE = true;
+            MainMenu->return_to_normal();
+            GameObject->start_game = false;
+        }
+
+        // If resume button clicked
+        else if (collisions->check_collision(-2.0f, 2.0f, -1.20f, -0.20f, xposition, yposition) &&
+                 pause_menu) {
+            GameObject->Initialise();
+            IS_MENU_ACTIVE = false;
         }
 
     }
@@ -181,3 +212,8 @@ float vertdimen[2];
 
 // Initialise MainMenu object
 EntryMenu *MainMenu = new EntryMenu;
+
+// Initialise PauseMenu object
+EntryMenu *PauseMenu = new EntryMenu;
+
+bool close_window = false;

@@ -1,11 +1,11 @@
 /*!********************************************************************************************************
-\File          : Player_object.cpp
+\File          : Game_object.cpp
 \Copyright     : GPL-3.0 License
 \Brief         : Player object functions
 \Contributors  : Freddie M,
  ********************************************************************************************************/
 
-#include "Player_object.h"
+#include "Game_object.h"
 #include <iostream>
 #include "Keyboard_input.h"
 
@@ -42,3 +42,10 @@ int player::out_player_damage()
 
 // Build player class as GLOBAL
 player* player_class = new player;
+
+Game_object::Game_object() { start_game = false; }
+
+void Game_object::Initialise() { start_game = true; }
+
+// Build GameObject class as GLOBAL
+Game_object* GameObject = new Game_object;
