@@ -6,3 +6,14 @@
  *********************************************************************************************************/
 
 #include "Gameplay.h"
+
+bool _isActive = false;
+bool Gameplay::isActive() { return _isActive; }
+
+void Gameplay::initialise()
+{
+    // Tell the gameplay loop that we can actually render something next time
+    _isActive = true;
+}
+
+void Gameplay::playFrame(float deltaTime) {}

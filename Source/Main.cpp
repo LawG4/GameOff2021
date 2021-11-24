@@ -15,6 +15,7 @@
 #include "Player_object.h"
 #include "collision.h"
 
+#include "Gameplay.h"
 #include "Sprites.h"
 #include "Timer.h"
 
@@ -157,6 +158,17 @@ int main(int argc, char *argv[])
         // If the user has asked the window to close through the Ui then schedule window destruction
         if (MainMenu->close_window == true) {
             glfwSetWindowShouldClose(window, true);
+        }
+
+        // Is the gameplay loop running
+        if (Gameplay::isActive()) {
+            // Run the frame and pass the delta time to the game
+            Gameplay::playFrame(Time::getDetlaTime());
+        } else {
+            // Check the main menu to see if the initalisation has been clicked
+            if (MainMenu->start_button) {
+                Log.info("Starting Game");
+            }
         }
 
         // Use Vulkan to render the frame

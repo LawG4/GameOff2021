@@ -15,7 +15,7 @@ class EntryMenu
     bool first_pass_start;
     bool first_pass_quit;
     bool close_window = false;
-    bool start_button;
+    bool start_button = false;
 
     bool render_start_shadow;
     bool render_quit_shadow;
