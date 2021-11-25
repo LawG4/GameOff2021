@@ -175,6 +175,7 @@ void EntryMenu::cursor_click(int button)
         // If quit box on main menu clicked on
         if (collisions->check_collision(-2.0f, 2.0f, 0.20f, 1.2f, xposition, yposition) && !pause_menu) {
             close_window = true;
+            IS_MENU_ACTIVE = false;
         }
 
         // Check if Start game box has been clicked, change IS_MENU_ACTIVE to false to stop rendering this
@@ -185,7 +186,7 @@ void EntryMenu::cursor_click(int button)
             IS_MENU_ACTIVE = false;
         }
 
-        // If pause menu open and quit button clicked return to main menu
+        // If PAUSE menu open and quit button clicked return to main menu
         else if (collisions->check_collision(-2.0f, 2.0f, 0.20f, 1.2f, xposition, yposition) && pause_menu) {
             IS_MENU_ACTIVE = false;
             return_to_normal();
@@ -204,6 +205,29 @@ void EntryMenu::cursor_click(int button)
     }
     // Right button
     else if (button == 1) {
+    }
+}
+
+void EntryMenu::menu_loop()
+{
+    while (IS_MENU_ACTIVE) {
+        // Start buttons
+        if (render_start_shadow) {
+            depp_start_button_instance->render();
+        } else {
+            normal_start_button_instance->render();
+        }
+        // Quit buttons
+        if (render_quit_shadow) {
+            depp_quit_button_instance->render();
+        } else {
+            normal_quit_button_instance->render();
+        }
+
+        // Poll GLFW for user events so they can be processed
+        glfwPollEvents();
+        // Use Vulkan to render the frame
+        vk::drawFrame();
     }
 }
 
