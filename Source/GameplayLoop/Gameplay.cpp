@@ -2,10 +2,11 @@
 \File          : Gameplay.cpp
 \Copyright     : GPL-3.0 License
 \Brief         : Provides the gameplay loop so that main doesn't get too clustered
-\Contributors  : Lawrence G,
+\Contributors  : Lawrence G, Freddie M
  *********************************************************************************************************/
 
 #include "Gameplay.h"
+#include "EntryMenu.h"
 #include "Log.h"
 #include "Sprites.h"
 #include "Window.h"
@@ -30,6 +31,12 @@ void gameplay_key_callback(GLFWwindow* window, int key, int scancode, int action
         // move the hopper to the right
         // Ideally this will be set the acceleration because we don't have delta time in the callback
         _hopper->setPosition(pos + glm::vec3(0.1, 0.0, 0.0));
+    }
+
+    // Escape to pause menu
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+        // Call pause menu
+        PauseMenu->IS_MENU_ACTIVE = true;
     }
 }
 
