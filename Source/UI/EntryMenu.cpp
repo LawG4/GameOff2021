@@ -54,7 +54,7 @@ EntryMenu::~EntryMenu()
 }
 
 // Generate triangles
-void EntryMenu::load_menu(int menuType, GLFWwindow *window)
+void EntryMenu::load_menu(int menuType)
 {
     // Create a spritesheet
     // 1 for Nornmal menu texture buttons
@@ -83,10 +83,6 @@ void EntryMenu::load_menu(int menuType, GLFWwindow *window)
 
     normal_quit_button_instance->setPosition(bottom_button_front);
     normal_quit_button_instance->setScale(glm::vec3(2, 0.5, 0));
-
-    // Initialise callbacks
-    glfwSetCursorPosCallback(window, menu_cursor_position_callback);
-    glfwSetMouseButtonCallback(window, menu_mouse_button_callback);
 }
 
 // Update button size and colour for when hovered over
@@ -213,9 +209,13 @@ void EntryMenu::cursor_click(int button)
     }
 }
 
-void EntryMenu::menu_loop()
+void EntryMenu::menu_loop(GLFWwindow *window)
 {
     while (IS_MENU_ACTIVE) {
+        // Initialise callbacks
+        glfwSetCursorPosCallback(window, menu_cursor_position_callback);
+        glfwSetMouseButtonCallback(window, menu_mouse_button_callback);
+
         // Start buttons
         if (render_start_shadow) {
             depp_start_button_instance->render();

@@ -112,8 +112,8 @@ int main(int argc, char *argv[])
     Camera::setPosition({0, 0, 0});
 
     // Load MainMenu, enter 1 for main menu, 2 for pause
-    MainMenu->load_menu(1, window);
-    PauseMenu->load_menu(2, window);
+    MainMenu->load_menu(1);
+    PauseMenu->load_menu(2);
     collisions->intialise_object(windowWidth, windowHeight);
 
     // Run MainMenu first
@@ -129,11 +129,10 @@ int main(int argc, char *argv[])
 
         // Check if menu is active, if it, enter menu loop
         if (MainMenu->IS_MENU_ACTIVE) {
-            MainMenu->menu_loop();
+            MainMenu->menu_loop(window);
         } else if (PauseMenu->IS_MENU_ACTIVE) {
-            PauseMenu->menu_loop();
+            PauseMenu->menu_loop(window);
         }
-
 
         // If the user has asked the window to close through the Ui then schedule window destruction
         if (close_window == true) {

@@ -64,7 +64,7 @@ class EntryMenu
     ~EntryMenu();
 
     // Enter 1 for main menu, 2 for pause initialisation
-    void load_menu(int menuType, GLFWwindow* window);
+    void load_menu(int menuType);
     // Ran each time cursor pos updated
     void cursor_update(double xpos, double ypos);
     // Ran each time cursor button pressed
@@ -74,7 +74,7 @@ class EntryMenu
     // Return to normal shade button
     void return_to_normal();
     // Menu loop
-    void menu_loop();
+    void menu_loop(GLFWwindow* window);
 };
 
 extern EntryMenu* MainMenu;
