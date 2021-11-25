@@ -202,6 +202,9 @@ void EntryMenu::cursor_click(int button)
             GameObject->Initialise();
             IS_MENU_ACTIVE = false;
         }
+        // Clear saved cursor positions
+        xposition = 0;
+        yposition = 0;
 
     }
     // Right button
