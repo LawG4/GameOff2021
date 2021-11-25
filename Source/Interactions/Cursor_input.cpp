@@ -10,13 +10,8 @@
 #include "Log.h"
 #include "collision.h"
 
-void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
-{
-    MainMenu->cursor_update(xpos, ypos);
-    PauseMenu->cursor_update(xpos, ypos);
-}
-
-void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+// Callback for cursor buttons
+void menu_mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
     if (action == GLFW_PRESS) {
         if (MainMenu->IS_MENU_ACTIVE) {
@@ -24,5 +19,14 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
         } else if (PauseMenu->IS_MENU_ACTIVE) {
             PauseMenu->cursor_click(button);
         }
+    }
+}
+// Callback for cursor position
+void menu_cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
+{
+    if (MainMenu->IS_MENU_ACTIVE) {
+        MainMenu->cursor_update(xpos, ypos);
+    } else if (PauseMenu->IS_MENU_ACTIVE) {
+        PauseMenu->cursor_update(xpos, ypos);
     }
 }

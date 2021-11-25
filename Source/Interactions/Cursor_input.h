@@ -11,10 +11,10 @@
 #include <GLFW/glfw3.h>
 #include "EntryMenu.h"
 
-// Create cursor movement
-void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
+// Cursor callback
+void menu_cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
 
 // Create cursor click feedback
-void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+void menu_mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 
 extern EntryMenu* MainMenu;

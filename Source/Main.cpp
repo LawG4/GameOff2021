@@ -101,14 +101,9 @@ int main(int argc, char *argv[])
         cleanUp();
         return -1;
     }
+
     // Key input data
     glfwSetKeyCallback(window, key_callback);
-
-    // Mouse input positon data
-    glfwSetCursorPosCallback(window, cursor_position_callback);
-
-    // Mouse input button click data
-    glfwSetMouseButtonCallback(window, mouse_button_callback);
 
     // Set camera position to the centre
     Camera::setPosition({0, 0, 0});
@@ -124,8 +119,8 @@ int main(int argc, char *argv[])
     backHopper.setPosition({0.0, -1, 0.3});
 
     // Load MainMenu, enter 1 for main menu, 2 for pause
-    MainMenu->load_menu(1);
-    PauseMenu->load_menu(2);
+    MainMenu->load_menu(1, window);
+    PauseMenu->load_menu(2, window);
     collisions->intialise_object(windowWidth, windowHeight);
 
     // Run MainMenu first
@@ -148,6 +143,7 @@ int main(int argc, char *argv[])
         } else if (PauseMenu->IS_MENU_ACTIVE) {
             PauseMenu->menu_loop();
         }
+
         // If GameObject variable start_game true
         if (GameObject->start_game) {
             frontHopper.render();

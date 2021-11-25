@@ -64,7 +64,7 @@ class EntryMenu
     ~EntryMenu();
 
     // Enter 1 for main menu, 2 for pause initialisation
-    void load_menu(int menuType);
+    void load_menu(int menuType, GLFWwindow* window);
     // Ran each time cursor pos updated
     void cursor_update(double xpos, double ypos);
     // Ran each time cursor button pressed
