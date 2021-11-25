@@ -8,6 +8,7 @@
 #include "Gameplay.h"
 #include "Log.h"
 #include "Sprites.h"
+#include "Window.h"
 
 bool _init = false;
 bool _isActive = false;
@@ -17,6 +18,20 @@ bool Gameplay::isActive() { return _isActive; }
 SpriteSheet* _hopperSheet = nullptr;
 Sprite* _hopperSprite = nullptr;
 SpriteInstance* _hopper = nullptr;
+
+void gameplay_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    // Store the hopper position
+    glm::vec3 pos = _hopper->getPosition();
+
+    // Get the state for the D button for foward
+    int state = glfwGetKey(window, GLFW_KEY_D);
+    if (state == GLFW_PRESS) {
+        // move the hopper to the right
+        // Ideally this will be set the acceleration because we don't have delta time in the callback
+        _hopper->setPosition(pos + glm::vec3(0.1, 0.0, 0.0));
+    }
+}
 
 void Gameplay::initialise()
 {
@@ -29,9 +44,16 @@ void Gameplay::initialise()
     SpriteInternals::activeSheets.push_back(_hopperSheet);
     _hopperSprite = new Sprite(_hopperSheet, {{0, 1}, {1, 1}, {1, 0}, {0, 0}});
     _hopper = new SpriteInstance(_hopperSprite);
+
+    // Tell GLFW that we're now using the gameplay key callback
+    glfwSetKeyCallback(window, gameplay_key_callback);
 }
 
-void Gameplay::playFrame(float deltaTime) { _hopper->render(); }
+void Gameplay::playFrame(float deltaTime)
+{
+    _hopper->setRotation(_hopper->getRotation() + deltaTime * glm::vec3(0, 0, 1));
+    _hopper->render();
+}
 
 void Gameplay::cleanup()
 {
