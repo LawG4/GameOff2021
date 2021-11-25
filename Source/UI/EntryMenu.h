@@ -73,6 +73,8 @@ class EntryMenu
     void shadow_button();
     // Return to normal shade button
     void return_to_normal();
+    // Menu loop
+    void menu_loop();
 };
 
 extern EntryMenu* MainMenu;

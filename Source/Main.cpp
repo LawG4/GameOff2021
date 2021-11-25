@@ -142,42 +142,17 @@ int main(int argc, char *argv[])
         // Poll GLFW for user events so they can be processed
         glfwPollEvents();
 
-        // Check if menu is active, if it, render buttons
+        // Check if menu is active, if it, enter menu loop
         if (MainMenu->IS_MENU_ACTIVE) {
-            // Start buttons
-            if (MainMenu->render_start_shadow) {
-                MainMenu->depp_start_button_instance->render();
-            } else {
-                MainMenu->normal_start_button_instance->render();
-            }
-            // Quit buttons
-            if (MainMenu->render_quit_shadow) {
-                MainMenu->depp_quit_button_instance->render();
-            } else {
-                MainMenu->normal_quit_button_instance->render();
-            }
-        }
-        // Same block of if's as above but for pause screen
-        if (PauseMenu->IS_MENU_ACTIVE) {
-            // Start buttons
-            if (PauseMenu->render_start_shadow) {
-                PauseMenu->depp_start_button_instance->render();
-            } else {
-                PauseMenu->normal_start_button_instance->render();
-            }
-            // Quit buttons
-            if (PauseMenu->render_quit_shadow) {
-                PauseMenu->depp_quit_button_instance->render();
-            } else {
-                PauseMenu->normal_quit_button_instance->render();
-            }
+            MainMenu->menu_loop();
+        } else if (PauseMenu->IS_MENU_ACTIVE) {
+            PauseMenu->menu_loop();
         }
         // If GameObject variable start_game true
         if (GameObject->start_game) {
             frontHopper.render();
             backHopper.render();
         }
-
 
         // If the user has asked the window to close through the Ui then schedule window destruction
         if (close_window == true) {
