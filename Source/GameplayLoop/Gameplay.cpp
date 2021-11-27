@@ -47,13 +47,16 @@ void Gameplay::initialise()
     _init = true;
 
     // Load up the grass hopper
-    _hopperSheet = new SpriteSheet("Textures/TempHopper.png");
+    _hopperSheet = new SpriteSheet("Textures/Hopper_walking.png");
     SpriteInternals::activeSheets.push_back(_hopperSheet);
 
     // Create two different sprites for the hopper, tex coordinates for the hopper, then the next one is the
     // same sprite just upside down
-    std::vector<std::vector<glm::vec2>> texCoords = {{{0, 1}, {1, 1}, {1, 0}, {0, 0}},
-                                                     {{0, 0}, {1, 0}, {1, 1}, {0, 1}}};
+    std::vector<std::vector<glm::vec2>> texCoords = {
+      {{0.0f, 1.0f}, {0.25f, 1.0f}, {0.25f, 0.0f}, {0.0f, 0.0f}},
+      {{0.25f, 1.0f}, {0.50f, 1.0f}, {0.50f, 0.0f}, {0.25f, 0.0f}},
+      {{0.50f, 1.0f}, {0.75f, 1.0f}, {0.75f, 0.0f}, {0.50f, 0.0f}},
+      {{0.75f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}, {0.75f, 0.0f}}};
     _hopper = new AnimatedSprite(_hopperSheet, texCoords, 1.0);
 
     // Tell GLFW that we're now using the gameplay key callback
