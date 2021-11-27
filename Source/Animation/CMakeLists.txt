@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 # Add the sources for the windowing system
 
 set(HEADERS
-	Aniamtion.h
+	Animation.h
 )
 
 set(SOURCES

@@ -11,6 +11,7 @@ set(COMPONENTS
 	Camera
 	Timing
 	GameplayLoop
+	Animation
 )
 
 foreach(directory ${COMPONENTS})
