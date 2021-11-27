@@ -18,5 +18,8 @@ void initialise();
 /// <param name="deltaTime">The frame time </param>
 void playFrame(float deltaTime);
 
+/// <summary> Gameplay loop for actual game, entered from main </summary>
+void gameLoop();
+
 void cleanup();
 }  // namespace Gameplay

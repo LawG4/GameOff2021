@@ -9,6 +9,7 @@
 #include "Animation.h"
 #include "EntryMenu.h"
 #include "Log.h"
+#include "Timer.h"
 #include "Window.h"
 
 bool _init = false;
@@ -77,4 +78,28 @@ void Gameplay::cleanup()
 
     delete _hopper;
     delete _hopperSheet;
+}
+
+void Gameplay::gameLoop()
+{
+    while (_isActive) {
+        // Start this frames clock, so we can know how long it took
+        Time::startFrameTime();
+
+        // Poll GLFW for user events so they can be processed
+        glfwPollEvents();
+
+        // Run the frame and pass the delta time to the game
+        Gameplay::playFrame(Time::getDetlaTime());
+
+        // Use Vulkan to render the frame
+        vk::drawFrame();
+
+        // Check if pause menu is active, if it, enter pause menu loop
+        if (PauseMenu->IS_MENU_ACTIVE) {
+            _isActive = PauseMenu->menu_loop(window);
+        }
+        // Frame has finished so end the clock so we know how long it took
+        Time::EndFrameTime();
+    }
 }

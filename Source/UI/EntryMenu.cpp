@@ -201,13 +201,16 @@ void EntryMenu::cursor_click(int button)
             // Clear saved cursor positions
             xposition = 0;
             yposition = 0;
+            menu_choice = false;
+
         }
 
         // If resume button clicked
-        else if (collisions->check_collision(-0.57f, 0.57f, -1.20f, -0.20f, xposition, yposition) &&
+        else if (collisions->check_collision(-0.57f, 0.57f, -0.60f, -0.10f, xposition, yposition) &&
                  pause_menu) {
             GameObject->Initialise();
             IS_MENU_ACTIVE = false;
+            menu_choice = true;
         }
 
     }
@@ -216,7 +219,7 @@ void EntryMenu::cursor_click(int button)
     }
 }
 
-void EntryMenu::menu_loop(GLFWwindow *window)
+bool EntryMenu::menu_loop(GLFWwindow *window)
 {
     while (IS_MENU_ACTIVE) {
         // Initialise callbacks
@@ -241,6 +244,7 @@ void EntryMenu::menu_loop(GLFWwindow *window)
         // Use Vulkan to render the frame
         vk::drawFrame();
     }
+    return menu_choice;
 }
 
 // Declare windowdimen (window dimension) array
