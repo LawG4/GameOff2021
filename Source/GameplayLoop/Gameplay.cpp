@@ -6,9 +6,9 @@
  *********************************************************************************************************/
 
 #include "Gameplay.h"
+#include "Animation.h"
 #include "EntryMenu.h"
 #include "Log.h"
-#include "Sprites.h"
 #include "Window.h"
 
 bool _init = false;
@@ -17,8 +17,7 @@ bool Gameplay::isActive() { return _isActive; }
 
 // Store the grasshopper and coordinates
 SpriteSheet* _hopperSheet = nullptr;
-Sprite* _hopperSprite = nullptr;
-SpriteInstance* _hopper = nullptr;
+AnimatedSprite* _hopper = nullptr;
 
 void gameplay_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -49,8 +48,12 @@ void Gameplay::initialise()
     // Load up the grass hopper
     _hopperSheet = new SpriteSheet("Textures/TempHopper.png");
     SpriteInternals::activeSheets.push_back(_hopperSheet);
-    _hopperSprite = new Sprite(_hopperSheet, {{0, 1}, {1, 1}, {1, 0}, {0, 0}});
-    _hopper = new SpriteInstance(_hopperSprite);
+
+    // Create two different sprites for the hopper, tex coordinates for the hopper, then the next one is the
+    // same sprite just upside down
+    std::vector<std::vector<glm::vec2>> texCoords = {{{0, 1}, {1, 1}, {1, 0}, {0, 0}},
+                                                     {{0, 0}, {1, 0}, {1, 1}, {0, 1}}};
+    _hopper = new AnimatedSprite(_hopperSheet, texCoords, 1.0);
 
     // Tell GLFW that we're now using the gameplay key callback
     glfwSetKeyCallback(window, gameplay_key_callback);
@@ -59,6 +62,7 @@ void Gameplay::initialise()
 void Gameplay::playFrame(float deltaTime)
 {
     //_hopper->setRotation(_hopper->getRotation() + deltaTime * glm::vec3(0, 0, 1));
+    _hopper->updateDelta(deltaTime);
     _hopper->render();
 }
 
@@ -72,6 +76,5 @@ void Gameplay::cleanup()
     Log.info("releasing gameplay loop resources");
 
     delete _hopper;
-    delete _hopperSprite;
     delete _hopperSheet;
 }
