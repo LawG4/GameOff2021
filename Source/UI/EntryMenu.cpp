@@ -147,13 +147,13 @@ void EntryMenu::cursor_update(double xpos, double ypos)
         xposition = xpos;
         yposition = ypos;
         // Check collisions for start game box
-        if (collisions->check_collision(-2.0f, 2.0f, -1.20f, -0.20f, xpos, ypos) && !cursor_on_box) {
+        if (collisions->check_collision(-0.57f, 0.57f, -0.6f, -0.10f, xpos, ypos) && !cursor_on_box) {
             start_button = true;
             shadow_button();
             return_box_to_normal = true;
         }
         // Check collisions for quit game box
-        else if (collisions->check_collision(-2.0f, 2.0f, 0.20f, 1.2f, xpos, ypos) && !cursor_on_box) {
+        else if (collisions->check_collision(-0.57f, 0.57f, 0.10f, 0.6f, xpos, ypos) && !cursor_on_box) {
             start_button = false;
             shadow_button();
             return_box_to_normal = true;
@@ -173,38 +173,42 @@ void EntryMenu::cursor_click(int button)
     // Check collisions for when click happens
     if (button == 0) {
         // If quit box on main menu clicked on
-        if (collisions->check_collision(-2.0f, 2.0f, 0.20f, 1.2f, xposition, yposition) && !pause_menu) {
+        if (collisions->check_collision(-0.57f, 0.57f, 0.10f, 0.6f, xposition, yposition) && !pause_menu) {
             close_window = true;
             IS_MENU_ACTIVE = false;
         }
 
         // Check if Start game box has been clicked, change IS_MENU_ACTIVE to false to stop rendering this
         // menu and intialise GameObject
-        else if (collisions->check_collision(-2.0f, 2.0f, -1.20f, -0.20f, xposition, yposition) &&
+        else if (collisions->check_collision(-0.57f, 0.57f, -0.6f, -0.10f, xposition, yposition) &&
                  !pause_menu) {
             GameObject->Initialise();
             IS_MENU_ACTIVE = false;
+            // Clear saved cursor positions
+            xposition = 0;
+            yposition = 0;
 
         }
 
         // If PAUSE menu open and quit button clicked return to main menu
-        else if (collisions->check_collision(-2.0f, 2.0f, 0.20f, 1.2f, xposition, yposition) && pause_menu) {
+        else if (collisions->check_collision(-0.57f, 0.57f, 0.10f, 0.6f, xposition, yposition) &&
+                 pause_menu) {
             IS_MENU_ACTIVE = false;
             return_to_normal();
             MainMenu->IS_MENU_ACTIVE = true;
             MainMenu->return_to_normal();
             GameObject->start_game = false;
+            // Clear saved cursor positions
+            xposition = 0;
+            yposition = 0;
         }
 
         // If resume button clicked
-        else if (collisions->check_collision(-2.0f, 2.0f, -1.20f, -0.20f, xposition, yposition) &&
+        else if (collisions->check_collision(-0.57f, 0.57f, -1.20f, -0.20f, xposition, yposition) &&
                  pause_menu) {
             GameObject->Initialise();
             IS_MENU_ACTIVE = false;
         }
-        // Clear saved cursor positions
-        xposition = 0;
-        yposition = 0;
 
     }
     // Right button
