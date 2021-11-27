@@ -5,10 +5,11 @@
 \Contributors  : Lawrence G,
  *********************************************************************************************************/
 #include "Animation.h"
+#include <cmath>
 #include "Log.h"
 
 AnimatedSprite::AnimatedSprite(SpriteSheet* sheet, const std::vector<std::vector<glm::vec2>>& texCoords,
-                               float timeLength, glm::vec3 pos, glm::vec3 scale, glm::vec3 rot)
+                               double totalTime, glm::vec3 pos, glm::vec3 scale, glm::vec3 rot)
 {
     // Ensure that there is atleast one tex coord
     if (texCoords.size() < 1) {
@@ -27,6 +28,9 @@ AnimatedSprite::AnimatedSprite(SpriteSheet* sheet, const std::vector<std::vector
 
     // To manage the underside of the positions and model project stuff, we use one underlying sprite instance
     _instance = new SpriteInstance(_sprites[0], pos, scale, rot);
+
+    // Store the total time one loop of animastion takes
+    _totalTime = totalTime;
 }
 
 AnimatedSprite::~AnimatedSprite()
@@ -52,9 +56,23 @@ void AnimatedSprite::render()
     _sprites[_spriteIndex]->render(_instance->getMvp());
 }
 
-void AnimatedSprite::updateDelta(double delta) {}
+void AnimatedSprite::updateDelta(double delta)
+{
+    // Add to the internal clock, but insure it wraps around
+    _currentTime = fmod(_currentTime + delta, _totalTime);
 
-void AnimatedSprite::setTime(double time) {}
+    // Now get the animation index
+    _spriteIndex = static_cast<uint32_t>(static_cast<double>(_sprites.size()) * (_currentTime / _totalTime));
+}
+
+void AnimatedSprite::setTime(double time)
+{
+    // Add to the internal clock, but insure it wraps around
+    _currentTime = time;
+
+    // Now get the animation index
+    _spriteIndex = static_cast<uint32_t>(static_cast<double>(_sprites.size()) * (_currentTime / _totalTime));
+}
 
 // Pass all of the positions and such over to the underlying instance
 

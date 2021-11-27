@@ -10,7 +10,7 @@
 class AnimatedSprite
 {
    public:
-    AnimatedSprite(SpriteSheet* sheet, const std::vector<std::vector<glm::vec2>>& texCoords, float timeLength,
+    AnimatedSprite(SpriteSheet* sheet, const std::vector<std::vector<glm::vec2>>& texCoords, double totalTime,
                    glm::vec3 pos = glm::vec3(0.0, 0.0, 0.0), glm::vec3 scale = glm::vec3(1.0, 1.0, 1.0),
                    glm::vec3 rot = glm::vec3(0.0, 0.0, 0.0));
     ~AnimatedSprite();
@@ -46,4 +46,6 @@ class AnimatedSprite
     uint32_t _spriteCount = 0;
 
     double _currentTime = 0.0;
+
+    double _totalTime = 0.0;
 };

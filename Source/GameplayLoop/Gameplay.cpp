@@ -62,6 +62,7 @@ void Gameplay::initialise()
 void Gameplay::playFrame(float deltaTime)
 {
     //_hopper->setRotation(_hopper->getRotation() + deltaTime * glm::vec3(0, 0, 1));
+    _hopper->updateDelta(deltaTime);
     _hopper->render();
 }
 
