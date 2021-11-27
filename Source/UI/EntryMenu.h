@@ -16,6 +16,7 @@ class EntryMenu
     bool first_pass_quit;
     bool start_button;
     bool pause_menu;
+    bool menu_choice;
 
     bool render_start_shadow;
     bool render_quit_shadow;
@@ -74,7 +75,7 @@ class EntryMenu
     // Return to normal shade button
     void return_to_normal();
     // Menu loop
-    void menu_loop(GLFWwindow* window);
+    bool menu_loop(GLFWwindow* window);
 };
 
 extern EntryMenu* MainMenu;
