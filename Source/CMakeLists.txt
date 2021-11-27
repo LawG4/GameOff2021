@@ -12,6 +12,7 @@ set(COMPONENTS
 	Timing
 	GameplayLoop
 	Animation
+	AssetLoader
 )
 
 foreach(directory ${COMPONENTS})
