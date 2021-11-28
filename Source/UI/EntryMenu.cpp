@@ -158,7 +158,7 @@ void EntryMenu::cursor_update(double xpos, double ypos)
 
         glm::vec2 mouseCoord = normaliseCursorCoordinates({xpos, ypos});
         // Check collisions for start game box
-        if (Collision::pointInBox(mouseCoord, {{-1.0f, 1.0f}, 0.8f, 0.20f}) && !cursor_on_box) {
+        if (Collision::pointInBox(mouseCoord, {{-0.6f, 0.0f}, 1.2f, 1.20f}) && !cursor_on_box) {
             start_button = true;
             shadow_button();
             return_box_to_normal = true;
