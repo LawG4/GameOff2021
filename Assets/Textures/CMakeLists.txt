@@ -15,6 +15,7 @@ set(TEXTURE_LIST
 	TestButton2.png
 	Button_Sprite.png
 	Pause_Button_Sprite.png
+	SpinningCoin.png
 	Hopper_walking.png
 )
 

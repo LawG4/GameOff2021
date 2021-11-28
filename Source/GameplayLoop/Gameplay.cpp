@@ -7,6 +7,7 @@
 
 #include "Gameplay.h"
 #include "Animation.h"
+#include "AssetHelper.h"
 #include "EntryMenu.h"
 #include "Log.h"
 #include "Timer.h"
@@ -17,20 +18,20 @@ bool _isActive = false;
 bool Gameplay::isActive() { return _isActive; }
 
 // Store the grasshopper and coordinates
-SpriteSheet* _hopperSheet = nullptr;
-AnimatedSprite* _hopper = nullptr;
+SpriteSheet* _coinSheet = nullptr;
+AnimatedSprite* _coin = nullptr;
 
 void gameplay_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     // Store the hopper position
-    glm::vec3 pos = _hopper->getPosition();
+    glm::vec3 pos = _coin->getPosition();
 
     // Get the state for the D button for foward
     int state = glfwGetKey(window, GLFW_KEY_D);
     if (state == GLFW_PRESS) {
         // move the hopper to the right
         // Ideally this will be set the acceleration because we don't have delta time in the callback
-        _hopper->setPosition(pos + glm::vec3(0.1, 0.0, 0.0));
+        _coin->setPosition(pos + glm::vec3(0.1, 0.0, 0.0));
     }
 
     // Escape to pause menu
@@ -46,18 +47,10 @@ void Gameplay::initialise()
     _isActive = true;
     _init = true;
 
-    // Load up the grass hopper
-    _hopperSheet = new SpriteSheet("Textures/Hopper_walking.png");
-    SpriteInternals::activeSheets.push_back(_hopperSheet);
-
-    // Create two different sprites for the hopper, tex coordinates for the hopper, then the next one is the
-    // same sprite just upside down
-    std::vector<std::vector<glm::vec2>> texCoords = {
-      {{0.0f, 1.0f}, {0.25f, 1.0f}, {0.25f, 0.0f}, {0.0f, 0.0f}},
-      {{0.25f, 1.0f}, {0.50f, 1.0f}, {0.50f, 0.0f}, {0.25f, 0.0f}},
-      {{0.50f, 1.0f}, {0.75f, 1.0f}, {0.75f, 0.0f}, {0.50f, 0.0f}},
-      {{0.75f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}, {0.75f, 0.0f}}};
-    _hopper = new AnimatedSprite(_hopperSheet, texCoords, 1.0);
+    std::pair<SpriteSheet*, AnimatedSprite*> coin = AnimatedSprites::spinningCoin();
+    _coinSheet = coin.first;
+    SpriteInternals::activeSheets.push_back(_coinSheet);
+    _coin = coin.second;
 
     // Tell GLFW that we're now using the gameplay key callback
     glfwSetKeyCallback(window, gameplay_key_callback);
@@ -66,8 +59,8 @@ void Gameplay::initialise()
 void Gameplay::playFrame(float deltaTime)
 {
     //_hopper->setRotation(_hopper->getRotation() + deltaTime * glm::vec3(0, 0, 1));
-    _hopper->updateDelta(deltaTime);
-    _hopper->render();
+    _coin->updateDelta(deltaTime);
+    _coin->render();
 }
 
 void Gameplay::cleanup()
@@ -79,8 +72,8 @@ void Gameplay::cleanup()
     // release the rest of the resources
     Log.info("releasing gameplay loop resources");
 
-    delete _hopper;
-    delete _hopperSheet;
+    delete _coin;
+    delete _coinSheet;
 }
 
 void Gameplay::gameLoop()
