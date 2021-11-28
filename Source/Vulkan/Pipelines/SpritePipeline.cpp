@@ -74,7 +74,23 @@ void PipelineInternals::create2DPipeline()
         info.pViewportState = &PipelineInternals::Templates::viewportState;
         info.pRasterizationState = &PipelineInternals::Templates::raster;
         info.pMultisampleState = &PipelineInternals::Templates::multisample;
-        info.pColorBlendState = &PipelineInternals::Templates::blend;
+
+        // Change colour blend state to allow alpha blending
+        VkPipelineColorBlendStateCreateInfo blend = PipelineInternals::Templates::blend;
+        VkPipelineColorBlendAttachmentState blendAttachment{};
+        blendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
+                                         VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+        blendAttachment.blendEnable = VK_TRUE;
+        blendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+        blendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+        blendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+        blendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+        blendAttachment.colorBlendOp = VK_BLEND_OP_ADD;
+        blendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+        blendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+        blendAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
+        blend.pAttachments = &blendAttachment;
+        info.pColorBlendState = &blend;
 
         VkPipelineDepthStencilStateCreateInfo depthState{};
         depthState.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
