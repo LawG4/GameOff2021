@@ -4,7 +4,7 @@
 \Brief         : Provides the gameplay loop so that main doesn't get too clustered
 \Contributors  : Lawrence G,
  *********************************************************************************************************/
-
+#include "Window.h"
 namespace Gameplay
 {
 /// <summary>Tells us if the gameplay is currently running or not</summary>
@@ -20,6 +20,8 @@ void playFrame(float deltaTime);
 
 /// <summary> Gameplay loop for actual game, entered from main </summary>
 void gameLoop();
+
+void windowSize(uint32_t width, uint32_t height);
 
 void cleanup();
 }  // namespace Gameplay

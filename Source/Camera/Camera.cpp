@@ -10,6 +10,10 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtx/quaternion.hpp"
 
+#include "Gameplay.h"
+
+void Camera::onWindowSize(GLFWwindow* window, int width, int height) { Gameplay::windowSize(width, height); }
+
 using namespace Camera;
 
 bool hasViewUpdated = true;

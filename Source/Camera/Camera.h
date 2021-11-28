@@ -6,11 +6,10 @@
  *********************************************************************************************************/
 #pragma once
 
+#include "Window.h"
 #include "glm/glm.hpp"
-
 namespace Camera
 {
-
 /// <summary>Gets information about if the camera has updated </summary>
 /// <returns>True if the camera has changed</returns>
 bool getHasCameraUpdated();
@@ -36,4 +35,8 @@ void setPosition(glm::vec3 position);
 /// <returns>Returns the current position of the camera</returns>
 glm::vec3 getPosition();
 
+/// <summary>Callback to update all the things that need changing when the window size is updated</summary>
+/// <param name="width">Width of window</param>
+/// <param name="height">Height of Window</param>
+void onWindowSize(GLFWwindow* window, int width, int height);
 }  // namespace Camera

@@ -17,6 +17,8 @@ set(TEXTURE_LIST
 	Pause_Button_Sprite.png
 	SpinningCoin.png
 	Hopper_walking.png
+	CityCentre.png
+	CityEdges.png
 )
 
 # For each texture listed add a custom command that copies it to the binary directory

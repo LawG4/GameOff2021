@@ -18,13 +18,20 @@ std::vector<glm::vec2> Textures::generateTexCoordinates(glm::vec2 topLeft, glm::
     topLeft = (topLeft * texSize);
 
     // fill in the texture coordinates starting from the bottom left and go counter clockwise
-    spriteSize = spriteSize * texSize;
+    spriteSize = (spriteSize * texSize);
     tex[0] = topLeft + glm::vec2(0, 1) * spriteSize;
     tex[1] = topLeft + glm::vec2(1, 1) * spriteSize;
     tex[2] = topLeft + glm::vec2(1, 0) * spriteSize;
     tex[3] = topLeft + glm::vec2(0, 0) * spriteSize;
 
     return tex;
+}
+
+glm::vec3 Textures::getTexSize(glm::vec2 spriteSize)
+{
+    // The height of the screen is 2 units tall.
+    // So 1 unit is equal to 256 pixels
+    return glm::vec3(spriteSize / glm::vec2(256), 1.0);
 }
 
 std::pair<SpriteSheet*, AnimatedSprite*> AnimatedSprites::spinningCoin()
@@ -43,6 +50,20 @@ std::pair<SpriteSheet*, AnimatedSprite*> AnimatedSprites::spinningCoin()
     tex[5] = Textures::generateTexCoordinates({29, 25}, {28, 25}, {128, 128});
 
     AnimatedSprite* sprite = new AnimatedSprite(sheet, tex, 0.6);
+    sprite->setScale(Textures::getTexSize({28, 25}));
+
+    pair.first = sheet;
+    pair.second = sprite;
+
+    return pair;
+}
+
+std::pair<SpriteSheet*, Sprite*> BackgroundSprites::CityCentre()
+{
+    std::pair<SpriteSheet*, Sprite*> pair;
+    SpriteSheet* sheet = new SpriteSheet("Textures/CityCentre.png");
+
+    Sprite* sprite = new Sprite(sheet, {{0, 1}, {1, 1}, {1, 0}, {0, 0}});
 
     pair.first = sheet;
     pair.second = sprite;

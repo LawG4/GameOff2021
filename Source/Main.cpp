@@ -116,7 +116,11 @@ int main(int argc, char *argv[])
     PauseMenu->load_menu(2);
 
     // Run MainMenu first
-    MainMenu->IS_MENU_ACTIVE = true;
+    MainMenu->IS_MENU_ACTIVE = false;
+    GameObject->start_game = true;
+
+    // Set the resize callback
+    glfwSetWindowSizeCallback(window, Camera::onWindowSize);
 
     // Enter into the windowing loop
     while (!glfwWindowShouldClose(window)) {
