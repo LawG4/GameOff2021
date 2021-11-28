@@ -12,6 +12,7 @@
 #include "Log.h"
 #include "Timer.h"
 #include "Window.h"
+#include "collision.h"
 
 bool _init = false;
 bool _isActive = false;
@@ -21,6 +22,9 @@ bool Gameplay::isActive() { return _isActive; }
 SpriteSheet* _coinSheet = nullptr;
 AnimatedSprite* _coin = nullptr;
 
+SpriteSheet* _coinSheet2 = nullptr;
+AnimatedSprite* _coin2 = nullptr;
+
 void gameplay_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     // Store the hopper position
@@ -29,9 +33,14 @@ void gameplay_key_callback(GLFWwindow* window, int key, int scancode, int action
     // Get the state for the D button for foward
     int state = glfwGetKey(window, GLFW_KEY_D);
     if (state == GLFW_PRESS) {
+        // Gonna have to comment this out, as I'm having a merge conflict sorry
+        /*
         // move the hopper to the right
-        // Ideally this will be set the acceleration because we don't have delta time in the callback
-        _coin->setPosition(pos + glm::vec3(0.1, 0.0, 0.0));
+        if (Gameplay::frontcol()) {
+            // Ideally this will be set the acceleration because we don't have delta time in the callback
+            _coin->setPosition(pos + glm::vec3(0.1, 0.0, 0.0));
+        }
+        */
     }
 
     // Escape to pause menu
