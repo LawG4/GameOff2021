@@ -40,5 +40,72 @@ bool collision_detection::check_collision(float x1_vertex, float x2_vertex, floa
     }
 }
 
+/// <summary>
+///  Check collision for hopper sprite
+/// </summary>
+/// <param name="x1_vertex">: X vertex</param>
+/// <param name="x2_vertex">: Y vertex</param>
+/// <param name="hopper_pos">: Hopper position in world</param>
+/// <param name="move_direction">: Direction of movement (forwards = 1, backwards = 2, up = 3, down =
+/// 4)</param>
+bool collision_detection::check_collision_position(float x1_vertex, float y2_vertex, glm::vec3 hopper_pos,
+                                                   int move_direction)
+{
+    // Convert positional data into cube mesh
+    x1 = x1_vertex - 0.5;
+    x2 = x1_vertex + 0.5;
+    y1 = y2_vertex - 0.5;
+    y2 = y2_vertex + 0.5;
+
+    // Check to see if collision occurs in mesh
+    if (move_direction == 1) {  // forward
+
+        x1 = x1_vertex - 0.5;
+        hopper_x1 = hopper_pos[0] + 0.5;
+        if (x1 > hopper_x1) {
+            return true;
+        } else {
+            return false;
+        }
+
+    } else if (move_direction == 2) {  // backwards
+
+        x2 = x1_vertex + 0.5;
+        hopper_x2 = hopper_pos[0] - 0.5;
+        if (x2 > hopper_x2) {
+            return true;
+        } else {
+            return false;
+        }
+
+    } else if (move_direction == 3) {  // up
+
+        y2 = y2_vertex + 0.5;
+        hopper_y2 = hopper_pos[2] + 0.5;
+        if (y2 > hopper_y2) {
+            return true;
+        } else {
+            return false;
+        }
+
+    } else if (move_direction == 4) {  // down
+
+        y1 = y2_vertex - 0.5;
+        hopper_y1 = hopper_pos[2] + 0.5;
+        if (y2 > hopper_y1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    if ((x1 > x_coordinate_range[0] && x2 < x_coordinate_range[1]) &&
+        (y1 > y_coordinate_range[0] && y2 < y_coordinate_range[1])) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 // Initialise collisions object
 collision_detection *collisions = new collision_detection;

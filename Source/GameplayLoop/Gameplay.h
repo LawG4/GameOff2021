@@ -18,6 +18,9 @@ void initialise();
 /// <param name="deltaTime">The frame time </param>
 void playFrame(float deltaTime);
 
+/// <summary> Collisions for front of hopper </summary>
+bool frontcol();
+
 /// <summary> Gameplay loop for actual game, entered from main </summary>
 void gameLoop();
 

@@ -12,6 +12,7 @@
 #include "Log.h"
 #include "Timer.h"
 #include "Window.h"
+#include "collision.h"
 
 bool _init = false;
 bool _isActive = false;
@@ -20,6 +21,9 @@ bool Gameplay::isActive() { return _isActive; }
 // Store the grasshopper and coordinates
 SpriteSheet* _coinSheet = nullptr;
 AnimatedSprite* _coin = nullptr;
+
+SpriteSheet* _coinSheet2 = nullptr;
+AnimatedSprite* _coin2 = nullptr;
 
 void gameplay_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -30,8 +34,10 @@ void gameplay_key_callback(GLFWwindow* window, int key, int scancode, int action
     int state = glfwGetKey(window, GLFW_KEY_D);
     if (state == GLFW_PRESS) {
         // move the hopper to the right
-        // Ideally this will be set the acceleration because we don't have delta time in the callback
-        _coin->setPosition(pos + glm::vec3(0.1, 0.0, 0.0));
+        if (Gameplay::frontcol()) {
+            // Ideally this will be set the acceleration because we don't have delta time in the callback
+            _coin->setPosition(pos + glm::vec3(0.1, 0.0, 0.0));
+        }
     }
 
     // Escape to pause menu
@@ -52,6 +58,13 @@ void Gameplay::initialise()
     SpriteInternals::activeSheets.push_back(_coinSheet);
     _coin = coin.second;
 
+    // create second coin to test collisions
+    std::pair<SpriteSheet*, AnimatedSprite*> coin2 = AnimatedSprites::spinningCoin();
+    _coinSheet2 = coin2.first;
+    SpriteInternals::activeSheets.push_back(_coinSheet2);
+    _coin2 = coin2.second;
+    _coin2->setPosition(glm::vec3(1.5, 0.0, 0.0));
+
     // Tell GLFW that we're now using the gameplay key callback
     glfwSetKeyCallback(window, gameplay_key_callback);
 }
@@ -61,6 +74,12 @@ void Gameplay::playFrame(float deltaTime)
     //_hopper->setRotation(_hopper->getRotation() + deltaTime * glm::vec3(0, 0, 1));
     _coin->updateDelta(deltaTime);
     _coin->render();
+    _coin2->render();
+}
+
+bool Gameplay::frontcol()
+{
+    return collisions->check_collision_position(1.5f, 0.0f, _coin->getPosition(), 1);
 }
 
 void Gameplay::cleanup()
@@ -74,6 +93,9 @@ void Gameplay::cleanup()
 
     delete _coin;
     delete _coinSheet;
+
+    delete _coin2;
+    delete _coinSheet2;
 }
 
 void Gameplay::gameLoop()
