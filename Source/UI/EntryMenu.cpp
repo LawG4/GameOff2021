@@ -204,10 +204,6 @@ void EntryMenu::cursor_click(int button)
         else if (top_button && !pause_menu) {
             game_state = true;
             IS_MENU_ACTIVE = false;
-            // Clear saved cursor positions
-            xposition = 0;
-            yposition = 0;
-
         }
 
         // If PAUSE menu open and quit button clicked return to main menu
@@ -216,19 +212,12 @@ void EntryMenu::cursor_click(int button)
             return_to_normal();
             MainMenu->IS_MENU_ACTIVE = true;
             MainMenu->return_to_normal();
-            GameObject->start_game = false;
-            // Clear saved cursor positions
-            xposition = 0;
-            yposition = 0;
-            menu_choice = false;
-
+            game_state = false;
         }
 
         // If resume button clicked
         else if (top_button && pause_menu) {
-            GameObject->Initialise();
             IS_MENU_ACTIVE = false;
-            menu_choice = true;
         }
 
     }
@@ -237,13 +226,17 @@ void EntryMenu::cursor_click(int button)
     }
 }
 
-bool EntryMenu::menu_loop(GLFWwindow *window)
+void EntryMenu::menu_loop(GLFWwindow *window)
 {
     // Initialise callbacks
     glfwSetCursorPosCallback(window, menu_cursor_position_callback);
     glfwSetMouseButtonCallback(window, menu_mouse_button_callback);
 
     while (IS_MENU_ACTIVE) {
+        if (!IS_MENU_ACTIVE) {
+            break;
+        }
+
         // Start buttons
         if (render_start_shadow) {
             depp_start_button_instance->render();
@@ -262,7 +255,6 @@ bool EntryMenu::menu_loop(GLFWwindow *window)
         // Use Vulkan to render the frame
         vk::drawFrame();
     }
-    return menu_choice;
 }
 
 // Initialise MainMenu object

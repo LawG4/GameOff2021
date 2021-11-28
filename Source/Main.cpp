@@ -126,11 +126,6 @@ int main(int argc, char *argv[])
         // Start this frames clock, so we can know how long it took
         Time::startFrameTime();
 
-        // If the user has asked the window to close through the Ui then schedule window destruction
-        if (close_window == true) {
-            glfwSetWindowShouldClose(window, true);
-        }
-
         // Poll GLFW for user events so they can be processed
         glfwPollEvents();
 
@@ -160,7 +155,13 @@ int main(int argc, char *argv[])
             Gameplay::gameLoop();
         }
 
+        // If the user has asked the window to close through the Ui then schedule window destruction
+        if (close_window == true) {
+            glfwSetWindowShouldClose(window, true);
+        }
+
         vk::drawFrame();
+
         // Frame has finished so end the clock so we know how long it took
         Time::EndFrameTime();
     }

@@ -5,10 +5,12 @@
 \Contributors  : Lawrence G, Freddie M
  *********************************************************************************************************/
 
-#include "Gameplay.h"
+#include "Game_object.h"
+
 #include "Animation.h"
 #include "AssetHelper.h"
 #include "EntryMenu.h"
+#include "Gameplay.h"
 #include "Log.h"
 #include "Timer.h"
 #include "Window.h"
@@ -46,6 +48,7 @@ void gameplay_key_callback(GLFWwindow* window, int key, int scancode, int action
     // Escape to pause menu
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         // Call pause menu
+        PauseMenu->IS_MENU_ACTIVE = true;
     }
 }
 
@@ -130,6 +133,20 @@ void Gameplay::gameLoop()
 
         // Poll GLFW for user events so they can be processed
         glfwPollEvents();
+
+        // If user has chosen to quit game, break out and return to main menu loop
+        if (!game_state) {
+            MainMenu->IS_MENU_ACTIVE = true;
+            game_state = false;
+            _isActive = false;
+            // Gameplay::cleanup();
+            break;
+        }
+
+        // Check if pause menu is active, if it, enter pause menu loop
+        if (PauseMenu->IS_MENU_ACTIVE) {
+            PauseMenu->menu_loop(window);
+        }
 
         // If the window x button was pressed then break out
         if (glfwWindowShouldClose(window)) {
