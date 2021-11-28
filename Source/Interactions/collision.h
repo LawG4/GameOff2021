@@ -2,32 +2,29 @@
 \File          : collision.h
 \Copyright     : GPL-3.0 License
 \Brief         : collision functions
-\Contributors  : Freddie M
+\Contributors  : Freddie M, Lawrence
  *********************************************************************************************************/
 #pragma once
 
 #include "EntryMenu.h"
 #include "nlohmann/json.hpp"
 
-// Collision object
-class collision_detection
-{
-   public:
-    // methods
-    void intialise_object(uint32_t ww, uint32_t wh);
+struct BoundingRect {
+    /// <summary>Top left (x,y) coordinates of the rectangle</summary>
+    glm::vec2 topLeft;
 
-    // check_collision(Left X, Right X, Top Y, Bottom Y)
-    bool check_collision(float x1_vertex, float x2_vertex, float y1_vertex, float y2_vertex, double xpos,
-                         double ypos);
+    /// <summary>Width of the rectangle</summary>
+    float width;
 
-    // variables
-    float pixel_scale_X;
-    float pixel_scale_Y;
-    float vertexx_M;
-    float vertexy_M;
-    float x_coordinate_range[2];
-    float y_coordinate_range[2];
+    /// <summary>Height of the rectangle</summary>
+    float height;
 };
 
-// Declare collisions object
-extern collision_detection* collisions;
+namespace Collision
+{
+/// <summary>Calculates if a point is indside the given rectangle</summary>
+/// <param name="point">(x,y) coordinates of the point being tested)</param>
+/// <param name="rect">Rectangle being tested</param>
+/// <returns>True if the point is inside the rectangle</returns>
+bool pointInBox(glm::vec2 point, const BoundingRect& rect);
+}  // namespace Collision
