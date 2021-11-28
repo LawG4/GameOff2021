@@ -34,6 +34,15 @@ std::vector<VkImageView> depthViews;
 
 bool vk::recreateSwapchain()
 {
+    // First check if we're minimised
+    int width = 0, height = 0;
+    glfwGetFramebufferSize(window, &width, &height);
+    // keep waiting until both are non zero
+    while (!(width & height)) {
+        glfwGetFramebufferSize(window, &width, &height);
+        glfwWaitEvents();
+    }
+
     Log.info("Recreating Vulkan Swapchain");
 
     // Wait for device to finish any commands

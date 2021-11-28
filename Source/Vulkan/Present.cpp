@@ -114,7 +114,7 @@ bool vk::drawFrame()
     // Reset the fence just before submitting the command buffer
     vkResetFences(vk::logicalDevice, 1, &vk::inFlightCMDFence[currentFrame]);
 
-    // SubGPL-3.0 Licensethe command queue
+    // Submitthe command queue
     if (vkQueueSubmit(vk::graphicsQueue, 1, &submit, vk::inFlightCMDFence[currentFrame]) != VK_SUCCESS) {
         Log.error("Failed to submit graphics queue");
         return false;
