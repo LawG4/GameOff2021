@@ -11,6 +11,7 @@
 #include "Cursor_input.h"
 #include "EntryMenu.h"
 #include "Game_object.h"
+#include "Window.h"
 #include "collision.h"
 
 // Constructor
@@ -140,14 +141,24 @@ void EntryMenu::return_to_normal()
     }
 }
 
+glm::vec2 normaliseCursorCoordinates(glm::vec2 mousePos)
+{
+    int width, height;
+    glfwGetFramebufferSize(window, &width, &height);
+
+    return (glm::vec2(2.0) * mousePos / glm::vec2(width, height)) - glm::vec2{1.0};
+}
+
 void EntryMenu::cursor_update(double xpos, double ypos)
 {
     if (IS_MENU_ACTIVE) {
         // update stored cursor location
         xposition = xpos;
         yposition = ypos;
+
+        glm::vec2 mouseCoord = normaliseCursorCoordinates({xpos, ypos});
         // Check collisions for start game box
-        if (Collision::pointInBox({xpos, ypos}, {{-0.57f, 0.57f}, -0.6f, -0.10f}) && !cursor_on_box) {
+        if (Collision::pointInBox(mouseCoord, {{-1.0f, 1.0f}, 0.8f, 0.20f}) && !cursor_on_box) {
             start_button = true;
             shadow_button();
             return_box_to_normal = true;
@@ -173,7 +184,7 @@ void EntryMenu::cursor_click(int button)
     // Check collisions for when click happens
     if (button == 0) {
         // If quit box on main menu clicked on
-        if (Collision::pointInBox({xposition, yposition}, {{-0.57f, 0.57f}, 0.10f, 0.6f}) && !pause_menu) {
+        if (Collision::pointInBox({xposition, yposition}, {{-1, 1}, 2.0f, 2.0f}) && !pause_menu) {
             close_window = true;
             IS_MENU_ACTIVE = false;
         }
