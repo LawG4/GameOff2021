@@ -125,7 +125,7 @@ void EntryMenu::shadow_button()
             render_quit_shadow = true;
 
         } else {
-            depp_quit_button_instance->setPosition(bottom_button_front);
+            // depp_quit_button_instance->setPosition(bottom_button_front);
             render_quit_shadow = true;
         }
     }
@@ -146,28 +146,36 @@ glm::vec2 normaliseCursorCoordinates(glm::vec2 mousePos)
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
 
-    return (glm::vec2(2.0) * mousePos / glm::vec2(width, height)) - glm::vec2{1.0};
+    glm::vec2 screenspace;
+
+    // Normalise x coordinate,
+    screenspace.x = 2.0 * (mousePos.x / width) - 1.0;
+    screenspace.y = 1.0 - ((mousePos.y / height) * 2.0);
+
+    return screenspace;
 }
 
 void EntryMenu::cursor_update(double xpos, double ypos)
 {
     if (IS_MENU_ACTIVE) {
         // update stored cursor location
-        xposition = xpos;
-        yposition = ypos;
 
         glm::vec2 mouseCoord = normaliseCursorCoordinates({xpos, ypos});
+
         // Check collisions for start game box
-        if (Collision::pointInBox(mouseCoord, {{-0.6f, 0.0f}, 1.2f, 1.20f}) && !cursor_on_box) {
+        if (Collision::pointInBox(mouseCoord, {{-0.57f, 0.6f}, 1.15f, 0.5f}) && !cursor_on_box) {
             start_button = true;
             shadow_button();
             return_box_to_normal = true;
+            top_button = true;
+
         }
         // Check collisions for quit game box
-        else if (Collision::pointInBox({xpos, ypos}, {{-0.57f, 0.57f}, 0.10f, 0.6f}) && !cursor_on_box) {
+        else if (Collision::pointInBox(mouseCoord, {{-0.57f, -0.1f}, 1.15f, 0.5f}) && !cursor_on_box) {
             start_button = false;
             shadow_button();
             return_box_to_normal = true;
+            top_button = false;
         }
         // If cursor on none then return everything to normal
         else {
@@ -184,15 +192,14 @@ void EntryMenu::cursor_click(int button)
     // Check collisions for when click happens
     if (button == 0) {
         // If quit box on main menu clicked on
-        if (Collision::pointInBox({xposition, yposition}, {{-1, 1}, 2.0f, 2.0f}) && !pause_menu) {
+        if (!top_button && !pause_menu) {
             close_window = true;
             IS_MENU_ACTIVE = false;
         }
 
         // Check if Start game box has been clicked, change IS_MENU_ACTIVE to false to stop rendering this
         // menu and intialise GameObject
-        else if (Collision::pointInBox({xposition, yposition}, {{-0.57f, 0.57f}, -0.6f, -0.10f}) &&
-                 !pause_menu) {
+        else if (top_button && !pause_menu) {
             GameObject->Initialise();
             IS_MENU_ACTIVE = false;
             // Clear saved cursor positions
@@ -202,8 +209,7 @@ void EntryMenu::cursor_click(int button)
         }
 
         // If PAUSE menu open and quit button clicked return to main menu
-        else if (Collision::pointInBox({xposition, yposition}, {{-0.57f, 0.57f}, 0.10f, 0.6f}) &&
-                 pause_menu) {
+        else if (!top_button && pause_menu) {
             IS_MENU_ACTIVE = false;
             return_to_normal();
             MainMenu->IS_MENU_ACTIVE = true;
@@ -217,8 +223,7 @@ void EntryMenu::cursor_click(int button)
         }
 
         // If resume button clicked
-        else if (Collision::pointInBox({xposition, yposition}, {{-0.57f, 0.57f}, -0.60f, -0.10f}) &&
-                 pause_menu) {
+        else if (top_button && pause_menu) {
             GameObject->Initialise();
             IS_MENU_ACTIVE = false;
             menu_choice = true;
@@ -232,11 +237,11 @@ void EntryMenu::cursor_click(int button)
 
 bool EntryMenu::menu_loop(GLFWwindow *window)
 {
-    while (IS_MENU_ACTIVE) {
-        // Initialise callbacks
-        glfwSetCursorPosCallback(window, menu_cursor_position_callback);
-        glfwSetMouseButtonCallback(window, menu_mouse_button_callback);
+    // Initialise callbacks
+    glfwSetCursorPosCallback(window, menu_cursor_position_callback);
+    glfwSetMouseButtonCallback(window, menu_mouse_button_callback);
 
+    while (IS_MENU_ACTIVE) {
         // Start buttons
         if (render_start_shadow) {
             depp_start_button_instance->render();
@@ -257,9 +262,6 @@ bool EntryMenu::menu_loop(GLFWwindow *window)
     }
     return menu_choice;
 }
-
-// Declare windowdimen (window dimension) array
-float vertdimen[2];
 
 // Initialise MainMenu object
 EntryMenu *MainMenu = new EntryMenu;

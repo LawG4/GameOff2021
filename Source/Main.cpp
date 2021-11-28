@@ -69,10 +69,6 @@ int main(int argc, char *argv[])
     uint32_t windowWidth = 720;
     uint32_t windowHeight = 400;
 
-    // Input vertex data
-    vertdimen[0] = 1.0f;
-    vertdimen[1] = 1.0f;
-
     // Used to set up cursor coordinate array
     bool settingsOverride = userSetting["Override_Default_Settings"];
     if (settingsOverride) {
@@ -116,8 +112,8 @@ int main(int argc, char *argv[])
     PauseMenu->load_menu(2);
 
     // Run MainMenu first
-    MainMenu->IS_MENU_ACTIVE = false;
-    GameObject->start_game = true;
+    MainMenu->IS_MENU_ACTIVE = true;
+    // GameObject->start_game = true;
 
     // Set the resize callback
     glfwSetWindowSizeCallback(window, Camera::onWindowSize);

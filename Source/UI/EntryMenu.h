@@ -17,6 +17,7 @@ class EntryMenu
     bool start_button;
     bool pause_menu;
     bool menu_choice;
+    bool top_button = false;
 
     bool render_start_shadow;
     bool render_quit_shadow;
