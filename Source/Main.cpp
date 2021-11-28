@@ -114,7 +114,6 @@ int main(int argc, char *argv[])
     // Load MainMenu, enter 1 for main menu, 2 for pause
     MainMenu->load_menu(1);
     PauseMenu->load_menu(2);
-    collisions->intialise_object(windowWidth, windowHeight);
 
     // Run MainMenu first
     MainMenu->IS_MENU_ACTIVE = true;

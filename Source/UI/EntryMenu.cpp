@@ -147,13 +147,13 @@ void EntryMenu::cursor_update(double xpos, double ypos)
         xposition = xpos;
         yposition = ypos;
         // Check collisions for start game box
-        if (collisions->check_collision(-0.57f, 0.57f, -0.6f, -0.10f, xpos, ypos) && !cursor_on_box) {
+        if (Collision::pointInBox({xpos, ypos}, {{-0.57f, 0.57f}, -0.6f, -0.10f}) && !cursor_on_box) {
             start_button = true;
             shadow_button();
             return_box_to_normal = true;
         }
         // Check collisions for quit game box
-        else if (collisions->check_collision(-0.57f, 0.57f, 0.10f, 0.6f, xpos, ypos) && !cursor_on_box) {
+        else if (Collision::pointInBox({xpos, ypos}, {{-0.57f, 0.57f}, 0.10f, 0.6f}) && !cursor_on_box) {
             start_button = false;
             shadow_button();
             return_box_to_normal = true;
@@ -173,14 +173,14 @@ void EntryMenu::cursor_click(int button)
     // Check collisions for when click happens
     if (button == 0) {
         // If quit box on main menu clicked on
-        if (collisions->check_collision(-0.57f, 0.57f, 0.10f, 0.6f, xposition, yposition) && !pause_menu) {
+        if (Collision::pointInBox({xposition, yposition}, {{-0.57f, 0.57f}, 0.10f, 0.6f}) && !pause_menu) {
             close_window = true;
             IS_MENU_ACTIVE = false;
         }
 
         // Check if Start game box has been clicked, change IS_MENU_ACTIVE to false to stop rendering this
         // menu and intialise GameObject
-        else if (collisions->check_collision(-0.57f, 0.57f, -0.6f, -0.10f, xposition, yposition) &&
+        else if (Collision::pointInBox({xposition, yposition}, {{-0.57f, 0.57f}, -0.6f, -0.10f}) &&
                  !pause_menu) {
             GameObject->Initialise();
             IS_MENU_ACTIVE = false;
@@ -191,7 +191,7 @@ void EntryMenu::cursor_click(int button)
         }
 
         // If PAUSE menu open and quit button clicked return to main menu
-        else if (collisions->check_collision(-0.57f, 0.57f, 0.10f, 0.6f, xposition, yposition) &&
+        else if (Collision::pointInBox({xposition, yposition}, {{-0.57f, 0.57f}, 0.10f, 0.6f}) &&
                  pause_menu) {
             IS_MENU_ACTIVE = false;
             return_to_normal();
@@ -206,7 +206,7 @@ void EntryMenu::cursor_click(int button)
         }
 
         // If resume button clicked
-        else if (collisions->check_collision(-0.57f, 0.57f, -0.60f, -0.10f, xposition, yposition) &&
+        else if (Collision::pointInBox({xposition, yposition}, {{-0.57f, 0.57f}, -0.60f, -0.10f}) &&
                  pause_menu) {
             GameObject->Initialise();
             IS_MENU_ACTIVE = false;
