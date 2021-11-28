@@ -11,3 +11,8 @@ namespace Textures
 std::vector<glm::vec2> generateTexCoordinates(glm::vec2 topLeft, glm::vec2 spriteSize, glm::vec2 textureSize);
 
 }
+
+namespace AnimatedSprites
+{
+std::pair<SpriteSheet*, AnimatedSprite*> spinningCoin();
+}
