@@ -5,6 +5,7 @@
 \Contributors  : Lawrence G,
  *********************************************************************************************************/
 #include "Window.h"
+
 namespace Gameplay
 {
 /// <summary>Tells us if the gameplay is currently running or not</summary>

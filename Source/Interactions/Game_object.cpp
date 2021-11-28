@@ -9,18 +9,6 @@
 #include <iostream>
 #include "Keyboard_input.h"
 
-/*
-=== Plan ===
-
-Make player class/struct object thing
-- 3 parts (Physical[movements],Actions[attacks, maybe merge with physical??],General updates[e.g health
-updates, all all player data e.g attack pwoer ect])
-
-- Detect when playable, so when paused or un paused
-- Take key commands and
-
-*/
-
 // Player class methods
 player::player()
 {  // Player constructor to create base player data values
@@ -49,3 +37,6 @@ void Game_object::Initialise() { start_game = true; }
 
 // Build GameObject class as GLOBAL
 Game_object* GameObject = new Game_object;
+
+// Global variable
+bool game_state = false;

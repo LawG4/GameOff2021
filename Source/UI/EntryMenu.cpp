@@ -8,6 +8,8 @@
 #include "Sprites.h"
 #include "nlohmann/json.hpp"
 
+#include "Gameplay.h"
+
 #include "Cursor_input.h"
 #include "EntryMenu.h"
 #include "Game_object.h"
@@ -200,7 +202,7 @@ void EntryMenu::cursor_click(int button)
         // Check if Start game box has been clicked, change IS_MENU_ACTIVE to false to stop rendering this
         // menu and intialise GameObject
         else if (top_button && !pause_menu) {
-            GameObject->Initialise();
+            game_state = true;
             IS_MENU_ACTIVE = false;
             // Clear saved cursor positions
             xposition = 0;

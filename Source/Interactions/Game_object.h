@@ -34,3 +34,5 @@ class Game_object
 };
 
 extern Game_object* GameObject;
+
+extern bool game_state;

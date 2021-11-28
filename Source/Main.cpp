@@ -113,10 +113,13 @@ int main(int argc, char *argv[])
 
     // Run MainMenu first
     MainMenu->IS_MENU_ACTIVE = true;
-    // GameObject->start_game = true;
 
     // Set the resize callback
     glfwSetWindowSizeCallback(window, Camera::onWindowSize);
+
+    // Initialise callbacks to main menu first thing
+    glfwSetCursorPosCallback(window, menu_cursor_position_callback);
+    glfwSetMouseButtonCallback(window, menu_mouse_button_callback);
 
     // Enter into the windowing loop
     while (!glfwWindowShouldClose(window)) {
@@ -131,8 +134,25 @@ int main(int argc, char *argv[])
         // Poll GLFW for user events so they can be processed
         glfwPollEvents();
 
-        // Check the main menu to see if the initalisation has been clicked
-        if (GameObject->start_game) {
+        // Check if menu is active, if it, enter menu loop
+        // Potential add check for callbacks?
+        if (MainMenu->IS_MENU_ACTIVE) {
+            // Start buttons
+            if (MainMenu->render_start_shadow) {
+                MainMenu->depp_start_button_instance->render();
+            } else {
+                MainMenu->normal_start_button_instance->render();
+            }
+            // Quit buttons
+            if (MainMenu->render_quit_shadow) {
+                MainMenu->depp_quit_button_instance->render();
+            } else {
+                MainMenu->normal_quit_button_instance->render();
+            }
+        }
+
+        // Check to see if game loop needs to be entered
+        if (game_state) {
             Log.info("Starting Game");
             // Initialise game and assets
             Gameplay::initialise();
@@ -140,11 +160,7 @@ int main(int argc, char *argv[])
             Gameplay::gameLoop();
         }
 
-        // Check if menu is active, if it, enter menu loop
-        if (MainMenu->IS_MENU_ACTIVE) {
-            MainMenu->menu_loop(window);
-        }
-
+        vk::drawFrame();
         // Frame has finished so end the clock so we know how long it took
         Time::EndFrameTime();
     }
