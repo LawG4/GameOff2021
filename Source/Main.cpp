@@ -132,13 +132,11 @@ int main(int argc, char* argv[])
         // Start this frames clock, so we can know how long it took
         Time::startFrameTime();
 
-        // If the user has asked the window to close through the Ui then schedule window destruction
-        if (close_window == true) {
-            glfwSetWindowShouldClose(window, true);
-        }
-
         // Poll GLFW for user events so they can be processed
         glfwPollEvents();
+
+        // Use Vulkan to render the frame
+        vk::drawFrame();
 
         // Check if menu is active, if it, enter menu loop
         // Potential add check for callbacks?
@@ -166,7 +164,11 @@ int main(int argc, char* argv[])
             Gameplay::gameLoop();
         }
 
-        vk::drawFrame();
+        // If the user has asked the window to close through the Ui then schedule window destruction
+        if (close_window == true) {
+            glfwSetWindowShouldClose(window, true);
+        }
+
         // Frame has finished so end the clock so we know how long it took
         Time::EndFrameTime();
     }

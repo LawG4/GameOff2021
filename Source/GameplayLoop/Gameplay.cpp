@@ -5,10 +5,12 @@
 \Contributors  : Lawrence G, Freddie M
  *********************************************************************************************************/
 
-#include "Gameplay.h"
+#include "Game_object.h"
+
 #include "Animation.h"
 #include "AssetHelper.h"
 #include "EntryMenu.h"
+#include "Gameplay.h"
 #include "Log.h"
 #include "Timer.h"
 #include "Window.h"
@@ -18,12 +20,15 @@ bool _init = false;
 bool _isActive = false;
 bool Gameplay::isActive() { return _isActive; }
 
-// Store the grasshopper and coordinates
+// Store the assets and coordinates
 SpriteSheet* _coinSheet = nullptr;
 AnimatedSprite* _coin = nullptr;
 
-SpriteSheet* _coinSheet2 = nullptr;
-AnimatedSprite* _coin2 = nullptr;
+SpriteSheet* _hopperSheetwalk = nullptr;
+AnimatedSprite* _walkhopper = nullptr;
+
+SpriteSheet* _hopperSheetjump = nullptr;
+AnimatedSprite* _jumphopper = nullptr;
 
 void gameplay_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -46,6 +51,7 @@ void gameplay_key_callback(GLFWwindow* window, int key, int scancode, int action
     // Escape to pause menu
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         // Call pause menu
+        PauseMenu->IS_MENU_ACTIVE = true;
     }
 }
 
@@ -64,10 +70,27 @@ void Gameplay::initialise()
     _init = true;
 
     // Load the assets
+
+    // Coin
     std::pair<SpriteSheet*, AnimatedSprite*> coin = AnimatedSprites::spinningCoin();
     _coinSheet = coin.first;
     SpriteInternals::activeSheets.push_back(_coinSheet);
     _coin = coin.second;
+    _coin->setPosition({-3.0, 0, 0});
+
+    // Walking hopper
+    std::pair<SpriteSheet*, AnimatedSprite*> walkhopper = AnimatedSprites::hopperwalk();
+    _hopperSheetwalk = walkhopper.first;
+    SpriteInternals::activeSheets.push_back(_hopperSheetwalk);
+    _walkhopper = walkhopper.second;
+    _walkhopper->setPosition({0, 0, 0});
+
+    // Jumping hoppper
+    std::pair<SpriteSheet*, AnimatedSprite*> jumphopper = AnimatedSprites::hopperjump();
+    _hopperSheetjump = jumphopper.first;
+    SpriteInternals::activeSheets.push_back(_hopperSheetjump);
+    _jumphopper = jumphopper.second;
+    _jumphopper->setPosition({1.0, 0, 0});
 
     // Load the wallpaper
     std::pair<SpriteSheet*, Sprite*> cityPair = BackgroundSprites::CityCentre();
@@ -94,9 +117,14 @@ void Gameplay::initialise()
 
 void Gameplay::playFrame(float deltaTime)
 {
-    //_hopper->setRotation(_hopper->getRotation() + deltaTime * glm::vec3(0, 0, 1));
     _coin->updateDelta(deltaTime);
     _coin->render();
+
+    _walkhopper->updateDelta(deltaTime);
+    _walkhopper->render();
+
+    _jumphopper->updateDelta(deltaTime);
+    _jumphopper->render();
 
     backgroundInstance->render();
     for (SpriteInstance& sprite : backgroundSides) {
@@ -115,6 +143,10 @@ void Gameplay::cleanup()
 
     delete _coin;
     delete _coinSheet;
+    delete _walkhopper;
+    delete _hopperSheetwalk;
+    delete _jumphopper;
+    delete _hopperSheetjump;
     delete backgroundSprite;
     delete backgroundSheet;
     delete backgroundRightSprite;
@@ -131,8 +163,22 @@ void Gameplay::gameLoop()
         // Poll GLFW for user events so they can be processed
         glfwPollEvents();
 
+        // Check if pause menu is active, if it, enter pause menu loop
+        if (PauseMenu->IS_MENU_ACTIVE) {
+            PauseMenu->menu_loop(window);
+        }
+
         // If the window x button was pressed then break out
         if (glfwWindowShouldClose(window)) {
+            _isActive = false;
+            Gameplay::cleanup();
+            break;
+        }
+
+        // If user has chosen to quit game, break out and return to main menu loop
+        if (!game_state) {
+            MainMenu->IS_MENU_ACTIVE = true;
+            game_state = false;
             _isActive = false;
             Gameplay::cleanup();
             break;

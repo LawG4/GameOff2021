@@ -58,6 +58,54 @@ std::pair<SpriteSheet*, AnimatedSprite*> AnimatedSprites::spinningCoin()
     return pair;
 }
 
+// Hopper textures
+std::pair<SpriteSheet*, AnimatedSprite*> AnimatedSprites::hopperwalk()
+{
+    // create the pair
+    std::pair<SpriteSheet*, AnimatedSprite*> pair;
+    SpriteSheet* sheet = new SpriteSheet("Textures/Hopper_walking_v2.png");
+
+    // Using the tex coord generator get all of the keyframes of the animation
+    std::vector<std::vector<glm::vec2>> tex(4);
+    tex[0] = Textures::generateTexCoordinates({0, 75}, {100, 75}, {400, 75});
+    tex[1] = Textures::generateTexCoordinates({100, 75}, {100, 75}, {400, 75});
+    tex[2] = Textures::generateTexCoordinates({200, 75}, {100, 75}, {400, 75});
+    tex[3] = Textures::generateTexCoordinates({300, 75}, {100, 75}, {400, 75});
+
+    AnimatedSprite* sprite = new AnimatedSprite(sheet, tex, 1.0);
+    sprite->setScale(Textures::getTexSize({100, 75}));
+
+    pair.first = sheet;
+    pair.second = sprite;
+
+    return pair;
+}
+
+// Hopper textures
+std::pair<SpriteSheet*, AnimatedSprite*> AnimatedSprites::hopperjump()
+{
+    // create the pair
+    std::pair<SpriteSheet*, AnimatedSprite*> pair;
+    SpriteSheet* sheet = new SpriteSheet("Textures/Hopperjump.png");
+
+    // Using the tex coord generator get all of the keyframes of the animation
+    std::vector<std::vector<glm::vec2>> tex(6);
+    tex[0] = Textures::generateTexCoordinates({0, 75}, {100, 75}, {600, 75});
+    tex[1] = Textures::generateTexCoordinates({100, 75}, {100, 75}, {600, 75});
+    tex[2] = Textures::generateTexCoordinates({200, 75}, {100, 75}, {600, 75});
+    tex[3] = Textures::generateTexCoordinates({300, 75}, {100, 75}, {600, 75});
+    tex[4] = Textures::generateTexCoordinates({400, 75}, {100, 75}, {600, 75});
+    tex[5] = Textures::generateTexCoordinates({500, 75}, {100, 75}, {600, 75});
+
+    AnimatedSprite* sprite = new AnimatedSprite(sheet, tex, 1.0);
+    sprite->setScale(Textures::getTexSize({100, 75}));
+
+    pair.first = sheet;
+    pair.second = sprite;
+
+    return pair;
+}
+
 std::pair<SpriteSheet*, Sprite*> BackgroundSprites::CityCentre()
 {
     std::pair<SpriteSheet*, Sprite*> pair;
