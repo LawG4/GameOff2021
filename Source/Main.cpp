@@ -117,7 +117,8 @@ int main(int argc, char* argv[])
 
     // Run MainMenu first
     MainMenu->IS_MENU_ACTIVE = true;
-
+    // Sound check
+    bool soundcheck = false;
     // Set the resize callback
     glfwSetWindowSizeCallback(window, Camera::onWindowSize);
 
@@ -137,7 +138,6 @@ int main(int argc, char* argv[])
         vk::drawFrame();
 
         // Check if menu is active, if it, enter menu loop
-        // Potential add check for callbacks?
         if (MainMenu->IS_MENU_ACTIVE) {
             // First the background
             MainMenu->backgroundInstance->render();
@@ -162,9 +162,11 @@ int main(int argc, char* argv[])
         // Check to see if game loop needs to be entered
         if (game_state) {
             Log.info("Starting Game");
-
-            // Play music
-            Sounds::music();
+            if (!soundcheck) {
+                // Play music
+                Sounds::music();
+                soundcheck = true;
+            }
             // Initialise game and assets
             Gameplay::initialise();
             // Enter gameLoop

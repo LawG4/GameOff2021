@@ -118,3 +118,17 @@ std::pair<SpriteSheet*, Sprite*> BackgroundSprites::CityCentre()
 
     return pair;
 }
+
+// Floor texture
+std::pair<SpriteSheet*, Sprite*> BackgroundSprites::floor()
+{
+    std::pair<SpriteSheet*, Sprite*> pair;
+    SpriteSheet* sheet = new SpriteSheet("Textures/floor.png");
+
+    Sprite* sprite = new Sprite(sheet, {{0, 1}, {1, 1}, {1, 0}, {0, 0}});
+
+    pair.first = sheet;
+    pair.second = sprite;
+
+    return pair;
+}
