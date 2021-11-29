@@ -5,11 +5,13 @@
 \Contributors  : Lawrence G, Freddie M
  *********************************************************************************************************/
 
-#include "Game_object.h"
+#include <cstdlib>
+#include <ctime>
 
 #include "Animation.h"
 #include "AssetHelper.h"
 #include "EntryMenu.h"
+#include "Game_object.h"
 #include "Gameplay.h"
 #include "Log.h"
 #include "Timer.h"
@@ -36,7 +38,16 @@ SpriteSheet* floor_sheet;
 Sprite* floor_sprite;
 SpriteInstance* floor_instance;
 
+// server1 tiles
+SpriteSheet* _server1_sheet;
+Sprite* _server1_sprite;
+// spriteInstance* _server1_instance;
+
 SpriteInstance* floorarray[40];
+
+SpriteInstance* serverarray[10];
+
+SpriteInstance* render_array[10];
 
 void gameplay_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -129,6 +140,16 @@ void Gameplay::initialise()
         floorarray[i] = floor;
     }
 
+    // Load server 1
+    std::pair<SpriteSheet*, Sprite*> server1pair = BackgroundSprites::server1();
+    _server1_sheet = server1pair.first;
+    SpriteInternals::activeSheets.push_back(_server1_sheet);
+    _server1_sprite = server1pair.second;
+    for (int i = 0; i < 10; i++) {
+        serverarray[i] =
+          new SpriteInstance(_server1_sprite, {0, 0, 0}, Textures::getTexSize({75, 75}), {0, 0, 0});
+    }
+
     // Load the wallpaper
     std::pair<SpriteSheet*, Sprite*> cityPair = BackgroundSprites::CityCentre();
     backgroundSheet = cityPair.first;
@@ -159,6 +180,29 @@ void Gameplay::playFrame(float deltaTime)
 
     // Update the hoppers position using the physics engine
     _walkhopper->setPosition(glm::vec3(Physics::updatePosition(deltaTime, {}), _walkhopper->getPosition().z));
+
+    int* position_choice = Gameplay::randWallValue();
+    glm::vec3 postion = _walkhopper->getPosition();
+
+    postion[0] += 1.5;
+    // if (postion[0] + 1.5);
+    postion[1] = -0.8;
+    glm::vec3 dumypos = postion;
+    dumypos[1] = 1;
+
+    for (int i = 0; i < 8; i++) {
+        if (position_choice[i] == 1) {
+            serverarray[i]->setPosition(postion);
+            serverarray[i]->render();
+            postion[1] += 0.29295;
+            dumypos[1] += 0.29295;
+        } else {
+            serverarray[i]->setPosition(postion);
+            serverarray[i]->render();
+            postion[1] += 0.29295;
+            dumypos[1] += 0.29295;
+        }
+    }
 
     // Update the hoppers animation
     _walkhopper->updateDelta(Physics::getVelocity().x * deltaTime);
@@ -227,6 +271,7 @@ void Gameplay::gameLoop()
         if (!game_state) {
             MainMenu->IS_MENU_ACTIVE = true;
             _isActive = false;
+            Gameplay::randWallValue();
             // Gameplay::cleanup();
             break;
         }
@@ -282,4 +327,27 @@ void Gameplay::windowSize(uint32_t width, uint32_t height)
         // Invert our trakcer
         sideTracker ^= 1;
     }
+}
+
+// Function to create array that will hold instructions for what next set of blocks will be
+int* Gameplay::randWallValue()
+{
+    // Create blank array to
+    int location_directions[10];
+
+    // Seed random with current time
+    std::srand(std::time(nullptr));
+
+    // Loop to create our numbers and based on them decide fate of blocks
+    for (int i = 0; i < 10; i++) {
+        float random_variable = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+        if (random_variable > 0.50) {
+            if (random_variable > 0.50) {
+                location_directions[i] = 1;
+            }
+        } else {
+            location_directions[i] = 0;
+        }
+    }
+    return location_directions;
 }

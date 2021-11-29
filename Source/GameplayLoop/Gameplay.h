@@ -29,6 +29,8 @@ void gameLoop();
 void windowSize(uint32_t width, uint32_t height);
 
 void cleanup();
+
+int* randWallValue();
 }  // namespace Gameplay
 
 namespace Physics
