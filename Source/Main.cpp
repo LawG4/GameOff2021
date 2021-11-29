@@ -106,6 +106,7 @@ int main(int argc, char* argv[])
 
     // Testing start a sound engine
     irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
+    engine->play2D("Assets/Chill.mp3");
 
     // Key input data
     glfwSetKeyCallback(window, key_callback);

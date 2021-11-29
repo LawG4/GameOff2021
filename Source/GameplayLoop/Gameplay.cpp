@@ -178,7 +178,6 @@ void Gameplay::gameLoop()
         // If user has chosen to quit game, break out and return to main menu loop
         if (!game_state) {
             MainMenu->IS_MENU_ACTIVE = true;
-            game_state = false;
             _isActive = false;
             // Gameplay::cleanup();
             break;
