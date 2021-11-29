@@ -16,14 +16,12 @@
 #include "collision.h"
 
 #include "Gameplay.h"
+#include "Sounds.h"
 #include "Sprites.h"
 #include "Timer.h"
 
 #include <fstream>
 #include <iostream>
-
-// Just test if sound works
-#include <irrKlang.h>
 
 /// <summary> Destory everything </summary>
 void cleanUp()
@@ -104,10 +102,6 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    // Testing start a sound engine
-    irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
-    engine->play2D("Assets/Chill.mp3");
-
     // Key input data
     glfwSetKeyCallback(window, key_callback);
 
@@ -120,6 +114,9 @@ int main(int argc, char* argv[])
 
     // Run MainMenu first
     MainMenu->IS_MENU_ACTIVE = true;
+
+    // Play music
+    Sounds::music();
 
     // Set the resize callback
     glfwSetWindowSizeCallback(window, Camera::onWindowSize);

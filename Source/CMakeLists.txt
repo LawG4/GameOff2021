@@ -13,6 +13,7 @@ set(COMPONENTS
 	GameplayLoop
 	Animation
 	AssetLoader
+	Sounds
 )
 
 foreach(directory ${COMPONENTS})
