@@ -16,14 +16,12 @@
 #include "collision.h"
 
 #include "Gameplay.h"
+#include "Sounds.h"
 #include "Sprites.h"
 #include "Timer.h"
 
 #include <fstream>
 #include <iostream>
-
-// Just test if sound works
-#include <irrKlang.h>
 
 /// <summary> Destory everything </summary>
 void cleanUp()
@@ -38,6 +36,9 @@ void cleanUp()
 
     // Destroy player object
     delete player_class;
+
+    // Destroy music engine when music no longer needed
+    Sounds::stopmusic();
 
     // If the window exists destroy it
     if (window) glfwDestroyWindow(window);
@@ -104,9 +105,6 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    // Testing start a sound engine
-    irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
-
     // Key input data
     glfwSetKeyCallback(window, key_callback);
 
@@ -164,6 +162,9 @@ int main(int argc, char* argv[])
         // Check to see if game loop needs to be entered
         if (game_state) {
             Log.info("Starting Game");
+
+            // Play music
+            Sounds::music();
             // Initialise game and assets
             Gameplay::initialise();
             // Enter gameLoop
