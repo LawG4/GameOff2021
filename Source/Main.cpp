@@ -37,6 +37,9 @@ void cleanUp()
     // Destroy player object
     delete player_class;
 
+    // Destroy music engine when music no longer needed
+    Sounds::stopmusic();
+
     // If the window exists destroy it
     if (window) glfwDestroyWindow(window);
     glfwTerminate();
@@ -166,9 +169,6 @@ int main(int argc, char* argv[])
             Gameplay::initialise();
             // Enter gameLoop
             Gameplay::gameLoop();
-
-            // Destroy music engine when music no longer needed
-            Sounds::stopmusic();
         }
 
         // If the user has asked the window to close through the Ui then schedule window destruction
