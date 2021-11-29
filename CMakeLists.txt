@@ -61,3 +61,41 @@ add_dependencies(${PROJ_NAME} SPIRV_TARGET)
 
 # Add in the assets
 add_subdirectory(Assets)
+
+# ===============================================================================================
+# Add in the requirements for copying over the licenses into the release folder 
+set(LICENSE_LIST
+External/irrKlang/irrKlang_License.txt
+External/stb/stb_License.txt
+External/glfw/License.md
+External/glm/copying.txt
+External/json/LICENSE.MIT
+External/spdlog/LICENSE
+)
+
+# for each license create a custom command for copying it over
+foreach(License ${LICENSE_LIST})
+
+	# Get the name of the directory containing the license and use it as the name of the directory
+	get_filename_component(LicenseOUT ${License} DIRECTORY)
+	get_filename_component(LicenseOUT ${LicenseOUT} NAME)
+	set(LicenseOUT "${LicenseOUT}_License.txt")
+
+	# Track the output file name so we can track it's dependencies
+	set(LICENSES_LIST_OUT ${LICENSES_LIST_OUT} ${LicenseOUT})
+
+	# Add the command that copies this license to the release directory
+	add_custom_command(
+		OUTPUT ${PROJ_ROOT}/bin/$<CONFIG>/Licenses/${LicenseOUT}
+		COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJ_ROOT}/bin/$<CONFIG>/Licenses
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different
+			"${CMAKE_CURRENT_LIST_DIR}/${License}"
+			"${PROJ_ROOT}/bin/$<CONFIG>/Licenses/${LicenseOUT}"
+		DEPENDS ${License}
+		COMMENT "Copying License : ${LicenseOUT}"
+	)
+endforeach()
+
+# Create the target for copying all textures
+add_custom_target(License_Target ALL DEPENDS ${LICENSES_LIST_OUT})
+add_dependencies(${PROJ_NAME} License_Target)

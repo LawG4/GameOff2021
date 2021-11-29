@@ -22,6 +22,9 @@
 #include <fstream>
 #include <iostream>
 
+// Just test if sound works
+#include <irrKlang.h>
+
 /// <summary> Destory everything </summary>
 void cleanUp()
 {
@@ -100,6 +103,9 @@ int main(int argc, char* argv[])
         cleanUp();
         return -1;
     }
+
+    // Testing start a sound engine
+    irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
 
     // Key input data
     glfwSetKeyCallback(window, key_callback);

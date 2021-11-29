@@ -11,3 +11,8 @@ build/*
 # Remove the bin directory
 bin/*
 */bin/*
+
+# Ignore everything in irrKlang except the license
+!External/irrKlang
+External/irrKlang/*
+!External/irrKlang/irrKlang_License.txt
