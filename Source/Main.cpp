@@ -129,6 +129,9 @@ int main(int argc, char *argv[])
         // Poll GLFW for user events so they can be processed
         glfwPollEvents();
 
+        // Use Vulkan to render the frame
+        vk::drawFrame();
+
         // Check if menu is active, if it, enter menu loop
         // Potential add check for callbacks?
         if (MainMenu->IS_MENU_ACTIVE) {
@@ -159,8 +162,6 @@ int main(int argc, char *argv[])
         if (close_window == true) {
             glfwSetWindowShouldClose(window, true);
         }
-
-        vk::drawFrame();
 
         // Frame has finished so end the clock so we know how long it took
         Time::EndFrameTime();

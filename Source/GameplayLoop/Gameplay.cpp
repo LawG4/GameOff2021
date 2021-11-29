@@ -134,15 +134,6 @@ void Gameplay::gameLoop()
         // Poll GLFW for user events so they can be processed
         glfwPollEvents();
 
-        // If user has chosen to quit game, break out and return to main menu loop
-        if (!game_state) {
-            MainMenu->IS_MENU_ACTIVE = true;
-            game_state = false;
-            _isActive = false;
-            // Gameplay::cleanup();
-            break;
-        }
-
         // Check if pause menu is active, if it, enter pause menu loop
         if (PauseMenu->IS_MENU_ACTIVE) {
             PauseMenu->menu_loop(window);
@@ -152,6 +143,15 @@ void Gameplay::gameLoop()
         if (glfwWindowShouldClose(window)) {
             _isActive = false;
             Gameplay::cleanup();
+            break;
+        }
+
+        // If user has chosen to quit game, break out and return to main menu loop
+        if (!game_state) {
+            MainMenu->IS_MENU_ACTIVE = true;
+            game_state = false;
+            _isActive = false;
+            // Gameplay::cleanup();
             break;
         }
 

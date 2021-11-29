@@ -233,7 +233,8 @@ void EntryMenu::menu_loop(GLFWwindow *window)
     glfwSetMouseButtonCallback(window, menu_mouse_button_callback);
 
     while (IS_MENU_ACTIVE) {
-        if (!IS_MENU_ACTIVE) {
+        // Check if X button in top left has been clicked
+        if (glfwWindowShouldClose(window)) {
             break;
         }
 
