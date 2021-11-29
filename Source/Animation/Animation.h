@@ -26,6 +26,10 @@ class AnimatedSprite
     /// <summary>Renders the currently selected frame </summary>
     void render();
 
+    /// <summary>Renders an instance of this animated sprite for the currently selected frame at a position on
+    /// screen</summary> <param name="mvp">The model view projection matrix </param>
+    void render(glm::mat4 mvp);
+
     /// <summary>Updates how much time has passed from the previous frame</summary>
     /// <param name="delta">Time which has passed</param>
     void updateDelta(double delta);
@@ -79,4 +83,19 @@ class AnimatedSprite
 
     /// <summary>How long one loop of the lasts</summary>
     double _totalTime = 0.0;
+};
+
+class AnimationInstance : public SpriteInstance
+{
+   public:
+    AnimationInstance();
+    AnimationInstance(AnimatedSprite* animated, glm::vec3 pos = {0, 0, 0}, glm::vec3 scale = {1, 1, 1},
+                      glm::vec3 rot = {0, 0, 0});
+    ~AnimationInstance();
+
+    /// <summary>Overrides the base render function </summary>
+    void render();
+
+   protected:
+    AnimatedSprite* _animated;
 };

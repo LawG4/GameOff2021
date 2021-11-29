@@ -97,12 +97,13 @@ class Sprite
 class SpriteInstance
 {
    public:
+    SpriteInstance();
     SpriteInstance(Sprite* sprite);
     SpriteInstance(Sprite* sprite, glm::vec3 pos, glm::vec3 scale, glm::vec3 rot);
     ~SpriteInstance();
 
     // Sets this sprite instance to be rendered this frame.
-    void render();
+    virtual void render();
 
     // Setters
     void setPosition(glm::vec3 position);

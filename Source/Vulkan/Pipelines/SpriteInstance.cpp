@@ -39,6 +39,8 @@ SpriteInstance::SpriteInstance(Sprite* sprite, glm::vec3 pos, glm::vec3 scale, g
     _mvpOutdated = false;
 }
 
+SpriteInstance::SpriteInstance() {}
+
 SpriteInstance::~SpriteInstance() {}
 
 glm::mat4 SpriteInstance::getMvp()
