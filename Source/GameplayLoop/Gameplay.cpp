@@ -121,10 +121,14 @@ void Gameplay::initialise()
     SpriteInternals::activeSheets.push_back(floor_sheet);
     floor_sprite = floorpair.second;
 
+    float tempfloat = 0;
     for (int i = 0; i < 20; i++) {
-        SpriteInstance* floor =
-          new SpriteInstance(floor_sprite, {i - 10, -3.6, 0}, Textures::getTexSize({75, 75}), {0, 0, 0});
+        tempfloat += 0.29295;
+        SpriteInstance* floor = new SpriteInstance(floor_sprite, {tempfloat - 3, -1.1, 0},
+                                                   Textures::getTexSize({75, 75}), {0, 0, 0});
         floorarray[i] = floor;
+        Log.error(Textures::getTexSize({75, 75})[0]);
+        Log.error(Textures::getTexSize({75, 75})[1]);
     }
 
     // Load the wallpaper
