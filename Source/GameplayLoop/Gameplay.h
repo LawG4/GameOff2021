@@ -5,6 +5,7 @@
 \Contributors  : Lawrence G,
  *********************************************************************************************************/
 #include "Window.h"
+#include "collision.h"
 
 namespace Gameplay
 {
@@ -29,3 +30,27 @@ void windowSize(uint32_t width, uint32_t height);
 
 void cleanup();
 }  // namespace Gameplay
+
+namespace Physics
+{
+/// <summary>Updates the players acceleration</summary>
+/// <param name="acceleration">The acceleration to set</param>
+void setAcceleration(glm::vec2 acceleration);
+
+void setHorizontalAcceleration(float x);
+
+/// <summary>Updates the players current velocity</summary>
+/// <param name="velocity">The velocity to  set</param>
+void setVelocity(glm::vec2 velocity);
+
+glm::vec2 getVelocity();
+
+/// <summary>Runs the physics calculations and returns the players position</summary>
+/// <param name="deltaTime">Time that has passed</param>
+/// <param name="rectangles">Bounding boxes for all the positions to test</param>
+/// <returns>Players position</returns>
+glm::vec2 updatePosition(double deltaTime, const std::vector<BoundingRect>& rectangles);
+
+/// <summary>Make the grassshopper jump</summary>
+void jump();
+}  // namespace Physics

@@ -33,26 +33,40 @@ AnimatedSprite* _jumphopper = nullptr;
 
 void gameplay_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    // Store the hopper position
-    glm::vec3 pos = _coin->getPosition();
-
-    // Get the state for the D button for foward
-    int state = glfwGetKey(window, GLFW_KEY_D);
-    if (state == GLFW_PRESS) {
-        // Gonna have to comment this out, as I'm having a merge conflict sorry
-        /*
-        // move the hopper to the right
-        if (Gameplay::frontcol()) {
-            // Ideally this will be set the acceleration because we don't have delta time in the callback
-            _coin->setPosition(pos + glm::vec3(0.1, 0.0, 0.0));
+    // If a key has been released
+    if (action == GLFW_RELEASE) {
+        switch (key) {
+            case GLFW_KEY_D:  // D key released
+                Physics::setHorizontalAcceleration(0);
+                break;
+            case GLFW_KEY_A:  // A key released
+                Physics::setHorizontalAcceleration(0);
+                break;
+            default:
+                break;
         }
-        */
     }
 
-    // Escape to pause menu
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-        // Call pause menu
-        PauseMenu->IS_MENU_ACTIVE = true;
+    // If a key has been pressed
+    if (action == GLFW_PRESS) {
+        switch (key) {
+            case GLFW_KEY_SPACE:  // Space key pressed
+                // Make the hopper jump
+                Physics::jump();
+                break;
+            case GLFW_KEY_D:  // D Key pressed
+                Physics::setHorizontalAcceleration(1.0);
+                break;
+            case GLFW_KEY_A:  // A Key pressed
+                Physics::setHorizontalAcceleration(-1.0);
+                break;
+            case GLFW_KEY_ESCAPE:  // Escape key pressed
+                // Make the pause menu show
+                PauseMenu->IS_MENU_ACTIVE = true;
+                break;
+            default:
+                break;
+        }
     }
 }
 
@@ -122,7 +136,13 @@ void Gameplay::playFrame(float deltaTime)
     _coin->updateDelta(deltaTime);
     _coin->render();
 
-    _walkhopper->updateDelta(deltaTime);
+    // Update the hoppers position using the physics engine
+    _walkhopper->setPosition(glm::vec3(Physics::updatePosition(deltaTime, {}), _walkhopper->getPosition().z));
+
+    // Update the hoppers animation
+    _walkhopper->updateDelta(Physics::getVelocity().x * deltaTime);
+
+    // Finally render the hopper
     _walkhopper->render();
     walkInstnace.render();
 

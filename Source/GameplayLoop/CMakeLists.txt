@@ -10,6 +10,7 @@ set(HEADERS
 
 set(SOURCES
 	Gameplay.cpp
+	PlayerPhysics.cpp
 )
 
 target_sources(${PROJ_NAME} PRIVATE ${HEADERS} ${SOURCES})
