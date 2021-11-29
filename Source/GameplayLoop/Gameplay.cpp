@@ -190,6 +190,18 @@ void Gameplay::playFrame(float deltaTime)
     glm::vec3 dumypos = postion;
     dumypos[1] = 1;
 
+    // render chunks in 3x8 area
+    /*
+    To do
+
+     1. make Gameplay::randWallValue(); return array of 24 numbers (0 to 4)
+     2. Use to fill array of sprite instances or null -> update sprite instance positions as well during this
+    step (have this be also be coppied and fed into collisions engine??)
+     3. Then have for loop to loop through array for each frame and render if something is present or not if
+    empty
+
+    */
+
     for (int i = 0; i < 8; i++) {
         if (position_choice[i] == 1) {
             serverarray[i]->setPosition(postion);
