@@ -142,7 +142,7 @@ void Gameplay::gameLoop()
         // If the window x button was pressed then break out
         if (glfwWindowShouldClose(window)) {
             _isActive = false;
-            Gameplay::cleanup();
+            // Gameplay::cleanup();
             break;
         }
 
