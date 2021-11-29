@@ -16,7 +16,7 @@ set(TEXTURE_LIST
 	Button_Sprite.png
 	Pause_Button_Sprite.png
 	SpinningCoin.png
-	Hopper_walking.png
+	Hopper_walking_v2.png
 	CityCentre.png
 	CityEdges.png
 )

@@ -15,7 +15,8 @@ glm::vec3 getTexSize(glm::vec2 spriteSize);
 namespace AnimatedSprites
 {
 std::pair<SpriteSheet*, AnimatedSprite*> spinningCoin();
-}
+std::pair<SpriteSheet*, AnimatedSprite*> hopperwalk();
+}  // namespace AnimatedSprites
 
 namespace BackgroundSprites
 {

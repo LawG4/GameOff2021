@@ -24,8 +24,8 @@ bool Gameplay::isActive() { return _isActive; }
 SpriteSheet* _coinSheet = nullptr;
 AnimatedSprite* _coin = nullptr;
 
-SpriteSheet* _coinSheet2 = nullptr;
-AnimatedSprite* _coin2 = nullptr;
+SpriteSheet* _hopperSheet = nullptr;
+AnimatedSprite* _hopper = nullptr;
 
 void gameplay_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -72,6 +72,12 @@ void Gameplay::initialise()
     SpriteInternals::activeSheets.push_back(_coinSheet);
     _coin = coin.second;
 
+    std::pair<SpriteSheet*, AnimatedSprite*> hopper = AnimatedSprites::hopperwalk();
+    _hopperSheet = hopper.first;
+    SpriteInternals::activeSheets.push_back(_hopperSheet);
+    _hopper = hopper.second;
+    _hopper->setPosition({1.0, 0, 0});
+
     // Load the wallpaper
     std::pair<SpriteSheet*, Sprite*> cityPair = BackgroundSprites::CityCentre();
     backgroundSheet = cityPair.first;
@@ -97,9 +103,11 @@ void Gameplay::initialise()
 
 void Gameplay::playFrame(float deltaTime)
 {
-    //_hopper->setRotation(_hopper->getRotation() + deltaTime * glm::vec3(0, 0, 1));
     _coin->updateDelta(deltaTime);
     _coin->render();
+
+    _hopper->updateDelta(deltaTime);
+    _hopper->render();
 
     backgroundInstance->render();
     for (SpriteInstance& sprite : backgroundSides) {
@@ -118,6 +126,8 @@ void Gameplay::cleanup()
 
     delete _coin;
     delete _coinSheet;
+    delete _hopper;
+    delete _hopperSheet;
     delete backgroundSprite;
     delete backgroundSheet;
     delete backgroundRightSprite;
