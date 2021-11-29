@@ -65,8 +65,7 @@ add_subdirectory(Assets)
 # ===============================================================================================
 # Add in the requirements for copying over the licenses into the release folder 
 set(LICENSE_LIST
-External/
-/irrKlang_License.txt
+External/irrKlang_License.txt
 External/stb/stb_License.txt
 External/glfw/License.md
 External/glm/copying.txt
