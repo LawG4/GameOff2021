@@ -127,8 +127,6 @@ void Gameplay::initialise()
         SpriteInstance* floor = new SpriteInstance(floor_sprite, {tempfloat - 3, -1.1, 0},
                                                    Textures::getTexSize({75, 75}), {0, 0, 0});
         floorarray[i] = floor;
-        Log.error(Textures::getTexSize({75, 75})[0]);
-        Log.error(Textures::getTexSize({75, 75})[1]);
     }
 
     // Load the wallpaper
