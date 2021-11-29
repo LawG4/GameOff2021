@@ -9,6 +9,7 @@
 #define TOP_SPEED (1000.0)
 #define FLOOR_Y_POS (-0.8)
 #define GRAVITY (-9.8)
+#define FRICTION (1.1f)
 // Players current acceleration
 glm::vec2 _acceleration = glm::vec2(0);
 
@@ -32,7 +33,7 @@ glm::vec2 Physics::updatePosition(double deltaTime, const std::vector<BoundingRe
     _velocity += _acceleration * static_cast<float>(deltaTime);
 
     // Apply some friction to the player's velocity, if their acceleration is 0
-    if (_acceleration.x == 0) _velocity.x -= 1.0f * deltaTime * _velocity.x;
+    _velocity = _velocity / (1.0f + FRICTION * static_cast<float>(deltaTime));
 
     // clamp the velocity to a top speed
     if (glm::length(_velocity) >= TOP_SPEED) _velocity = glm::vec2(TOP_SPEED) * glm::normalize(_velocity);
