@@ -31,6 +31,13 @@ AnimationInstance walkInstnace;
 SpriteSheet* _hopperSheetjump = nullptr;
 AnimatedSprite* _jumphopper = nullptr;
 
+// Floor tiles
+SpriteSheet* floor_sheet;
+Sprite* floor_sprite;
+SpriteInstance* floor_instance;
+
+SpriteInstance* floorarray[20];
+
 void gameplay_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     // If a key has been released
@@ -108,6 +115,18 @@ void Gameplay::initialise()
     _jumphopper = jumphopper.second;
     _jumphopper->setPosition({1.0, 0, 0});
 
+    // Load floor
+    std::pair<SpriteSheet*, Sprite*> floorpair = BackgroundSprites::floor();
+    floor_sheet = floorpair.first;
+    SpriteInternals::activeSheets.push_back(floor_sheet);
+    floor_sprite = floorpair.second;
+
+    for (int i = 0; i < 20; i++) {
+        SpriteInstance* floor =
+          new SpriteInstance(floor_sprite, {i - 10, -3.6, 0}, Textures::getTexSize({75, 75}), {0, 0, 0});
+        floorarray[i] = floor;
+    }
+
     // Load the wallpaper
     std::pair<SpriteSheet*, Sprite*> cityPair = BackgroundSprites::CityCentre();
     backgroundSheet = cityPair.first;
@@ -148,6 +167,10 @@ void Gameplay::playFrame(float deltaTime)
 
     _jumphopper->updateDelta(deltaTime);
     _jumphopper->render();
+
+    for (int i = 0; i < 20; i++) {
+        floorarray[i]->render();
+    }
 
     backgroundInstance->render();
     for (SpriteInstance& sprite : backgroundSides) {

@@ -62,6 +62,8 @@ void Physics::jump()
 
     _falling = true;
     _velocity.y = 10;
+
+    // Begin using jump animations
 }
 
 void Physics::setVelocity(glm::vec2 velocity) {}
