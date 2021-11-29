@@ -57,8 +57,8 @@ glm::mat4 SpriteInstance::calculateMVP()
     glm::mat4 mat = glm::identity<glm::mat4>();
 
     mat = glm::mat4(glm::quat(_rot));
-    mat = glm::scale(mat, _scale);
-    mat = glm::translate(mat, _pos);
+    mat = glm::scale(glm::mat4(1.0), _scale) * mat;
+    mat = glm::translate(glm::mat4(1.0), _pos) * mat;
 
     mat = Camera::getViewProjectionMatrix() * mat;
 

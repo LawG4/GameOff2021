@@ -7,7 +7,7 @@
 #include "Gameplay.h"
 
 #define TOP_SPEED (1000.0)
-#define FLOOR_Y_POS (-2.6)
+#define FLOOR_Y_POS (-0.8)
 #define GRAVITY (-9.8)
 // Players current acceleration
 glm::vec2 _acceleration = glm::vec2(0);
@@ -61,7 +61,7 @@ void Physics::jump()
     if (_falling) return;
 
     _falling = true;
-    _velocity.y = 10;
+    _velocity.y = 4;
 }
 
 void Physics::setVelocity(glm::vec2 velocity) {}

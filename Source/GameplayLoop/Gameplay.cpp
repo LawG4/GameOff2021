@@ -236,15 +236,15 @@ void Gameplay::windowSize(uint32_t width, uint32_t height)
 
     // We can use an array to keep each track of which one to add currently
     Sprite* sides[2] = {backgroundLeftSprite, backgroundRightSprite};
-    uint32_t sideTracker = 1;
+    uint32_t sideTracker = 0;
     for (uint32_t i = 0; i < sideCount; i++) {
         // Which sprite are we putting on each side?
         SpriteInstance leftInstance = SpriteInstance(sides[sideTracker]);
         SpriteInstance rightInstance = SpriteInstance(sides[sideTracker ^ 1]);
 
         // Now place each sprite instance appropriatly
-        leftInstance.setPosition({-1.0f - 1.5 * i * sideSize.x, 0, 0});
-        rightInstance.setPosition({1.0f + 1.5 * i * sideSize.x, 0, 0});
+        leftInstance.setPosition({-1.33f - i * sideSize.x, 0, 0});
+        rightInstance.setPosition({1.32f + i * sideSize.x, 0, 0});
 
         // Pass on the scales of the instances
         leftInstance.setScale(sideSize);
