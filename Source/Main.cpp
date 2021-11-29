@@ -44,7 +44,7 @@ void cleanUp()
     Log.info("All resources destroyed");
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     if (!initLog()) {
         std::cout << "Somehow the logger failed to init!\nWhat on earth happened??" << std::endl;
@@ -135,6 +135,12 @@ int main(int argc, char *argv[])
         // Check if menu is active, if it, enter menu loop
         // Potential add check for callbacks?
         if (MainMenu->IS_MENU_ACTIVE) {
+            // First the background
+            MainMenu->backgroundInstance->render();
+            for (SpriteInstance& sprite : MainMenu->backgroundSides) {
+                sprite.render();
+            }
+
             // Start buttons
             if (MainMenu->render_start_shadow) {
                 MainMenu->depp_start_button_instance->render();

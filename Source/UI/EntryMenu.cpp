@@ -8,6 +8,7 @@
 #include "Sprites.h"
 #include "nlohmann/json.hpp"
 
+#include "AssetHelper.h"
 #include "Gameplay.h"
 
 #include "Cursor_input.h"
@@ -54,6 +55,12 @@ EntryMenu::~EntryMenu()
 
     // Delete the sprite sheets
     if (button_sprites) delete button_sprites;
+
+    delete backgroundSprite;
+    delete backgroundSheet;
+    delete backgroundRightSprite;
+    delete backgroundLeftSprite;
+    delete backgroundSideSheet;
 }
 
 // Generate triangles
@@ -86,6 +93,25 @@ void EntryMenu::load_menu(int menuType)
 
     normal_quit_button_instance->setPosition(bottom_button_front);
     normal_quit_button_instance->setScale(glm::vec3(2, 0.5, 0));
+
+    // Load the wallpaper
+    std::pair<SpriteSheet *, Sprite *> cityPair = BackgroundSprites::CityCentre();
+    backgroundSheet = cityPair.first;
+    backgroundSprite = cityPair.second;
+    backgroundInstance = new SpriteInstance(backgroundSprite, {0, 0, 0}, {2, 2, 1}, {0, 0, 0});
+    SpriteInternals::activeSheets.push_back(backgroundSheet);
+
+    backgroundSideSheet = new SpriteSheet("Textures/CityEdges.png");
+    SpriteInternals::activeSheets.push_back(backgroundSideSheet);
+    backgroundLeftSprite =
+      new Sprite(backgroundSideSheet, Textures::generateTexCoordinates({0, 0}, {168, 512}, {512, 512}));
+    backgroundRightSprite =
+      new Sprite(backgroundSideSheet, Textures::generateTexCoordinates({168, 0}, {168, 512}, {512, 512}));
+
+    // Get how wide the frame is, so we can make sure the whole screen is covered
+    int width, height;
+    glfwGetFramebufferSize(window, &width, &height);
+    windowSize(width, height);
 }
 
 // Update button size and colour for when hovered over
@@ -229,7 +255,7 @@ void EntryMenu::cursor_click(int button)
 }
 
 void EntryMenu::menu_loop(GLFWwindow *window)
-{
+{  // Just pause menu now
     // Initialise callbacks
     glfwSetCursorPosCallback(window, menu_cursor_position_callback);
     glfwSetMouseButtonCallback(window, menu_mouse_button_callback);
@@ -238,6 +264,13 @@ void EntryMenu::menu_loop(GLFWwindow *window)
         // Check if X button in top left has been clicked
         if (glfwWindowShouldClose(window)) {
             break;
+        }
+
+        // First the background
+        backgroundInstance->render();
+
+        for (SpriteInstance &sprite : backgroundSides) {
+            sprite.render();
         }
 
         // Start buttons
@@ -257,6 +290,48 @@ void EntryMenu::menu_loop(GLFWwindow *window)
         glfwPollEvents();
         // Use Vulkan to render the frame
         vk::drawFrame();
+    }
+}
+
+void EntryMenu::windowSize(uint32_t width, uint32_t height)
+{
+    // We know that the window is 2 units height. So how many units wide is it?
+
+    float uniformWidth = 2 * static_cast<float>(width) / static_cast<float>(height);
+    // backgroundInstance->setScale({uniformWidth, 2.0, 1.0});
+    Log.info("Window is {} units wide", uniformWidth);
+
+    // empty the sides vector
+    backgroundSides.clear();
+
+    // How wide is the side slice anyway?
+    glm::vec3 sideSize = Textures::getTexSize({168, 512});
+
+    // How many side slices are rquired on each side
+    uint32_t sideCount = glm::ceil(uniformWidth / (2.0 * sideSize.x));
+
+    // We can use an array to keep each track of which one to add currently
+    Sprite *sides[2] = {backgroundLeftSprite, backgroundRightSprite};
+    uint32_t sideTracker = 1;
+    for (uint32_t i = 0; i < sideCount; i++) {
+        // Which sprite are we putting on each side?
+        SpriteInstance leftInstance = SpriteInstance(sides[sideTracker]);
+        SpriteInstance rightInstance = SpriteInstance(sides[sideTracker ^ 1]);
+
+        // Now place each sprite instance appropriatly
+        leftInstance.setPosition({-1.0f - 1.5 * i * sideSize.x, 0, 0});
+        rightInstance.setPosition({1.0f + 1.5 * i * sideSize.x, 0, 0});
+
+        // Pass on the scales of the instances
+        leftInstance.setScale(sideSize);
+        rightInstance.setScale(sideSize);
+
+        // Track them
+        backgroundSides.push_back(leftInstance);
+        backgroundSides.push_back(rightInstance);
+
+        // Invert our trakcer
+        sideTracker ^= 1;
     }
 }
 

@@ -50,6 +50,16 @@ class EntryMenu
     UiSpriteInstance* normal_quit_button_instance = nullptr;
     UiSpriteInstance* depp_quit_button_instance = nullptr;
 
+    SpriteSheet* backgroundSheet = nullptr;
+    SpriteSheet* backgroundSideSheet = nullptr;
+    Sprite* backgroundSprite = nullptr;
+    Sprite* backgroundLeftSprite = nullptr;
+    Sprite* backgroundRightSprite = nullptr;
+    SpriteInstance* backgroundInstance = nullptr;
+    SpriteInstance* backgroundLeftSpriteInstance = nullptr;
+    SpriteInstance* backgroundRightSpriteInstance = nullptr;
+    std::vector<SpriteInstance> backgroundSides;
+
     // Intitialise locations for each box
     glm::vec3 top_button_front = {0.0f, 0.7f, 0.0f};
     glm::vec3 top_button_bottom = {0.0f, 0.7f, 0.0f};
@@ -76,6 +86,8 @@ class EntryMenu
     void return_to_normal();
     // Menu loop
     void menu_loop(GLFWwindow* window);
+    // stolen function from gameplayloop
+    void windowSize(uint32_t width, uint32_t height);
 };
 
 extern EntryMenu* MainMenu;

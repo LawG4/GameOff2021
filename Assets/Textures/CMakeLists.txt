@@ -3,16 +3,11 @@ cmake_minimum_required(VERSION 3.20)
 # Set a list of texture maps
 set(TEXTURE_LIST
 	TempHopper.png
-	rest.png
-	MenuStart.png
-	MenuStartDark.png
 	floor.png
 	network_box.png
 	server_control.png
 	server_front.png
 	server_rack_rear.png
-	TestButton.png
-	TestButton2.png
 	Button_Sprite.png
 	Pause_Button_Sprite.png
 	SpinningCoin.png

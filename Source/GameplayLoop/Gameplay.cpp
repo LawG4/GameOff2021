@@ -180,7 +180,7 @@ void Gameplay::gameLoop()
             MainMenu->IS_MENU_ACTIVE = true;
             game_state = false;
             _isActive = false;
-            Gameplay::cleanup();
+            // Gameplay::cleanup();
             break;
         }
 
