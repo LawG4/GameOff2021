@@ -197,6 +197,7 @@ void EntryMenu::cursor_click(int button)
         if (!top_button && !pause_menu) {
             close_window = true;
             IS_MENU_ACTIVE = false;
+            top_button = false;
         }
 
         // Check if Start game box has been clicked, change IS_MENU_ACTIVE to false to stop rendering this
@@ -204,6 +205,7 @@ void EntryMenu::cursor_click(int button)
         else if (top_button && !pause_menu) {
             game_state = true;
             IS_MENU_ACTIVE = false;
+            top_button = false;
         }
 
         // If PAUSE menu open and quit button clicked return to main menu

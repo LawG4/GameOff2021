@@ -20,12 +20,15 @@ bool _init = false;
 bool _isActive = false;
 bool Gameplay::isActive() { return _isActive; }
 
-// Store the grasshopper and coordinates
+// Store the assets and coordinates
 SpriteSheet* _coinSheet = nullptr;
 AnimatedSprite* _coin = nullptr;
 
-SpriteSheet* _hopperSheet = nullptr;
-AnimatedSprite* _hopper = nullptr;
+SpriteSheet* _hopperSheetwalk = nullptr;
+AnimatedSprite* _walkhopper = nullptr;
+
+SpriteSheet* _hopperSheetjump = nullptr;
+AnimatedSprite* _jumphopper = nullptr;
 
 void gameplay_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -67,16 +70,27 @@ void Gameplay::initialise()
     _init = true;
 
     // Load the assets
+
+    // Coin
     std::pair<SpriteSheet*, AnimatedSprite*> coin = AnimatedSprites::spinningCoin();
     _coinSheet = coin.first;
     SpriteInternals::activeSheets.push_back(_coinSheet);
     _coin = coin.second;
+    _coin->setPosition({-3.0, 0, 0});
 
-    std::pair<SpriteSheet*, AnimatedSprite*> hopper = AnimatedSprites::hopperwalk();
-    _hopperSheet = hopper.first;
-    SpriteInternals::activeSheets.push_back(_hopperSheet);
-    _hopper = hopper.second;
-    _hopper->setPosition({1.0, 0, 0});
+    // Walking hopper
+    std::pair<SpriteSheet*, AnimatedSprite*> walkhopper = AnimatedSprites::hopperwalk();
+    _hopperSheetwalk = walkhopper.first;
+    SpriteInternals::activeSheets.push_back(_hopperSheetwalk);
+    _walkhopper = walkhopper.second;
+    _walkhopper->setPosition({0, 0, 0});
+
+    // Jumping hoppper
+    std::pair<SpriteSheet*, AnimatedSprite*> jumphopper = AnimatedSprites::hopperjump();
+    _hopperSheetjump = jumphopper.first;
+    SpriteInternals::activeSheets.push_back(_hopperSheetjump);
+    _jumphopper = jumphopper.second;
+    _jumphopper->setPosition({1.0, 0, 0});
 
     // Load the wallpaper
     std::pair<SpriteSheet*, Sprite*> cityPair = BackgroundSprites::CityCentre();
@@ -106,8 +120,11 @@ void Gameplay::playFrame(float deltaTime)
     _coin->updateDelta(deltaTime);
     _coin->render();
 
-    _hopper->updateDelta(deltaTime);
-    _hopper->render();
+    _walkhopper->updateDelta(deltaTime);
+    _walkhopper->render();
+
+    _jumphopper->updateDelta(deltaTime);
+    _jumphopper->render();
 
     backgroundInstance->render();
     for (SpriteInstance& sprite : backgroundSides) {
@@ -126,8 +143,10 @@ void Gameplay::cleanup()
 
     delete _coin;
     delete _coinSheet;
-    delete _hopper;
-    delete _hopperSheet;
+    delete _walkhopper;
+    delete _hopperSheetwalk;
+    delete _jumphopper;
+    delete _hopperSheetjump;
     delete backgroundSprite;
     delete backgroundSheet;
     delete backgroundRightSprite;
@@ -152,7 +171,7 @@ void Gameplay::gameLoop()
         // If the window x button was pressed then break out
         if (glfwWindowShouldClose(window)) {
             _isActive = false;
-            // Gameplay::cleanup();
+            Gameplay::cleanup();
             break;
         }
 
@@ -161,7 +180,7 @@ void Gameplay::gameLoop()
             MainMenu->IS_MENU_ACTIVE = true;
             game_state = false;
             _isActive = false;
-            // Gameplay::cleanup();
+            Gameplay::cleanup();
             break;
         }
 
