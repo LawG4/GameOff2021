@@ -56,6 +56,15 @@ void AnimatedSprite::render()
     _sprites[_spriteIndex]->render(_instance->getMvp());
 }
 
+void AnimatedSprite::render(glm::mat4 mvp)
+{
+    // Ensure that the sprite index is kept within bounds
+    _spriteIndex = _spriteIndex % _spriteCount;
+
+    // now pass the mvp over to the current frame for rendering
+    _sprites[_spriteIndex]->render(mvp);
+}
+
 void AnimatedSprite::updateDelta(double delta)
 {
     // Add to the internal clock, but insure it wraps around
@@ -87,3 +96,17 @@ glm::vec3 AnimatedSprite::getPosition() { return _instance->getPosition(); }
 glm::vec3 AnimatedSprite::getRotation() { return _instance->getRotation(); }
 
 glm::vec3 AnimatedSprite::getScale() { return _instance->getScale(); }
+
+// Populate the animation instance
+
+AnimationInstance::AnimationInstance() {}
+AnimationInstance::~AnimationInstance() {}
+AnimationInstance::AnimationInstance(AnimatedSprite* animated, glm::vec3 pos, glm::vec3 scale, glm::vec3 rot)
+{
+    _animated = animated;
+    _pos = pos;
+    _scale = scale;
+    _rot = rot;
+}
+
+void AnimationInstance::render() { _animated->render(getMvp()); }

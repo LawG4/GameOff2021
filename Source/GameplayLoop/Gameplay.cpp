@@ -26,6 +26,7 @@ AnimatedSprite* _coin = nullptr;
 
 SpriteSheet* _hopperSheetwalk = nullptr;
 AnimatedSprite* _walkhopper = nullptr;
+AnimationInstance walkInstnace;
 
 SpriteSheet* _hopperSheetjump = nullptr;
 AnimatedSprite* _jumphopper = nullptr;
@@ -83,6 +84,7 @@ void Gameplay::initialise()
     _hopperSheetwalk = walkhopper.first;
     SpriteInternals::activeSheets.push_back(_hopperSheetwalk);
     _walkhopper = walkhopper.second;
+    walkInstnace = AnimationInstance(_walkhopper);
     _walkhopper->setPosition({0, 0, 0});
 
     // Jumping hoppper
@@ -122,6 +124,7 @@ void Gameplay::playFrame(float deltaTime)
 
     _walkhopper->updateDelta(deltaTime);
     _walkhopper->render();
+    walkInstnace.render();
 
     _jumphopper->updateDelta(deltaTime);
     _jumphopper->render();
