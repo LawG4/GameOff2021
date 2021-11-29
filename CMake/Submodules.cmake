@@ -103,6 +103,3 @@ if(WIN32)
 else()
     target_link_libraries(${PROJ_NAME} ${LIBS_LIST_OUT})
 endif()
-
-
-
