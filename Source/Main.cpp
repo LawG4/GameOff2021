@@ -115,9 +115,6 @@ int main(int argc, char* argv[])
     // Run MainMenu first
     MainMenu->IS_MENU_ACTIVE = true;
 
-    // Play music
-    Sounds::music();
-
     // Set the resize callback
     glfwSetWindowSizeCallback(window, Camera::onWindowSize);
 
@@ -162,10 +159,16 @@ int main(int argc, char* argv[])
         // Check to see if game loop needs to be entered
         if (game_state) {
             Log.info("Starting Game");
+
+            // Play music
+            Sounds::music();
             // Initialise game and assets
             Gameplay::initialise();
             // Enter gameLoop
             Gameplay::gameLoop();
+
+            // Destroy music engine when music no longer needed
+            Sounds::stopmusic();
         }
 
         // If the user has asked the window to close through the Ui then schedule window destruction

@@ -8,9 +8,10 @@
 // Just test if sound works
 #include <irrKlang.h>
 
-irrklang::ISoundEngine* engine;
 namespace Sounds
 {
 // Fucntion to play main sound tract
 void music();
+// Function to stop music and delete object
+void stopmusic();
 }  // namespace Sounds

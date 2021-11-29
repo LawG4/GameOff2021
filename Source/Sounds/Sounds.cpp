@@ -7,9 +7,12 @@
 
 #include "Sounds.h"
 
+irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
+
 void Sounds::music()
 {
     // Testing start a sound engine
-    irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
     engine->play2D("Sounds/Chill.mp3");
 }
+
+void Sounds::stopmusic() { engine->drop(); }
