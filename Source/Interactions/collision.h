@@ -27,4 +27,6 @@ namespace Collision
 /// <param name="rect">Rectangle being tested</param>
 /// <returns>True if the point is inside the rectangle</returns>
 bool pointInBox(glm::vec2 point, const BoundingRect& rect);
+
+bool boxInBox(const BoundingRect& rect1, const BoundingRect& rect2);
 }  // namespace Collision
