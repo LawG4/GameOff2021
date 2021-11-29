@@ -36,7 +36,7 @@ SpriteSheet* floor_sheet;
 Sprite* floor_sprite;
 SpriteInstance* floor_instance;
 
-SpriteInstance* floorarray[20];
+SpriteInstance* floorarray[40];
 
 void gameplay_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -122,9 +122,9 @@ void Gameplay::initialise()
     floor_sprite = floorpair.second;
 
     float tempfloat = 0;
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 40; i++) {
         tempfloat += 0.29295;
-        SpriteInstance* floor = new SpriteInstance(floor_sprite, {tempfloat - 3, -1.1, 0},
+        SpriteInstance* floor = new SpriteInstance(floor_sprite, {tempfloat - 6, -1.1, 0},
                                                    Textures::getTexSize({75, 75}), {0, 0, 0});
         floorarray[i] = floor;
     }
@@ -170,7 +170,7 @@ void Gameplay::playFrame(float deltaTime)
     _jumphopper->updateDelta(deltaTime);
     _jumphopper->render();
 
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 40; i++) {
         floorarray[i]->render();
     }
 
