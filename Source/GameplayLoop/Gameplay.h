@@ -43,6 +43,8 @@ void setHorizontalAcceleration(float x);
 /// <param name="velocity">The velocity to  set</param>
 void setVelocity(glm::vec2 velocity);
 
+glm::vec2 getVelocity();
+
 /// <summary>Runs the physics calculations and returns the players position</summary>
 /// <param name="deltaTime">Time that has passed</param>
 /// <param name="rectangles">Bounding boxes for all the positions to test</param>

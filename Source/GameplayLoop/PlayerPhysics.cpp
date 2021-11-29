@@ -17,6 +17,9 @@ glm::vec2 _velocity = glm::vec2(0);
 
 glm::vec2 _position = glm::vec2(0);
 
+glm::vec2 _leftFootOffset = glm::vec2(0);
+glm::vec2 _rightFootOffset = glm::vec2(0);
+
 // Is the player currently falling?
 bool _falling = true;
 
@@ -27,6 +30,9 @@ glm::vec2 Physics::updatePosition(double deltaTime, const std::vector<BoundingRe
 
     // Now using the delta time update the velocity
     _velocity += _acceleration * static_cast<float>(deltaTime);
+
+    // Apply some friction to the player's velocity, if their acceleration is 0
+    if (_acceleration.x == 0) _velocity.x -= 1.0f * deltaTime * _velocity.x;
 
     // clamp the velocity to a top speed
     if (glm::length(_velocity) >= TOP_SPEED) _velocity = glm::vec2(TOP_SPEED) * glm::normalize(_velocity);
@@ -59,6 +65,8 @@ void Physics::jump()
 }
 
 void Physics::setVelocity(glm::vec2 velocity) {}
+
+glm::vec2 Physics::getVelocity() { return _velocity; }
 
 void Physics::setAcceleration(glm::vec2 acceleration) { _acceleration = acceleration; }
 

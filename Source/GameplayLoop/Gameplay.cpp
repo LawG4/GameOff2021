@@ -33,6 +33,20 @@ AnimatedSprite* _jumphopper = nullptr;
 
 void gameplay_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+    // If a key has been released
+    if (action == GLFW_RELEASE) {
+        switch (key) {
+            case GLFW_KEY_D:  // D key released
+                Physics::setHorizontalAcceleration(0);
+                break;
+            case GLFW_KEY_A:  // A key released
+                Physics::setHorizontalAcceleration(0);
+                break;
+            default:
+                break;
+        }
+    }
+
     // If a key has been pressed
     if (action == GLFW_PRESS) {
         switch (key) {
@@ -122,11 +136,11 @@ void Gameplay::playFrame(float deltaTime)
     _coin->updateDelta(deltaTime);
     _coin->render();
 
-    // Update the hoppers animation
-    _walkhopper->updateDelta(deltaTime);
-
     // Update the hoppers position using the physics engine
     _walkhopper->setPosition(glm::vec3(Physics::updatePosition(deltaTime, {}), _walkhopper->getPosition().z));
+
+    // Update the hoppers animation
+    _walkhopper->updateDelta(Physics::getVelocity().x * deltaTime);
 
     // Finally render the hopper
     _walkhopper->render();
