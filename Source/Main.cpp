@@ -22,6 +22,9 @@
 #include <fstream>
 #include <iostream>
 
+// Just test if sound works
+#include <irrKlang.h>
+
 /// <summary> Destory everything </summary>
 void cleanUp()
 {
@@ -44,7 +47,7 @@ void cleanUp()
     Log.info("All resources destroyed");
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     if (!initLog()) {
         std::cout << "Somehow the logger failed to init!\nWhat on earth happened??" << std::endl;
@@ -100,6 +103,9 @@ int main(int argc, char *argv[])
         cleanUp();
         return -1;
     }
+
+    // Testing start a sound engine
+    irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
 
     // Key input data
     glfwSetKeyCallback(window, key_callback);
