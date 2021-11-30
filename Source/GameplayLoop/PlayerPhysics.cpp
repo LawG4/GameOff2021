@@ -34,6 +34,7 @@ glm::vec2 Physics::updatePosition(double deltaTime, const std::vector<BoundingRe
 
     // Apply some friction to the player's velocity, if their acceleration is 0
     _velocity = _velocity / (1.0f + FRICTION * static_cast<float>(deltaTime));
+    _acceleration.x = _acceleration.x / (1.0f + FRICTION * 4.0f * static_cast<float>(deltaTime));
 
     // clamp the velocity to a top speed
     if (glm::length(_velocity) >= TOP_SPEED) _velocity = glm::vec2(TOP_SPEED) * glm::normalize(_velocity);

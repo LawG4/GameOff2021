@@ -39,38 +39,46 @@ SpriteInstance* floor_instance;
 
 SpriteInstance* floorarray[20];
 
+namespace Keys
+{
+bool A = false;
+bool D = false;
+bool SPACE = false;
+}  // namespace Keys
+
 void gameplay_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    // If a key has been released
-    if (action == GLFW_RELEASE) {
+    // If a key has been pressed
+    if (action == GLFW_PRESS) {
         switch (key) {
-            case GLFW_KEY_D:  // D key released
-                Physics::setHorizontalAcceleration(0);
+            case GLFW_KEY_SPACE:  // Space key pressed
+                Keys::SPACE = true;
                 break;
-            case GLFW_KEY_A:  // A key released
-                Physics::setHorizontalAcceleration(0);
+            case GLFW_KEY_D:  // D Key pressed
+                Keys::D = true;
+                break;
+            case GLFW_KEY_A:  // A Key pressed
+                Keys::A = true;
+                break;
+            case GLFW_KEY_ESCAPE:  // Escape key pressed
+                // Make the pause menu show
+                PauseMenu->IS_MENU_ACTIVE = true;
                 break;
             default:
                 break;
         }
     }
-
-    // If a key has been pressed
-    if (action == GLFW_PRESS) {
+    // Has a key been released?
+    else if (action == GLFW_RELEASE) {
         switch (key) {
-            case GLFW_KEY_SPACE:  // Space key pressed
-                // Make the hopper jump
-                Physics::jump();
+            case GLFW_KEY_SPACE:  // Space key released
+                Keys::SPACE = false;
                 break;
-            case GLFW_KEY_D:  // D Key pressed
-                Physics::setHorizontalAcceleration(1.0);
+            case GLFW_KEY_D:  // D Key released
+                Keys::D = false;
                 break;
-            case GLFW_KEY_A:  // A Key pressed
-                Physics::setHorizontalAcceleration(-1.0);
-                break;
-            case GLFW_KEY_ESCAPE:  // Escape key pressed
-                // Make the pause menu show
-                PauseMenu->IS_MENU_ACTIVE = true;
+            case GLFW_KEY_A:  // A Key released
+                Keys::A = false;
                 break;
             default:
                 break;
@@ -159,6 +167,30 @@ void Gameplay::initialise()
 
 void Gameplay::playFrame(float deltaTime)
 {
+    // Update the velocity based on the user's key input
+    if (Keys::SPACE) Physics::jump();
+
+    // No left or right keys are being pressed, or both are being pressed
+    if (!(Keys::A || Keys::D) || (Keys::A && Keys::D)) {
+        Physics::setHorizontalAcceleration(0);
+        // Only left key is pressed
+    } else if (Keys::A) {
+        // Apply a faster tern around
+        if (Physics::getVelocity().x > 0) {
+            Physics::setHorizontalAcceleration(-8);
+        } else {
+            Physics::setHorizontalAcceleration(-3);
+        }
+        // Only right key is pressed
+    } else if (Keys::D) {
+        // Apply a faster tern around
+        if (Physics::getVelocity().x > 0) {
+            Physics::setHorizontalAcceleration(3);
+        } else {
+            Physics::setHorizontalAcceleration(8);
+        }
+    }
+
     // Update the hoppers position using the physics engine
     _walkhopper->setPosition(
       glm::vec3(Physics::updatePosition(deltaTime, PhysicsBoxes), _walkhopper->getPosition().z));
