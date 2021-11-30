@@ -30,7 +30,7 @@ void windowSize(uint32_t width, uint32_t height);
 
 void cleanup();
 
-int* randWallValue();
+void randWallValue();
 }  // namespace Gameplay
 
 namespace Physics

@@ -12,6 +12,7 @@
 
 #include "Animation.h"
 #include "AssetHelper.h"
+#include "Camera.h"
 #include "EntryMenu.h"
 #include "Game_object.h"
 #include "Gameplay.h"
@@ -61,7 +62,10 @@ SpriteInstance* serverarray[10];
 SpriteInstance* render_array[10];
 
 // Global variable for storing position
-int world_vect_limit = 0;
+std::vector<SpriteInstance> Infinite_vector_list_thing;
+float hoppborder;
+std::vector<int> location_directions(80);
+glm::vec3 world_vect_limit = {0, -0.8, 0};
 
 void gameplay_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -220,60 +224,71 @@ void Gameplay::playFrame(float deltaTime)
     // Update the hoppers position using the physics engine
     _walkhopper->setPosition(glm::vec3(Physics::updatePosition(deltaTime, {}), _walkhopper->getPosition().z));
 
-    std::vector<SpriteInstance> Infinite_vector_list_thing(400);
-
-    Infinite_vector_list_thing;
-    next_empty_position;
-    nextposition;
-
-    int* position_choice;
-    position_choice = Gameplay::randWallValue();
-
-    glm::vec3 world_vect_limit = {0, 0, 0};
-
-    glm::vec3 postion = _walkhopper->getPosition();
-    postion[0] += 2.9295;
+    // Something to decide number of spawns
+    glm::vec3 nextposition;
+    glm::vec3 postion = Camera::getPosition();
+    hoppborder = postion[0];
 
     // If character has moved "out of view (view is 10x8)"
     if (world_vect_limit[0] < postion[0]) {
-        position_choice = Gameplay::randWallValue();
-        next_empty_position = world_vect_limit;
-
         // Nested for loop (first loop 10 times) (nexted: loop 8 times)
+        Gameplay::randWallValue();
+        int counter = 0;
         for (int row = 0; row < 10; row++) {
-            // Add 1 to move accross y axis
-            world_vect_limit[1] += 0.29295;
+            // Add 1 to move accross x axis
+            world_vect_limit[0] += 0.3;
             nextposition = world_vect_limit;
 
             for (int i = 0; i < 8; i++) {
                 // If choice 1 then copy server 1 instance
-                if (position_choice[i] == 1) {
-                    Infinite_vector_list_thing[next_empty_position] = SpriteInstance(
-                      _server1_sprite, nextposition, Textures::getTexSize({75, 75}), {0, 0, 0});
+                if (location_directions[counter] == 1) {
+                    SpriteInstance temp = SpriteInstance(_server1_sprite, nextposition,
+                                                         Textures::getTexSize({75, 75}), {0, 0, 0});
+                    Infinite_vector_list_thing.push_back(temp);
 
-                    nextposition[0] += 0.29295;
-                } else {
-                    nextposition[0] += 0.29295;
+                    nextposition[1] += 0.29295;
+
+                    // If choice 2 then copy server 2 instance
+                } else if (location_directions[counter] == 2) {
+                    SpriteInstance temp = SpriteInstance(_server2_sprite, nextposition,
+                                                         Textures::getTexSize({75, 75}), {0, 0, 0});
+                    Infinite_vector_list_thing.push_back(temp);
+
+                    nextposition[1] += 0.29295;
+
                 }
+
+                else if (location_directions[counter] == 3) {
+                    SpriteInstance temp = SpriteInstance(_server3_sprite, nextposition,
+                                                         Textures::getTexSize({75, 75}), {0, 0, 0});
+                    Infinite_vector_list_thing.push_back(temp);
+
+                    nextposition[1] += 0.29295;
+                }
+
+                else if (location_directions[counter] == 4) {
+                    SpriteInstance temp = SpriteInstance(_server4_sprite, nextposition,
+                                                         Textures::getTexSize({75, 75}), {0, 0, 0});
+                    Infinite_vector_list_thing.push_back(temp);
+
+                    nextposition[1] += 0.29295;
+                }
+
+                else if (location_directions[counter] == 0) {
+                    nextposition[1] += 0.29295;
+
+                } else {
+                }
+                counter += 1;
             }
         }
         // At the end of nested for loops add 10 to world_vect_limit
-        world_vect_limit[0] += 2.9;
+        world_vect_limit[0] += 3;
     }
 
-    postion[0] += 1.5;
-    postion[1] = -0.8;
-
-    /*
-    To do
-
-     1. make Gameplay::randWallValue(); return array of 24 numbers (0 to 4)
-     2. Use to fill array of sprite instances or null -> update sprite instance positions as well during
-    this step (have this be also be coppied and fed into collisions engine??)
-     3. Then have for loop to loop through array for each frame and render if something is present or not if
-    empty
-
-    */
+    for (SpriteInstance x : Infinite_vector_list_thing) {
+        x.render();
+    }
 
     // Update the hoppers animation
     _walkhopper->updateDelta(Physics::getVelocity().x * deltaTime);
@@ -401,23 +416,28 @@ void Gameplay::windowSize(uint32_t width, uint32_t height)
 }
 
 // Function to create array that will hold instructions for what next set of blocks will be
-int* Gameplay::randWallValue()
+void Gameplay::randWallValue()
 {
-    // Create blank array to
-    static int location_directions[10];
+    // if (location_directions[0] != NULL) location_directions.clear();
 
     // Loop to create our numbers and based on them decide fate of blocks
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 80; i++) {
         float random_variable = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
 
         if (random_variable > 0.50) {
-            if (random_variable > 0.50) {
+            if (random_variable > 0.50 && random_variable < 0.60) {
                 location_directions[i] = 1;
+            } else if (random_variable > 0.60 && random_variable < 0.70) {
+                location_directions[i] = 2;
+            } else if (random_variable > 0.80 && random_variable < 0.90) {
+                location_directions[i] = 3;
+            } else if (random_variable > 0.90 && random_variable < 1.0) {
+                location_directions[i] = 4;
+            } else {
+                location_directions[i] = 0;
             }
         } else {
             location_directions[i] = 0;
-        };
+        }
     }
-
-    return location_directions;
 }
