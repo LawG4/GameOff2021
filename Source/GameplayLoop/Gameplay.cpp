@@ -255,6 +255,8 @@ void Gameplay::cleanup()
     delete backgroundRightSprite;
     delete backgroundLeftSprite;
     delete backgroundSideSheet;
+    delete floor_sprite;
+    delete floor_sheet;
 }
 
 void Gameplay::gameLoop()
