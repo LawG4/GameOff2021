@@ -72,9 +72,11 @@ SpriteInstance* render_array[10];
 
 // Global variable for storing position
 std::vector<SpriteInstance> Infinite_vector_list_thing;
+std::vector<AnimationInstance> coin_vector;
 float hoppborder;
 std::vector<int> location_directions(240);
 glm::vec3 world_vect_limit = {0, -0.8, 0};
+std::vector<int> coing_vector(240);
 
 void gameplay_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -304,6 +306,12 @@ void Gameplay::playFrame(float deltaTime)
             nextposition = world_vect_limit;
 
             for (int i = 0; i < 8; i++) {
+                // Coin instances
+                if (coing_vector[counter] == 1) {
+                    AnimationInstance temp =
+                      AnimationInstance(_coin, nextposition, {0.1, 0.1, 0.1}, {0, 0, 0});
+                    coin_vector.push_back(temp);
+                }
                 // If choice 1 then copy server 1 instance
                 if (location_directions[counter] == 1) {
                     SpriteInstance temp = SpriteInstance(_server1_sprite, nextposition,
@@ -350,10 +358,18 @@ void Gameplay::playFrame(float deltaTime)
         world_vect_limit[0] += 0;
     }
 
+    // Physics for server boxes
     for (SpriteInstance x : Infinite_vector_list_thing) {
         x.render();
         // Use a physics box
         PhysicsBoxes.push_back(Physics::boxFromSprite(x));
+    }
+
+    // Physics for coins
+    for (AnimationInstance x : coin_vector) {
+        x.render();
+        // Use a physics box
+        // PhysicsBoxes.push_back(Physics::boxFromSprite(x));
     }
 
     // Update the hoppers animation
@@ -377,12 +393,12 @@ void Gameplay::playFrame(float deltaTime)
     _walkhopper->render();
 
     _coin->updateDelta(deltaTime);
-    _coinInstance.render();
+    //_coinInstance.render();
 
-    walkInstnace.render();
+    // walkInstnace.render();
 
-    _jumphopper->updateDelta(deltaTime);
-    _jumphopper->render();
+    // _jumphopper->updateDelta(deltaTime);
+    // _jumphopper->render();
 
     for (SpriteInstance& sprite : floorInstances) {
         sprite.render();
@@ -547,19 +563,27 @@ void Gameplay::randWallValue()
             }
 
             else if (location_directions[i - 1] == 0) {
-                if (random_variable > 0.58 && random_variable < 0.60) {
+                if (random_variable > 0.55 && random_variable < 0.58) {
                     location_directions[i] = 1;
+                    coing_vector[i] = 0;
                 } else if (random_variable > 0.68 && random_variable < 0.70) {
                     location_directions[i] = 2;
-                } else if (random_variable > 0.85 && random_variable < 0.90) {
+                    coing_vector[i] = 0;
+                } else if (random_variable > 0.80 && random_variable < 0.85) {
                     location_directions[i] = 3;
-                } else if (random_variable > 0.97 && random_variable < 1.0) {
+                    coing_vector[i] = 0;
+                } else if (random_variable > 0.86 && random_variable < 0.9) {
                     location_directions[i] = 4;
+                    coing_vector[i] = 0;
+                } else if (random_variable > 0.9 && random_variable < 1) {
+                    coing_vector[i] = 1;
                 } else {
                     location_directions[i] = 0;
+                    coing_vector[i] = 0;
                 }
             } else {
                 location_directions[i] = 0;
+                coing_vector[i] = 0;
             }
         }
     }
