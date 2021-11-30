@@ -85,6 +85,7 @@ Sprite* backgroundRightSprite;
 SpriteInstance* backgroundInstance;
 std::vector<SpriteInstance> backgroundSides;
 
+std::vector<BoundingRect> PhysicsBoxes;
 void Gameplay::initialise()
 {
     // Tell the gameplay loop that we can actually render something next time
@@ -98,7 +99,7 @@ void Gameplay::initialise()
     _coinSheet = coin.first;
     SpriteInternals::activeSheets.push_back(_coinSheet);
     _coin = coin.second;
-    _coin->setPosition({-3.0, 0, 0});
+    _coin->setPosition({0.4, -0.5, 0});
 
     // Walking hopper
     std::pair<SpriteSheet*, AnimatedSprite*> walkhopper = AnimatedSprites::hopperwalk();
@@ -141,6 +142,10 @@ void Gameplay::initialise()
     backgroundRightSprite =
       new Sprite(backgroundSideSheet, Textures::generateTexCoordinates({168, 0}, {168, 512}, {512, 512}));
 
+    // Use a physics box
+    PhysicsBoxes.push_back(
+      {{_coin->getPosition() - 0.5f * _coin->getScale()}, _coin->getScale().x, _coin->getScale().y});
+
     // Get how wide the frame is, so we can make sure the whole screen is covered
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
@@ -152,17 +157,19 @@ void Gameplay::initialise()
 
 void Gameplay::playFrame(float deltaTime)
 {
-    _coin->updateDelta(deltaTime);
-    _coin->render();
-
     // Update the hoppers position using the physics engine
-    _walkhopper->setPosition(glm::vec3(Physics::updatePosition(deltaTime, {}), _walkhopper->getPosition().z));
+    _walkhopper->setPosition(
+      glm::vec3(Physics::updatePosition(deltaTime, PhysicsBoxes), _walkhopper->getPosition().z));
 
     // Update the hoppers animation
     _walkhopper->updateDelta(Physics::getVelocity().x * deltaTime);
 
     // Finally render the hopper
     _walkhopper->render();
+
+    _coin->updateDelta(deltaTime);
+    _coin->render();
+
     walkInstnace.render();
 
     _jumphopper->updateDelta(deltaTime);

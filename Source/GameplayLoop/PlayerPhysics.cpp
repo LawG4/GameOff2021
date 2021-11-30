@@ -18,8 +18,8 @@ glm::vec2 _velocity = glm::vec2(0);
 
 glm::vec2 _position = glm::vec2(0);
 
-glm::vec2 _leftFootOffset = glm::vec2(0);
-glm::vec2 _rightFootOffset = glm::vec2(0);
+const glm::vec2 _spriteSize = glm::vec2(0.28, 0.18);
+const glm::vec2 _spriteOffset = glm::vec2(-0.16, -0.06);
 
 // Is the player currently falling?
 bool _falling = true;
@@ -46,12 +46,60 @@ glm::vec2 Physics::updatePosition(double deltaTime, const std::vector<BoundingRe
         _falling = false;           // not falling
         _position.y = FLOOR_Y_POS;  // pop them back to the floor
         _velocity.y = 0;
-
-        // We can skip Y position calculations yeah yeah, I know goto sucks...
-        goto HORIZONTAL_CALCS;
     }
 
-HORIZONTAL_CALCS:
+    // Push the sprite coordinates into a bounding rectangle
+    BoundingRect spriteRect{_position + _spriteOffset, _spriteSize.x, _spriteSize.y};
+
+    // Take a copy of all boxes which collide in the Y direction
+    std::vector<BoundingRect> reTest;
+
+    // First test the Y direction collision and resolve
+    for (const BoundingRect& rect : rectangles) {
+        // We have collided with this box, push it out
+        if (Collision::boxInBox(spriteRect, rect)) {
+            // This box will need retesting in the x direction
+            reTest.push_back(rect);
+
+            // if the Y velocity is negative then we're falling onto something
+            if (_velocity.y < 0) {
+                // Stop falling
+                _falling = false;
+                _velocity.y = 0;
+
+                // Push out
+                spriteRect.topLeft.y = rect.topLeft.y + spriteRect.height;
+            } else if (_velocity.y > 0) {
+                // We smacked a cieling, so stay fallign
+                _velocity.y = 0;
+                // pushout
+                spriteRect.topLeft.y = rect.topLeft.y - rect.height;
+            }
+        }
+    }
+
+    // Now retest any colisions that happened in the Y direction, this time resolving in the x direction
+    for (const BoundingRect& rect : reTest) {
+        if (Collision::boxInBox(spriteRect, rect)) {
+            // There is still an x collision that needs resolving
+            Log.info("Retest collision");
+
+            // If the x direction is positive then push the hopper left
+            if (_velocity.x > 0) {
+                // Stop hopper from advancing
+                _velocity.x = 0;
+                // Push out
+                spriteRect.topLeft.x = rect.topLeft.x - spriteRect.width;
+            } else if (_velocity.x < 0) {
+                // Hopper is moving left so push hopper right
+                _velocity.x = 0;
+                spriteRect.topLeft.x = rect.topLeft.x + rect.width;
+            }
+        }
+    }
+
+    // Set the position to what is in the rectangle
+    _position = spriteRect.topLeft - _spriteOffset;
 
     return _position;
 }
