@@ -260,6 +260,12 @@ void Gameplay::playFrame(float deltaTime)
         floorInstances.push_back(temp);
     }
 
+    // When the player is off screen
+    if (_walkhopper->getPosition().x < leftCorner.x) {
+        Log.info("Dead");
+        exit(1);
+    }
+
     // Update the velocity based on the user's key input
     if (Keys::SPACE) Physics::jump();
 
