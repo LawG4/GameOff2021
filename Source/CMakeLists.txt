@@ -14,6 +14,7 @@ set(COMPONENTS
 	Animation
 	AssetLoader
 	Sounds
+	Score
 )
 
 foreach(directory ${COMPONENTS})

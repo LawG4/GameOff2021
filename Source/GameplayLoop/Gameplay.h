@@ -55,4 +55,6 @@ glm::vec2 updatePosition(double deltaTime, const std::vector<BoundingRect>& rect
 
 /// <summary>Make the grassshopper jump</summary>
 void jump();
+
+BoundingRect boxFromSprite(SpriteInstance& instance);
 }  // namespace Physics
