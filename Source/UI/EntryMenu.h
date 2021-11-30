@@ -55,10 +55,10 @@ class EntryMenu
     Sprite* backgroundSprite = nullptr;
     Sprite* backgroundLeftSprite = nullptr;
     Sprite* backgroundRightSprite = nullptr;
-    SpriteInstance* backgroundInstance = nullptr;
+    UiSpriteInstance* backgroundInstance = nullptr;
     SpriteInstance* backgroundLeftSpriteInstance = nullptr;
     SpriteInstance* backgroundRightSpriteInstance = nullptr;
-    std::vector<SpriteInstance> backgroundSides;
+    std::vector<UiSpriteInstance> backgroundSides;
 
     // Intitialise locations for each box
     glm::vec3 top_button_front = {0.0f, 0.7f, 0.0f};
