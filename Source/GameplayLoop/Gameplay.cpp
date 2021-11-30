@@ -7,6 +7,8 @@
 
 #include <cstdlib>
 #include <ctime>
+#include <iostream>
+#include <string>
 
 #include "Animation.h"
 #include "AssetHelper.h"
@@ -41,13 +43,25 @@ SpriteInstance* floor_instance;
 // server1 tiles
 SpriteSheet* _server1_sheet;
 Sprite* _server1_sprite;
-// spriteInstance* _server1_instance;
+
+// server2 tiles
+SpriteSheet* _server2_sheet;
+Sprite* _server2_sprite;
+
+// server3 tiles
+SpriteSheet* _server3_sheet;
+Sprite* _server3_sprite;
+
+// server4 tiles
+SpriteSheet* _server4_sheet;
+Sprite* _server4_sprite;
 
 SpriteInstance* floorarray[40];
-
 SpriteInstance* serverarray[10];
-
 SpriteInstance* render_array[10];
+
+// Global variable for storing position
+int world_vect_limit = 0;
 
 void gameplay_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -102,6 +116,9 @@ void Gameplay::initialise()
     _isActive = true;
     _init = true;
 
+    // Seed random with current time
+    std::srand(std::time(nullptr));
+
     // Load the assets
 
     // Coin
@@ -145,10 +162,32 @@ void Gameplay::initialise()
     _server1_sheet = server1pair.first;
     SpriteInternals::activeSheets.push_back(_server1_sheet);
     _server1_sprite = server1pair.second;
-    for (int i = 0; i < 10; i++) {
-        serverarray[i] =
-          new SpriteInstance(_server1_sprite, {0, 0, 0}, Textures::getTexSize({75, 75}), {0, 0, 0});
-    }
+    serverarray[0] =
+      new SpriteInstance(_server1_sprite, {0, 0, 0}, Textures::getTexSize({75, 75}), {0, 0, 0});
+
+    // Load server 2
+    std::pair<SpriteSheet*, Sprite*> server2pair = BackgroundSprites::server2();
+    _server2_sheet = server2pair.first;
+    SpriteInternals::activeSheets.push_back(_server2_sheet);
+    _server2_sprite = server2pair.second;
+    serverarray[1] =
+      new SpriteInstance(_server2_sprite, {0, 0, 0}, Textures::getTexSize({75, 75}), {0, 0, 0});
+
+    // Load server 3
+    std::pair<SpriteSheet*, Sprite*> server3pair = BackgroundSprites::server3();
+    _server3_sheet = server3pair.first;
+    SpriteInternals::activeSheets.push_back(_server3_sheet);
+    _server3_sprite = server3pair.second;
+    serverarray[2] =
+      new SpriteInstance(_server3_sprite, {0, 0, 0}, Textures::getTexSize({75, 75}), {0, 0, 0});
+
+    // Load server 4
+    std::pair<SpriteSheet*, Sprite*> server4pair = BackgroundSprites::server4();
+    _server4_sheet = server4pair.first;
+    SpriteInternals::activeSheets.push_back(_server4_sheet);
+    _server4_sprite = server4pair.second;
+    serverarray[3] =
+      new SpriteInstance(_server4_sprite, {0, 0, 0}, Textures::getTexSize({75, 75}), {0, 0, 0});
 
     // Load the wallpaper
     std::pair<SpriteSheet*, Sprite*> cityPair = BackgroundSprites::CityCentre();
@@ -181,40 +220,45 @@ void Gameplay::playFrame(float deltaTime)
     // Update the hoppers position using the physics engine
     _walkhopper->setPosition(glm::vec3(Physics::updatePosition(deltaTime, {}), _walkhopper->getPosition().z));
 
-    int* position_choice = Gameplay::randWallValue();
+    Infinite_vector_list_thing;
+    next_empty_position;
+
+    int* position_choice;
+    position_choice = Gameplay::randWallValue();
+
     glm::vec3 postion = _walkhopper->getPosition();
 
-    postion[0] += 1.5;
-    // if (postion[0] + 1.5);
-    postion[1] = -0.8;
-    glm::vec3 dumypos = postion;
-    dumypos[1] = 1;
+    if (world_vect_limit < postion[0]) {
+        world_vect_limit += 3;
+        position_choice = Gameplay::randWallValue();
 
-    // render chunks in 3x8 area
+        for (int row = 0; row < 3; row++) {
+            for (int i = 0; i < 8; i++) {
+                if (position_choice[i] == 1) {
+                    Infinite_vector_list_thing serverarray[1];
+                    setPosition(postion);
+                    serverarray[i]->render();
+                    postion[1] += 0.29295;
+                } else {
+                    postion[1] += 0.29295;
+                }
+            }
+        }
+    }
+
+    postion[0] += 1.5;
+    postion[1] = -0.8;
+
     /*
     To do
 
      1. make Gameplay::randWallValue(); return array of 24 numbers (0 to 4)
-     2. Use to fill array of sprite instances or null -> update sprite instance positions as well during this
-    step (have this be also be coppied and fed into collisions engine??)
+     2. Use to fill array of sprite instances or null -> update sprite instance positions as well during
+    this step (have this be also be coppied and fed into collisions engine??)
      3. Then have for loop to loop through array for each frame and render if something is present or not if
     empty
 
     */
-
-    for (int i = 0; i < 8; i++) {
-        if (position_choice[i] == 1) {
-            serverarray[i]->setPosition(postion);
-            serverarray[i]->render();
-            postion[1] += 0.29295;
-            dumypos[1] += 0.29295;
-        } else {
-            serverarray[i]->setPosition(postion);
-            serverarray[i]->render();
-            postion[1] += 0.29295;
-            dumypos[1] += 0.29295;
-        }
-    }
 
     // Update the hoppers animation
     _walkhopper->updateDelta(Physics::getVelocity().x * deltaTime);
@@ -345,21 +389,20 @@ void Gameplay::windowSize(uint32_t width, uint32_t height)
 int* Gameplay::randWallValue()
 {
     // Create blank array to
-    int location_directions[10];
-
-    // Seed random with current time
-    std::srand(std::time(nullptr));
+    static int location_directions[10];
 
     // Loop to create our numbers and based on them decide fate of blocks
     for (int i = 0; i < 10; i++) {
         float random_variable = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+
         if (random_variable > 0.50) {
             if (random_variable > 0.50) {
                 location_directions[i] = 1;
             }
         } else {
             location_directions[i] = 0;
-        }
+        };
     }
+
     return location_directions;
 }
