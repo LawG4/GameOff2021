@@ -13,6 +13,7 @@
 #include "EntryMenu.h"
 #include "Gameplay.h"
 #include "Log.h"
+#include "Score.h"
 #include "Timer.h"
 #include "Window.h"
 #include "collision.h"
@@ -113,6 +114,9 @@ void Gameplay::initialise()
     _coinInstance = AnimationInstance(_coin);
     _coinInstance.setScale({0.1, 0.1, 1.0});
     _coinInstance.setPosition({0.4, -0.5, 0});
+
+    // Use the coin to init the score
+    Score::init(_coin);
 
     // Walking hopper
     std::pair<SpriteSheet*, AnimatedSprite*> walkhopper = AnimatedSprites::hopperwalk();
@@ -247,6 +251,10 @@ void Gameplay::playFrame(float deltaTime)
     for (SpriteInstance& sprite : backgroundSides) {
         sprite.render();
     }
+
+    // render the score
+    Score::parseScore(_uniformWidth);
+    Score::render();
 }
 
 void Gameplay::cleanup()
@@ -257,6 +265,9 @@ void Gameplay::cleanup()
 
     // release the rest of the resources
     Log.info("releasing gameplay loop resources");
+
+    // cleanup score renderer
+    Score::deinit();
 
     delete _coin;
     delete _coinSheet;
