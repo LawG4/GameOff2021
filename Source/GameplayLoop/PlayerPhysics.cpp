@@ -18,8 +18,8 @@ glm::vec2 _velocity = glm::vec2(0);
 
 glm::vec2 _position = glm::vec2(0);
 
-const glm::vec2 _spriteSize = glm::vec2(0.28, 0.18);
-const glm::vec2 _spriteOffset = glm::vec2(-0.16, -0.06);
+const glm::vec2 _spriteSize = glm::vec2(0.28, 0.10);
+const glm::vec2 _spriteOffset = glm::vec2(-0.16, -0.04);
 
 // Is the player currently falling?
 bool _falling = true;
