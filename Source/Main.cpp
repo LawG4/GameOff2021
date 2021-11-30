@@ -83,7 +83,9 @@ int main(int argc, char* argv[])
     }
 
     // Create the window with the settings
-    if (!initWindow("B.U.G Launcher", windowWidth, windowHeight, fullScreen)) {
+    if (!initWindow("Chronicals of Barry : Why did we make a buggy game engine from scratch, originally this "
+                    "was a critisism of crypto, but we didn't have time so now you just collect doge coins",
+                    windowWidth, windowHeight, fullScreen)) {
         Log.error("Could not initialise GLFW window for the laucher");
         cleanUp();
         return -1;
