@@ -9,6 +9,7 @@
 
 #include "Animation.h"
 #include "AssetHelper.h"
+#include "Camera.h"
 #include "EntryMenu.h"
 #include "Gameplay.h"
 #include "Log.h"
@@ -35,9 +36,7 @@ AnimatedSprite* _jumphopper = nullptr;
 // Floor tiles
 SpriteSheet* floor_sheet;
 Sprite* floor_sprite;
-SpriteInstance* floor_instance;
-
-SpriteInstance* floorarray[20];
+std::vector<SpriteInstance> floorInstances;
 
 namespace Keys
 {
@@ -133,6 +132,7 @@ void Gameplay::initialise()
     SpriteInternals::activeSheets.push_back(floor_sheet);
     floor_sprite = floorpair.second;
 
+    /*
     float tempfloat = 0;
     for (int i = 0; i < 20; i++) {
         tempfloat += 0.29295;
@@ -140,6 +140,7 @@ void Gameplay::initialise()
                                                    Textures::getTexSize({75, 75}), {0, 0, 0});
         floorarray[i] = floor;
     }
+    */
 
     // Load the wallpaper
     std::pair<SpriteSheet*, Sprite*> cityPair = BackgroundSprites::CityCentre();
@@ -225,8 +226,8 @@ void Gameplay::playFrame(float deltaTime)
     _jumphopper->updateDelta(deltaTime);
     _jumphopper->render();
 
-    for (int i = 0; i < 20; i++) {
-        floorarray[i]->render();
+    for (SpriteInstance& sprite : floorInstances) {
+        sprite.render();
     }
 
     backgroundInstance->render();
@@ -338,5 +339,20 @@ void Gameplay::windowSize(uint32_t width, uint32_t height)
 
         // Invert our trakcer
         sideTracker ^= 1;
+    }
+
+    // Now calculate how many floor tiles are needed to cover the screen
+    floorInstances.clear();
+    sideSize = Textures::getTexSize({75, 75});
+    sideCount = glm::ceil(uniformWidth / sideSize.x) + 1;
+
+    // Calculate the world position of the bottom left corner
+    glm::vec2 corner = {Camera::getPosition().x - 0.5f * uniformWidth, Camera::getPosition().y - 0.5f * 2.0};
+
+    // Place them
+    floorInstances.resize(sideCount);
+    for (uint32_t i = 0; i < sideCount; i++) {
+        floorInstances[i] = SpriteInstance(
+          floor_sprite, glm::vec3(corner + glm::vec2(i * sideSize.x, 0), -0.8), sideSize, glm::vec3(0.0f));
     }
 }
