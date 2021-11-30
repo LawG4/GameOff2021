@@ -15,6 +15,7 @@ set(TEXTURE_LIST
 	CityCentre.png
 	CityEdges.png
 	Hopperjump.png
+	Numbers.png
 )
 
 # For each texture listed add a custom command that copies it to the binary directory

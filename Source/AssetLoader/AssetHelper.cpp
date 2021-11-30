@@ -132,3 +132,59 @@ std::pair<SpriteSheet*, Sprite*> BackgroundSprites::floor()
 
     return pair;
 }
+
+// Rear server rack texture
+std::pair<SpriteSheet*, Sprite*> BackgroundSprites::server1()
+{
+    std::pair<SpriteSheet*, Sprite*> pair;
+    SpriteSheet* sheet = new SpriteSheet("Textures/server_rack_rear.png");
+
+    Sprite* sprite = new Sprite(sheet, {{0, 1}, {1, 1}, {1, 0}, {0, 0}});
+
+    pair.first = sheet;
+    pair.second = sprite;
+
+    return pair;
+}
+
+// Floor texture
+std::pair<SpriteSheet*, Sprite*> BackgroundSprites::server2()
+{
+    std::pair<SpriteSheet*, Sprite*> pair;
+    SpriteSheet* sheet = new SpriteSheet("Textures/server_front.png");
+
+    Sprite* sprite = new Sprite(sheet, {{0, 1}, {1, 1}, {1, 0}, {0, 0}});
+
+    pair.first = sheet;
+    pair.second = sprite;
+
+    return pair;
+}
+
+// Floor texture
+std::pair<SpriteSheet*, Sprite*> BackgroundSprites::server3()
+{
+    std::pair<SpriteSheet*, Sprite*> pair;
+    SpriteSheet* sheet = new SpriteSheet("Textures/server_control.png");
+
+    Sprite* sprite = new Sprite(sheet, {{0, 1}, {1, 1}, {1, 0}, {0, 0}});
+
+    pair.first = sheet;
+    pair.second = sprite;
+
+    return pair;
+}
+
+// Floor texture
+std::pair<SpriteSheet*, Sprite*> BackgroundSprites::server4()
+{
+    std::pair<SpriteSheet*, Sprite*> pair;
+    SpriteSheet* sheet = new SpriteSheet("Textures/network_box.png");
+
+    Sprite* sprite = new Sprite(sheet, {{0, 1}, {1, 1}, {1, 0}, {0, 0}});
+
+    pair.first = sheet;
+    pair.second = sprite;
+
+    return pair;
+}

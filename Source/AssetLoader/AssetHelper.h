@@ -22,6 +22,10 @@ std::pair<SpriteSheet*, AnimatedSprite*> hopperjump();
 namespace BackgroundSprites
 {
 std::pair<SpriteSheet*, Sprite*> CityCentre();
-// Floor texture
+// Block textures
 std::pair<SpriteSheet*, Sprite*> floor();
+std::pair<SpriteSheet*, Sprite*> server1();
+std::pair<SpriteSheet*, Sprite*> server2();
+std::pair<SpriteSheet*, Sprite*> server3();
+std::pair<SpriteSheet*, Sprite*> server4();
 }  // namespace BackgroundSprites
