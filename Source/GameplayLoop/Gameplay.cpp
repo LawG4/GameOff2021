@@ -374,8 +374,6 @@ void Gameplay::playFrame(float deltaTime)
     // Physics for coins
     for (AnimationInstance x : coin_vector) {
         x.render();
-        // Use a physics box
-        // PhysicsBoxes.push_back(Physics::boxFromSprite(x));
     }
 
     // Update the hoppers animation
