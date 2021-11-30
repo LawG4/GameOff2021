@@ -43,7 +43,6 @@ SpriteSheet* floor_sheet;
 Sprite* floor_sprite;
 std::vector<SpriteInstance> floorInstances;
 
-
 namespace Keys
 {
 bool A = false;
@@ -76,7 +75,6 @@ std::vector<SpriteInstance> Infinite_vector_list_thing;
 float hoppborder;
 std::vector<int> location_directions(80);
 glm::vec3 world_vect_limit = {0, -0.8, 0};
-
 
 void gameplay_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -174,7 +172,6 @@ void Gameplay::initialise()
     SpriteInternals::activeSheets.push_back(floor_sheet);
     floor_sprite = floorpair.second;
 
-
     float tempfloat = 0;
     for (int i = 0; i < 40; i++) {
         tempfloat += 0.29295;
@@ -214,7 +211,6 @@ void Gameplay::initialise()
     _server4_sprite = server4pair.second;
     serverarray[3] =
       new SpriteInstance(_server4_sprite, {0, 0, 0}, Textures::getTexSize({75, 75}), {0, 0, 0});
-
 
     // Load the wallpaper
     std::pair<SpriteSheet*, Sprite*> cityPair = BackgroundSprites::CityCentre();
@@ -386,10 +382,8 @@ void Gameplay::playFrame(float deltaTime)
     _jumphopper->updateDelta(deltaTime);
     _jumphopper->render();
 
-
     for (SpriteInstance& sprite : floorInstances) {
         sprite.render();
-
     }
 
     backgroundInstance->render();
@@ -427,6 +421,14 @@ void Gameplay::cleanup()
     delete backgroundSideSheet;
     delete floor_sprite;
     delete floor_sheet;
+    delete _server1_sprite;
+    delete _server2_sprite;
+    delete _server3_sprite;
+    delete _server4_sprite;
+    delete _server4_sheet;
+    delete _server3_sheet;
+    delete _server2_sheet;
+    delete _server1_sheet;
 }
 
 void Gameplay::gameLoop()
