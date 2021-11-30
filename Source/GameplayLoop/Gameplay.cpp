@@ -26,6 +26,9 @@ bool _init = false;
 bool _isActive = false;
 bool Gameplay::isActive() { return _isActive; }
 
+const glm::vec2 _spriteSize = glm::vec2(0.28, 0.10);
+const glm::vec2 _spriteOffset = glm::vec2(-0.16, -0.04);
+
 // Store the assets and coordinates
 SpriteSheet* _coinSheet = nullptr;
 AnimatedSprite* _coin = nullptr;
@@ -371,11 +374,17 @@ void Gameplay::playFrame(float deltaTime)
         PhysicsBoxes.push_back(Physics::boxFromSprite(x));
     }
 
+    BoundingRect spriteRect{
+      glm::vec2(_walkhopper->getPosition().x, _walkhopper->getPosition().y) + _spriteOffset, _spriteSize.x,
+      _spriteSize.y};
     // Physics for coins
-    for (AnimationInstance x : coin_vector) {
-        x.render();
-        // Use a physics box
-        // PhysicsBoxes.push_back(Physics::boxFromSprite(x));
+    for (uint32_t i = 0; i < coin_vector.size(); i++) {
+        coin_vector[i].render();
+        if (Collision::boxInBox(spriteRect, Physics::boxFromSprite(coin_vector[i]))) {
+            // We've touched a coin
+            Score::score++;
+            coin_vector[i].setPosition(glm::vec3(0.0f, 0.0f, -100));
+        }
     }
 
     // Update the hoppers animation
