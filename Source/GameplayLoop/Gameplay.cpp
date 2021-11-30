@@ -23,6 +23,7 @@ bool Gameplay::isActive() { return _isActive; }
 // Store the assets and coordinates
 SpriteSheet* _coinSheet = nullptr;
 AnimatedSprite* _coin = nullptr;
+AnimationInstance _coinInstance;
 
 SpriteSheet* _hopperSheetwalk = nullptr;
 AnimatedSprite* _walkhopper = nullptr;
@@ -99,7 +100,9 @@ void Gameplay::initialise()
     _coinSheet = coin.first;
     SpriteInternals::activeSheets.push_back(_coinSheet);
     _coin = coin.second;
-    _coin->setPosition({0.4, -0.5, 0});
+    _coinInstance = AnimationInstance(_coin);
+    _coinInstance.setScale({0.1, 0.1, 1.0});
+    _coinInstance.setPosition({0.4, -0.5, 0});
 
     // Walking hopper
     std::pair<SpriteSheet*, AnimatedSprite*> walkhopper = AnimatedSprites::hopperwalk();
@@ -132,7 +135,7 @@ void Gameplay::initialise()
     std::pair<SpriteSheet*, Sprite*> cityPair = BackgroundSprites::CityCentre();
     backgroundSheet = cityPair.first;
     backgroundSprite = cityPair.second;
-    backgroundInstance = new SpriteInstance(backgroundSprite, {0, 0, 0}, {2, 2, 1}, {0, 0, 0});
+    backgroundInstance = new SpriteInstance(backgroundSprite, {0, 0, -0.9}, {2, 2, 1}, {0, 0, 0});
     SpriteInternals::activeSheets.push_back(backgroundSheet);
 
     backgroundSideSheet = new SpriteSheet("Textures/CityEdges.png");
@@ -143,8 +146,7 @@ void Gameplay::initialise()
       new Sprite(backgroundSideSheet, Textures::generateTexCoordinates({168, 0}, {168, 512}, {512, 512}));
 
     // Use a physics box
-    PhysicsBoxes.push_back(
-      {{_coin->getPosition() - 0.5f * _coin->getScale()}, _coin->getScale().x, _coin->getScale().y});
+    PhysicsBoxes.push_back(Physics::boxFromSprite(_coinInstance));
 
     // Get how wide the frame is, so we can make sure the whole screen is covered
     int width, height;
@@ -164,11 +166,25 @@ void Gameplay::playFrame(float deltaTime)
     // Update the hoppers animation
     _walkhopper->updateDelta(Physics::getVelocity().x * deltaTime);
 
+    // Now make the hopper face the right direction
+    if (Physics::getVelocity().x < 0) {
+        _walkhopper->setRotation({0, glm::pi<float>(), 0});
+        glm::vec3 pos = _walkhopper->getPosition();
+        pos.z = 0.4;
+        _walkhopper->setPosition(pos);
+
+    } else {
+        _walkhopper->setRotation({0, 0, 0});
+        glm::vec3 pos = _walkhopper->getPosition();
+        pos.z = 0.0;
+        _walkhopper->setPosition(pos);
+    }
+
     // Finally render the hopper
     _walkhopper->render();
 
     _coin->updateDelta(deltaTime);
-    _coin->render();
+    _coinInstance.render();
 
     walkInstnace.render();
 
@@ -273,8 +289,8 @@ void Gameplay::windowSize(uint32_t width, uint32_t height)
         SpriteInstance rightInstance = SpriteInstance(sides[sideTracker ^ 1]);
 
         // Now place each sprite instance appropriatly
-        leftInstance.setPosition({-1.33f - i * sideSize.x, 0, 0});
-        rightInstance.setPosition({1.32f + i * sideSize.x, 0, 0});
+        leftInstance.setPosition({-1.33f - i * sideSize.x, 0, 0.9});
+        rightInstance.setPosition({1.32f + i * sideSize.x, 0, 0.9});
 
         // Pass on the scales of the instances
         leftInstance.setScale(sideSize);
