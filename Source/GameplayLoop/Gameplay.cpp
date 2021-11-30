@@ -43,15 +43,12 @@ SpriteSheet* floor_sheet;
 Sprite* floor_sprite;
 std::vector<SpriteInstance> floorInstances;
 
-
-
 namespace Keys
 {
 bool A = false;
 bool D = false;
 bool SPACE = false;
 }  // namespace Keys
-
 
 // server1 tiles
 SpriteSheet* _server1_sheet;
@@ -76,10 +73,8 @@ SpriteInstance* render_array[10];
 // Global variable for storing position
 std::vector<SpriteInstance> Infinite_vector_list_thing;
 float hoppborder;
-std::vector<int> location_directions(80);
+std::vector<int> location_directions(240);
 glm::vec3 world_vect_limit = {0, -0.8, 0};
-
-
 
 void gameplay_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -177,7 +172,6 @@ void Gameplay::initialise()
     SpriteInternals::activeSheets.push_back(floor_sheet);
     floor_sprite = floorpair.second;
 
-
     float tempfloat = 0;
     for (int i = 0; i < 40; i++) {
         tempfloat += 0.29295;
@@ -185,7 +179,6 @@ void Gameplay::initialise()
                                                    Textures::getTexSize({75, 75}), {0, 0, 0});
         floorarray[i] = floor;
     }
-
 
     // Load server 1
     std::pair<SpriteSheet*, Sprite*> server1pair = BackgroundSprites::server1();
@@ -218,8 +211,6 @@ void Gameplay::initialise()
     _server4_sprite = server4pair.second;
     serverarray[3] =
       new SpriteInstance(_server4_sprite, {0, 0, 0}, Textures::getTexSize({75, 75}), {0, 0, 0});
-
-
 
     // Load the wallpaper
     std::pair<SpriteSheet*, Sprite*> cityPair = BackgroundSprites::CityCentre();
@@ -303,13 +294,13 @@ void Gameplay::playFrame(float deltaTime)
     hoppborder = postion[0];
 
     // If character has moved "out of view (view is 10x8)"
-    if (world_vect_limit[0] < postion[0]) {
+    if (world_vect_limit[0] < postion[0] + 6) {
         // Nested for loop (first loop 10 times) (nexted: loop 8 times)
         Gameplay::randWallValue();
         int counter = 0;
-        for (int row = 0; row < 10; row++) {
+        for (int row = 0; row < 30; row++) {
             // Add 1 to move accross x axis
-            world_vect_limit[0] += 0.3;
+            world_vect_limit[0] += 0.29295;
             nextposition = world_vect_limit;
 
             for (int i = 0; i < 8; i++) {
@@ -356,11 +347,13 @@ void Gameplay::playFrame(float deltaTime)
             }
         }
         // At the end of nested for loops add 10 to world_vect_limit
-        world_vect_limit[0] += 3;
+        world_vect_limit[0] += 0;
     }
 
     for (SpriteInstance x : Infinite_vector_list_thing) {
         x.render();
+        // Use a physics box
+        PhysicsBoxes.push_back(Physics::boxFromSprite(x));
     }
 
     // Update the hoppers animation
@@ -391,10 +384,8 @@ void Gameplay::playFrame(float deltaTime)
     _jumphopper->updateDelta(deltaTime);
     _jumphopper->render();
 
-
     for (SpriteInstance& sprite : floorInstances) {
         sprite.render();
-
     }
 
     backgroundInstance->render();
@@ -540,17 +531,17 @@ void Gameplay::randWallValue()
     // if (location_directions[0] != NULL) location_directions.clear();
 
     // Loop to create our numbers and based on them decide fate of blocks
-    for (int i = 0; i < 80; i++) {
+    for (int i = 0; i < 240; i++) {
         float random_variable = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
 
         if (random_variable > 0.50) {
-            if (random_variable > 0.50 && random_variable < 0.60) {
+            if (random_variable > 0.58 && random_variable < 0.60) {
                 location_directions[i] = 1;
-            } else if (random_variable > 0.60 && random_variable < 0.70) {
+            } else if (random_variable > 0.68 && random_variable < 0.70) {
                 location_directions[i] = 2;
-            } else if (random_variable > 0.80 && random_variable < 0.90) {
+            } else if (random_variable > 0.89 && random_variable < 0.90) {
                 location_directions[i] = 3;
-            } else if (random_variable > 0.90 && random_variable < 1.0) {
+            } else if (random_variable > 0.97 && random_variable < 1.0) {
                 location_directions[i] = 4;
             } else {
                 location_directions[i] = 0;
