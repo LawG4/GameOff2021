@@ -220,30 +220,45 @@ void Gameplay::playFrame(float deltaTime)
     // Update the hoppers position using the physics engine
     _walkhopper->setPosition(glm::vec3(Physics::updatePosition(deltaTime, {}), _walkhopper->getPosition().z));
 
+    std::vector<SpriteInstance> Infinite_vector_list_thing(400);
+
     Infinite_vector_list_thing;
     next_empty_position;
+    nextposition;
 
     int* position_choice;
     position_choice = Gameplay::randWallValue();
 
+    glm::vec3 world_vect_limit = {0, 0, 0};
+
     glm::vec3 postion = _walkhopper->getPosition();
+    postion[0] += 2.9295;
 
-    if (world_vect_limit < postion[0]) {
-        world_vect_limit += 3;
+    // If character has moved "out of view (view is 10x8)"
+    if (world_vect_limit[0] < postion[0]) {
         position_choice = Gameplay::randWallValue();
+        next_empty_position = world_vect_limit;
 
-        for (int row = 0; row < 3; row++) {
+        // Nested for loop (first loop 10 times) (nexted: loop 8 times)
+        for (int row = 0; row < 10; row++) {
+            // Add 1 to move accross y axis
+            world_vect_limit[1] += 0.29295;
+            nextposition = world_vect_limit;
+
             for (int i = 0; i < 8; i++) {
+                // If choice 1 then copy server 1 instance
                 if (position_choice[i] == 1) {
-                    Infinite_vector_list_thing serverarray[1];
-                    setPosition(postion);
-                    serverarray[i]->render();
-                    postion[1] += 0.29295;
+                    Infinite_vector_list_thing[next_empty_position] = SpriteInstance(
+                      _server1_sprite, nextposition, Textures::getTexSize({75, 75}), {0, 0, 0});
+
+                    nextposition[0] += 0.29295;
                 } else {
-                    postion[1] += 0.29295;
+                    nextposition[0] += 0.29295;
                 }
             }
         }
+        // At the end of nested for loops add 10 to world_vect_limit
+        world_vect_limit[0] += 2.9;
     }
 
     postion[0] += 1.5;
