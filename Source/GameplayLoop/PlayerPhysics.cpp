@@ -113,6 +113,14 @@ void Physics::jump()
     _velocity.y = 4;
 }
 
+BoundingRect Physics::boxFromSprite(SpriteInstance& instance)
+{
+    // Get the top left position
+    glm::vec2 topLeft = glm::vec2(instance.getPosition().x - 0.5f * instance.getScale().x,
+                                  instance.getPosition().y + 0.5 * instance.getScale().y);
+    return {topLeft, instance.getScale().x, instance.getScale().y};
+}
+
 void Physics::setVelocity(glm::vec2 velocity) {}
 
 glm::vec2 Physics::getVelocity() { return _velocity; }
