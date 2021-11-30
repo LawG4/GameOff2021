@@ -534,20 +534,25 @@ void Gameplay::randWallValue()
     for (int i = 0; i < 240; i++) {
         float random_variable = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
 
-        if (random_variable > 0.50) {
-            if (random_variable > 0.58 && random_variable < 0.60) {
-                location_directions[i] = 1;
-            } else if (random_variable > 0.68 && random_variable < 0.70) {
-                location_directions[i] = 2;
-            } else if (random_variable > 0.89 && random_variable < 0.90) {
-                location_directions[i] = 3;
-            } else if (random_variable > 0.97 && random_variable < 1.0) {
-                location_directions[i] = 4;
+        if (random_variable > 0.58) {
+            if (i == 0) {
+            }
+
+            else if (location_directions[i - 1] == 0) {
+                if (random_variable > 0.58 && random_variable < 0.60) {
+                    location_directions[i] = 1;
+                } else if (random_variable > 0.68 && random_variable < 0.70) {
+                    location_directions[i] = 2;
+                } else if (random_variable > 0.85 && random_variable < 0.90) {
+                    location_directions[i] = 3;
+                } else if (random_variable > 0.97 && random_variable < 1.0) {
+                    location_directions[i] = 4;
+                } else {
+                    location_directions[i] = 0;
+                }
             } else {
                 location_directions[i] = 0;
             }
-        } else {
-            location_directions[i] = 0;
         }
     }
 }
