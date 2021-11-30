@@ -99,6 +99,6 @@ void SpriteInstance::setScale(glm::vec3 scale)
     _scale = scale;
 }
 
-glm::vec3 SpriteInstance::getPosition() { return _pos; }
+glm::vec3 SpriteInstance::getPosition() { return _pos + glm::vec3(0, 0, -2 * _pos.z); }
 glm::vec3 SpriteInstance::getRotation() { return _rot; }
 glm::vec3 SpriteInstance::getScale() { return _scale; }

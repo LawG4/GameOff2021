@@ -39,4 +39,6 @@ glm::vec3 getPosition();
 /// <param name="width">Width of window</param>
 /// <param name="height">Height of Window</param>
 void onWindowSize(GLFWwindow* window, int width, int height);
+
+void scroll(double deltaTime);
 }  // namespace Camera

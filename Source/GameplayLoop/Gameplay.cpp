@@ -93,6 +93,9 @@ Sprite* backgroundRightSprite;
 SpriteInstance* backgroundInstance;
 std::vector<SpriteInstance> backgroundSides;
 
+float floorPannelWidth;
+float _uniformWidth;
+
 std::vector<BoundingRect> PhysicsBoxes;
 void Gameplay::initialise()
 {
@@ -132,16 +135,6 @@ void Gameplay::initialise()
     SpriteInternals::activeSheets.push_back(floor_sheet);
     floor_sprite = floorpair.second;
 
-    /*
-    float tempfloat = 0;
-    for (int i = 0; i < 20; i++) {
-        tempfloat += 0.29295;
-        SpriteInstance* floor = new SpriteInstance(floor_sprite, {tempfloat - 3, -1.1, 0},
-                                                   Textures::getTexSize({75, 75}), {0, 0, 0});
-        floorarray[i] = floor;
-    }
-    */
-
     // Load the wallpaper
     std::pair<SpriteSheet*, Sprite*> cityPair = BackgroundSprites::CityCentre();
     backgroundSheet = cityPair.first;
@@ -170,6 +163,24 @@ void Gameplay::initialise()
 
 void Gameplay::playFrame(float deltaTime)
 {
+    // Move the camera
+    Camera::scroll(deltaTime);
+
+    // Move the floor if it has gone out of range
+    glm::vec2 leftCorner = {Camera::getPosition().x - 0.5f * _uniformWidth,
+                            Camera::getPosition().y - 0.5f * 2.0};
+    while (floorInstances[0].getPosition().x < leftCorner.x - floorPannelWidth / 2.0f) {
+        // Pop the first floor tile off
+        floorInstances.erase(floorInstances.begin());
+
+        // Create a new sprite instance based on the back
+        SpriteInstance temp = floorInstances[floorInstances.size() - 1];
+        temp.setPosition(temp.getPosition() + glm::vec3(floorPannelWidth, 0, 0));
+
+        // Add this new one to the list
+        floorInstances.push_back(temp);
+    }
+
     // Update the velocity based on the user's key input
     if (Keys::SPACE) Physics::jump();
 
@@ -305,6 +316,7 @@ void Gameplay::windowSize(uint32_t width, uint32_t height)
     // We know that the window is 2 units height. So how many units wide is it?
 
     float uniformWidth = 2 * static_cast<float>(width) / static_cast<float>(height);
+    _uniformWidth = uniformWidth;
     // backgroundInstance->setScale({uniformWidth, 2.0, 1.0});
     Log.info("Window is {} units wide", uniformWidth);
 
@@ -344,6 +356,7 @@ void Gameplay::windowSize(uint32_t width, uint32_t height)
     // Now calculate how many floor tiles are needed to cover the screen
     floorInstances.clear();
     sideSize = Textures::getTexSize({75, 75});
+    floorPannelWidth = sideSize.x;
     sideCount = glm::ceil(uniformWidth / sideSize.x) + 1;
 
     // Calculate the world position of the bottom left corner
