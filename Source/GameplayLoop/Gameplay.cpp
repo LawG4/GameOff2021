@@ -423,6 +423,14 @@ void Gameplay::cleanup()
     delete backgroundSideSheet;
     delete floor_sprite;
     delete floor_sheet;
+    delete _server1_sprite;
+    delete _server2_sprite;
+    delete _server3_sprite;
+    delete _server4_sprite;
+    delete _server4_sheet;
+    delete _server3_sheet;
+    delete _server2_sheet;
+    delete _server1_sheet;
 }
 
 void Gameplay::gameLoop()
