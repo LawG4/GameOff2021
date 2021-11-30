@@ -31,6 +31,12 @@ glm::mat4 viewProjectionMatrix = glm::identity<glm::mat4>();
 glm::mat4 projectionMatrix = glm::identity<glm::mat4>();
 glm::mat4 viewMatrix = glm::identity<glm::mat4>();
 
+void Camera::scroll(double deltaTime)
+{
+    cameraPosition.x += static_cast<float>(deltaTime);
+    Camera::setPosition(cameraPosition);
+}
+
 void Camera::setProjection(uint32_t width, uint32_t height)
 {
     float aspectRatio = static_cast<float>(width) / static_cast<float>(height);
