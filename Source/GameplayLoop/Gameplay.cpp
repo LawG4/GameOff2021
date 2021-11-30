@@ -90,8 +90,8 @@ SpriteSheet* backgroundSideSheet;
 Sprite* backgroundSprite;
 Sprite* backgroundLeftSprite;
 Sprite* backgroundRightSprite;
-SpriteInstance* backgroundInstance;
-std::vector<SpriteInstance> backgroundSides;
+UiSpriteInstance* backgroundInstance;
+std::vector<UiSpriteInstance> backgroundSides;
 
 float floorPannelWidth;
 float _uniformWidth;
@@ -139,7 +139,9 @@ void Gameplay::initialise()
     std::pair<SpriteSheet*, Sprite*> cityPair = BackgroundSprites::CityCentre();
     backgroundSheet = cityPair.first;
     backgroundSprite = cityPair.second;
-    backgroundInstance = new SpriteInstance(backgroundSprite, {0, 0, -0.9}, {2, 2, 1}, {0, 0, 0});
+    backgroundInstance = new UiSpriteInstance(backgroundSprite);
+    backgroundInstance->setPosition({0, 0, 0.9});
+    backgroundInstance->setScale({2, 2, 1});
     SpriteInternals::activeSheets.push_back(backgroundSheet);
 
     backgroundSideSheet = new SpriteSheet("Textures/CityEdges.png");
@@ -331,15 +333,15 @@ void Gameplay::windowSize(uint32_t width, uint32_t height)
 
     // We can use an array to keep each track of which one to add currently
     Sprite* sides[2] = {backgroundLeftSprite, backgroundRightSprite};
-    uint32_t sideTracker = 0;
+    uint32_t sideTracker = 1;
     for (uint32_t i = 0; i < sideCount; i++) {
         // Which sprite are we putting on each side?
-        SpriteInstance leftInstance = SpriteInstance(sides[sideTracker]);
-        SpriteInstance rightInstance = SpriteInstance(sides[sideTracker ^ 1]);
+        UiSpriteInstance leftInstance = UiSpriteInstance(sides[sideTracker]);
+        UiSpriteInstance rightInstance = UiSpriteInstance(sides[sideTracker ^ 1]);
 
         // Now place each sprite instance appropriatly
-        leftInstance.setPosition({-1.33f - i * sideSize.x, 0, 0.9});
-        rightInstance.setPosition({1.32f + i * sideSize.x, 0, 0.9});
+        leftInstance.setPosition({-1.0f - 1.5 * i * sideSize.x, 0, 0.9});
+        rightInstance.setPosition({1.0f + 1.5 * i * sideSize.x, 0, 0.9});
 
         // Pass on the scales of the instances
         leftInstance.setScale(sideSize);
